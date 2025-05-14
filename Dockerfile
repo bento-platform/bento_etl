@@ -5,6 +5,10 @@ WORKDIR /etl
 COPY pyproject.toml .
 COPY poetry.lock .
 
+# Install more recent poetry
+# TODO: rm once included in base image
+RUN pip install --no-cache-dir poetry==2.1.3
+
 RUN poetry config virtualenvs.create false && \
     poetry --no-cache install --without dev --no-root
 
