@@ -16,7 +16,13 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "bento_etl", from = "src"}]
+packages = [{include = "bento_etl"}]
+name = "bento-etl"
+version = "0.1.0"
+description = "ETL service for Bento"
+authors = [
+    "Victor Rocheleau <victor.rocheleau@mcgill.ca>"
+]
 
 [tool.poetry.group.dev.dependencies]
 aioresponses = "^0.7.8"
