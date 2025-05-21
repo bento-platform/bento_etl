@@ -6,6 +6,7 @@ from .authz import authz_middleware
 from .config import get_config
 from .logger import get_logger
 from .constants import BENTO_SERVICE_KIND, SERVICE_TYPE
+from .routers.jobs import job_router
 
 BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
     "serviceKind": BENTO_SERVICE_KIND,
@@ -26,3 +27,5 @@ app = BentoFastAPI(
     __version__,
     configure_structlog_access_logger=True,
 )
+
+app.include_router(job_router)
