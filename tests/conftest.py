@@ -1,7 +1,10 @@
+from logging import Logger
 import pytest
 import os
 
 from fastapi.testclient import TestClient
+
+from bento_etl.logger import get_logger
 
 os.environ["BENTO_DEBUG"] = "true"
 os.environ["BENTO_VALIDATE_SSL"] = "false"
@@ -18,6 +21,11 @@ from bento_etl.main import app
 @pytest.fixture
 def config() -> Config:
     return get_config()
+
+
+@pytest.fixture
+def logger(config) -> Logger:
+    return get_logger(config)
 
 
 @pytest.fixture

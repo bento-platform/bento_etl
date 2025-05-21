@@ -13,7 +13,8 @@ dependencies = [
     "bento-lib (>=13.1.0,<14.0.0)",
     "pydantic-settings (>=2.9.1,<3.0.0)",
     "structlog (>=25.3.0,<26.0.0)",
-    "uvicorn (>=0.34.2,<0.35.0)"
+    "uvicorn (>=0.34.2,<0.35.0)",
+    "polars (>=1.30.0,<2.0.0)"
 ]
 
 [tool.poetry]
