@@ -18,7 +18,36 @@ For a Bento instance that needs ETL processing, the general flow would be:
 ## ETL Pipeline configuration
 
 TODO!
+- Extractors
+  - Configure API polling extractor (**WIP**)
+  - Configure S3 polling extractor (ROADMAP)
+- Transformers
+  - Configure a JSON to Phenopackets transformer (**WIP**)
+  - Configure a JSON to Experiments transformer (**WIP**)
+  - Configure a passthrough transformer (ROADMAP)
+  - Configure a CSV to Phenopackets transformer (ROADMAP)
+  - Configure a CSV to Experiments transformer (ROADMAP)
+  - Configure a VCF to Parquet transformer (ROADMAP)
+  - Configure a VCF to VCF transformer (ROADMAP)
+- Loaders
+  - Configure a Katsu Phenopackets loader (**WIP**)
+  - Configure a Katsu Experiments loader (**WIP**)
+  - Configure a Gohan VCF loader (ROADMAP)
+  - Configure a generic S3 loader (ROADMAP)
+  - Configure a generic HTTP loader (ROADMAP)
 
 ## Dev
 
+We recommend using docker compose for local dev work:
 
+```
+docker compose -f docker-compose.dev.yaml
+```
+
+You can then open the dev container in VS Code, the repo is mounted at `/etl`.
+
+## OpenAPI docs
+
+FastAPI produces an OpenAPI schema automatically, providing rich API docs.
+
+To access the Swagger UI of a local bento_etl, simply open a browser and visit `localhost:5000/docs`.
