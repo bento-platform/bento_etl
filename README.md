@@ -41,10 +41,23 @@ TODO!
 We recommend using docker compose for local dev work:
 
 ```
-docker compose -f docker-compose.dev.yaml
+# Set UID for volume permissions
+export UID=$(id -u)
+
+# Spin up the ETL service
+docker compose -f docker-compose.dev.yaml up -d
+
+# Spin down the ETL service
+docker compose -f docker-compose.dev.yaml down
 ```
 
-You can then open the dev container in VS Code, the repo is mounted at `/etl`.
+You can then open the dev container in VS Code, the repo is mounted at `/etl`:
+1. Open the command palette: `CTRL + Shift + P`
+2. Select `Dev Containers: Attach to running container`
+3. Select the `bento_etl` container (it must be running)
+4. If not automatic, open `/etl` folder
+5. If not automatic, trust source control
+6. (Optional) Add break points and use the provided interactive debugger config `Python Dev Debugger (bento_etl): Remote Attach`
 
 ## OpenAPI docs
 

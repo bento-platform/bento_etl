@@ -7,7 +7,7 @@ export ASGI_APP="bento_etl.main:app"
 : "${INTERNAL_PORT:=5000}"
 
 
-python -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:9511 -m \
+python -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:5678 -m \
   uvicorn \
   --host 0.0.0.0 \
   --port "${INTERNAL_PORT}" \
