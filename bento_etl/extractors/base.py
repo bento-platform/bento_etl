@@ -1,5 +1,7 @@
-from logging import Logger
+import httpx
 import polars as pl
+from logging import Logger
+from fastapi import status
 
 __all__ = ["BaseExtractor"]
 
@@ -23,4 +25,27 @@ class BaseExtractor:
         pass
 
 
-# TODO: implement an HTTP extractor capable of polling an endpoint to obtain JSON data
+class ApiPollExtractor(BaseExtractor):
+    def __init__(self, logger, endpoint: str, frequency: str, http_verb: str = "GET"):
+        self.endpoint = endpoint
+        self.frequency = frequency
+        self.http_verb = http_verb
+        super().__init__(logger)
+
+    def extract(self) -> pl.DataFrame:
+        df: pl.DataFrame = None
+        with httpx.Client() as client:
+            r = client.request(self.http_verb, self.endpoint)
+            if r.status_code != status.HTTP_200_OK:
+                # TODO: more specific exception
+                raise Exception()
+
+            # Response implements read() function
+            df = pl.read_json(r)
+
+        if df.is_empty():
+            self.logger.warning("Extracted payload results in an empty data frame")
+            # TODO: more specific exception
+            raise Exception()
+
+        return df
