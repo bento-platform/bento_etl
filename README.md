@@ -41,7 +41,8 @@ TODO!
 We recommend using docker compose for local dev work:
 
 ```
-docker compose -f docker-compose.dev.yaml
+export UID=$(id -u)
+docker compose -f docker-compose.dev.yaml up -d
 ```
 
 You can then open the dev container in VS Code, the repo is mounted at `/etl`.
