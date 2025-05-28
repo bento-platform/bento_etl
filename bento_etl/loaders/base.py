@@ -1,5 +1,7 @@
 from logging import Logger
 
+from bento_etl.config import Config
+
 __all__ = ["BaseLoader"]
 
 
@@ -11,8 +13,9 @@ class BaseLoader:
     and load it into the target destination.
     """
 
-    def __init__(self, logger: Logger):
+    def __init__(self, logger: Logger, config: Config):
         self.logger = logger
+        self.config = config
 
     def load(self, data):
         pass
