@@ -9,7 +9,7 @@ class PhenopacketsLoader(BaseLoader):
 
     def load(self, data):
         # ASSUME FOR NOW: data is json and VALID dataset with valid id
-        dataset_id = data[0]["id"]
+        dataset_id = "16543a4a-cee9-4e3d-9826-fcb1e0e5a292" # From bento portal; moose project
         
         # TODO UNHARDCODE later
         katsu_enpoint = f'http://localhost:8000/ingest/{dataset_id}/phenopackets_json'
