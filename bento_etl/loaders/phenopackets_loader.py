@@ -1,4 +1,6 @@
 import httpx
+import json
+import asyncio
 from fastapi import status
 from .base import BaseLoader
 
@@ -7,10 +9,12 @@ class PhenopacketsLoader(BaseLoader):
         super().__init__(logger, config)
         self.dataset_id = dataset_id
 
-    def load(self, data):
+    async def load(self, data:json):
         katsu_ingest_url = f'http://{self.config.katsu_endpoint}/ingest/{self.dataset_id}/phenopackets_json'
         
-        with httpx.Client() as client:
-            r = client.request("POST", url=katsu_ingest_url, json=data)
-            return r.status_code
-            #if r.status_code != status.HTTP_200_OK:
+        limits = httpx.Limits(max_keepalive_connections=20, max_connections=len(data))
+
+        async with httpx.AsyncClient(limits=limits) as client:
+            katsu_requests = [client.post(katsu_ingest_url, json=data[index]) for index in range(len(data))]
+            result = await asyncio.gather(*katsu_requests)
+            return result
