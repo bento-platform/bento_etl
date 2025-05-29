@@ -32,3 +32,7 @@ def logger(config) -> Logger:
 def test_client():
     with TestClient(app) as client:
         yield client
+
+@pytest.fixture
+def anyio_backend():
+    return 'asyncio'
