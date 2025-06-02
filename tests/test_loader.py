@@ -7,7 +7,8 @@ from bento_etl.loaders.phenopackets_loader import PhenopacketsLoader
 async def test_phenopackets_loader(logger, config):
     # Placeholder test
     dataset_id = "16543a4a-cee9-4e3d-9826-fcb1e0e5a292" # From bento portal; moose project
-    loader = PhenopacketsLoader(logger, config, dataset_id)
+    batch_size = 4
+    loader = PhenopacketsLoader(logger, config, dataset_id, batch_size)
 
     
     caller_path =os.path.dirname(__file__)

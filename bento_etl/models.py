@@ -24,6 +24,7 @@ class LoadStep(BaseModel):
     """
     # TODO: complete
     dataset_id: str
+    batch_size: int
     data_type: Literal["phenopackets", "experiments"]
 
 class JobStatus(BaseModel):
