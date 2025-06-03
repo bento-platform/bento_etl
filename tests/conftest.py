@@ -17,7 +17,6 @@ os.environ["AUTHZ_ENABLED"] = "False"
 from bento_etl.config import Config, get_config
 from bento_etl.main import app
 
-
 @pytest.fixture
 def config() -> Config:
     return get_config()
@@ -32,7 +31,3 @@ def logger(config) -> Logger:
 def test_client():
     with TestClient(app) as client:
         yield client
-
-@pytest.fixture
-def anyio_backend():
-    return 'asyncio'
