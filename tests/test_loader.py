@@ -1,21 +1,24 @@
 import os
 import json
+import uuid
+import httpx
 import pytest
+from unittest.mock import patch
 from bento_etl.loaders.phenopackets_loader import PhenopacketsLoader
 
-@pytest.mark.anyio
-async def test_phenopackets_loader(logger, config):
-    # Placeholder test
-    dataset_id = "16543a4a-cee9-4e3d-9826-fcb1e0e5a292" # From bento portal; moose project
-    batch_size = 4
-    loader = PhenopacketsLoader(logger, config, dataset_id, batch_size)
+class TestPhenopacketsLoader:
+    async_client_path = 'bento_etl.loaders.phenopackets_loader.httpx.AsyncClient.post'
 
-    
-    caller_path =os.path.dirname(__file__)
-    file_path = os.path.join(caller_path, "data/synthetic_phenopackets_v2.json")
-    
-    with open(file_path) as f:
-        json_content = json.load(f)
-        response = await loader.load(json_content)
+    @pytest.mark.anyio
+    @patch(async_client_path, return_value = httpx.Response(204))
+    async def test_valid_load(self, logger, config):
+        loader = PhenopacketsLoader(logger, config, uuid.uuid4(), 4)
+        response = await loader.load("{}")
         assert all(r.status_code == 204 for r in response)
 
+    @pytest.mark.anyio
+    @patch(async_client_path, return_value = httpx.Response(400))
+    async def test_invalid_dataset_id(self, logger, config):
+        loader = PhenopacketsLoader(logger, config, "BAD_DATASET_ID", 4)
+        response = await loader.load("{}")
+        assert all(r.status_code == 400 for r in response)
