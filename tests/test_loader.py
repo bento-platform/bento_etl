@@ -13,12 +13,12 @@ class TestPhenopacketsLoader:
     @patch(async_client_path, return_value = httpx.Response(204))
     async def test_valid_load(self, logger, config):
         loader = PhenopacketsLoader(logger, config, uuid.uuid4(), 4)
-        response = await loader.load("{}")
-        assert all(r.status_code == 204 for r in response)
+        await loader.load("{}")
 
     @pytest.mark.anyio
     @patch(async_client_path, return_value = httpx.Response(400))
     async def test_invalid_dataset_id(self, logger, config):
         loader = PhenopacketsLoader(logger, config, "BAD_DATASET_ID", 4)
-        response = await loader.load("{}")
-        assert all(r.status_code == 400 for r in response)
+
+        with pytest.raises(Exception, match='400'):
+            await loader.load("{}")
