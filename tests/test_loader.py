@@ -22,3 +22,11 @@ class TestPhenopacketsLoader:
 
         with pytest.raises(Exception, match='400'):
             await loader.load("{}")
+
+    @pytest.mark.asyncio
+    @patch(async_client_path, return_value = httpx.Response(400))
+    async def test_invalid_data(self, logger, config):
+        loader = PhenopacketsLoader(logger, config, uuid.uuid4(), 4)
+
+        with pytest.raises(Exception, match='400'):
+            await loader.load("BAD_JSON")
