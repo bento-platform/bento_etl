@@ -19,8 +19,11 @@ def get_loader(job: Job, logger: LoggerDependency, config: ConfigDependency):
 
     # TODO: should probably raise if dependency cannot be provided from job details
     if job.loader.data_type == "phenopackets":
-        return PhenopacketsLoader(logger, config, job.loader.dataset_id, job.loader.batch_size)
+        return PhenopacketsLoader(
+            logger, config, job.loader.dataset_id, job.loader.batch_size
+        )
     else:
         raise NotImplementedError
+
 
 LoaderDep = Annotated[BaseLoader, Depends(get_loader)]

@@ -19,7 +19,7 @@ class Config(BentoFastAPIBaseConfig):
     service_description: str = (
         "ETL service for external data ingestion into the Bento platform"
     )
-    katsu_endpoint: str = "localhost:8000" # TODO
+    katsu_endpoint: str = "localhost:8000"  # TODO
 
     # Service Configs
 
