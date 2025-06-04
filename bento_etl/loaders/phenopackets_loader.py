@@ -26,15 +26,19 @@ class PhenopacketsLoader(BaseLoader):
             try:
                 await asyncio.gather(*load_requests)
             except Exception as ex:
-                self.logger.warning("Cancelling all Phenopacket uploads")
+                await self.logger.warning("Cancelling all Phenopacket uploads")
                 self.cancel_all_requests(load_requests)
+                raise ex
+
 
     async def send_request(self, client:AsyncClient, request_url:str, data:json):
         request = await client.post(request_url, json=data)
+
         if request.status_code != status.HTTP_204_NO_CONTENT:
-            error_message = f"Phenopacket upload to Katsu failed with error {request.status_code}"
-            self.logger.error(error_message)
+            error_message = f"Phenopacket upload to Katsu failed with status code {request.status_code}"
+            await self.logger.error(error_message)
             raise Exception(error_message)
+
 
     def cancel_all_requests(self, requests:list[Task]):
         for request in requests:
