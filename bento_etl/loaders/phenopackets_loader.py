@@ -12,13 +12,19 @@ class PhenopacketsLoader(BaseLoader):
         super().__init__(logger, config)
         self.dataset_id = dataset_id
         self.batch_size = batch_size
-        self.load_url = f"http://{self.config.katsu_endpoint}/ingest/{self.dataset_id}/phenopackets_json"
+        self.load_url = f"{self.config.katsu_url}ingest/{self.dataset_id}/phenopackets_json"
 
     async def load(self, data: json):
         load_requests = []
         limits = httpx.Limits(max_keepalive_connections=20, max_connections=len(data))
+        headers = {'Authorization': f'Bearer {self.config.etl_client_secret}'}
+        self.logger(self.config.openid_config_url)
 
-        async with AsyncClient(limits=limits) as client:
+        '''
+
+        async with AsyncClient(limits=limits, 
+                               verify=self.config.bento_validate_ssl,
+                               headers=headers) as client:
             for index in range(0, len(data), self.batch_size):
                 batch = data[index : index + self.batch_size]
                 request = asyncio.ensure_future(
@@ -29,16 +35,16 @@ class PhenopacketsLoader(BaseLoader):
             try:
                 await asyncio.gather(*load_requests)
             except Exception as ex:
-                await self.logger.warning("Cancelling all Phenopacket uploads")
+                self.logger.warning("Cancelling all Phenopacket uploads")
                 self.cancel_all_requests(load_requests)
-                raise ex
+                raise ex'''
 
     async def send_request(self, client: AsyncClient, request_url: str, data: json):
         request = await client.post(request_url, json=data)
 
         if request.status_code != status.HTTP_204_NO_CONTENT:
             error_message = f"Phenopacket upload to Katsu failed with status code {request.status_code}"
-            await self.logger.error(error_message)
+            self.logger.error(error_message)
             raise Exception(error_message)
 
     def cancel_all_requests(self, requests: list[Task]):
