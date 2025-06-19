@@ -4,6 +4,8 @@ import asyncio
 from asyncio import Task
 from httpx import AsyncClient
 from fastapi import status
+
+from bento_etl import authz
 from .base import BaseLoader
 
 
@@ -11,23 +13,13 @@ class PhenopacketsLoader(BaseLoader):
     def __init__(self, logger, config, dataset_id, batch_size):
         super().__init__(logger, config)
         self.dataset_id = dataset_id
-        self.batch_size = batch_size
+        self.batch_size = batch_size #TODO: Check that it is > 0
         self.load_url = f"{self.config.katsu_url}ingest/{self.dataset_id}/phenopackets_json"
 
     async def load(self, data: json):
-        openid_config = httpx.get(self.config.openid_config_url, verify=self.config.bento_validate_ssl).json()
-        
-        token_res = httpx.post(openid_config["token_endpoint"], verify=self.config.bento_validate_ssl, data={
-                "grant_type": "client_credentials",
-                "client_id": self.config.etl_client_id,
-                "client_secret": self.config.etl_client_secret,
-            })
-                
-        bearer_token = f'Bearer {token_res.json()["access_token"]}'
-        
-
         load_requests = []
         limits = httpx.Limits(max_keepalive_connections=20, max_connections=len(data))
+        bearer_token = authz.get_bearer_token(self.config.openid_config_url, self.config.etl_client_id, self.config.etl_client_secret, self.config.bento_validate_ssl)
         headers = {'Authorization': bearer_token}
 
         async with AsyncClient(limits=limits, 
