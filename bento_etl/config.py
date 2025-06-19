@@ -2,7 +2,6 @@ from bento_lib.config.pydantic import BentoFastAPIBaseConfig
 from fastapi import Depends
 from functools import lru_cache
 from typing import Annotated
-import os
 
 from .constants import SERVICE_GROUP, SERVICE_ARTIFACT
 
