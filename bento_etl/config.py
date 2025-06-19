@@ -25,7 +25,9 @@ class Config(BentoFastAPIBaseConfig):
     katsu_url: str = "http://localhost:8000"
     etl_client_id: str = ""
     etl_client_secret: str = ""
-    openid_config_url: str = "https://bentov2auth.local/realms/bentov2/.well-known/openid-configuration"
+    openid_config_url: str = (
+        "https://bentov2auth.local/realms/bentov2/.well-known/openid-configuration"
+    )
 
 
 @lru_cache

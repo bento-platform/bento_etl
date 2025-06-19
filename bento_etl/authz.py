@@ -10,13 +10,18 @@ authz_middleware = FastApiAuthMiddleware.build_from_fastapi_pydantic_config(
     config, get_logger(config)
 )
 
+
 def get_bearer_token(openid_config_url, client_id, client_secret, validate_ssl):
     openid_config = httpx.get(openid_config_url, verify=validate_ssl).json()
 
-    token_res = httpx.post(openid_config["token_endpoint"], verify=validate_ssl, data={
+    token_res = httpx.post(
+        openid_config["token_endpoint"],
+        verify=validate_ssl,
+        data={
             "grant_type": "client_credentials",
             "client_id": client_id,
             "client_secret": client_secret,
-        })
+        },
+    )
 
-    return f'Bearer {token_res.json()["access_token"]}'
+    return f"Bearer {token_res.json()['access_token']}"
