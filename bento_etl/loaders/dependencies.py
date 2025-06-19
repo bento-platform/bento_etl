@@ -12,12 +12,6 @@ __all__ = ["get_loader", "LoaderDep"]
 
 def get_loader(job: Job, logger: LoggerDependency, config: ConfigDependency):
     # returns the appropriate loader instance depending on the job description
-    # TODO: implement dependency injection logic once we have Job model and concrete loaders
-    # e.g:
-    # if job.loader.type == "phenopacket":
-    #   return LoadPhenopackets(job.loader)
-
-    # TODO: should probably raise if dependency cannot be provided from job details
     if job.loader.data_type == "phenopackets":
         return PhenopacketsLoader(
             logger, config, job.loader.dataset_id, job.loader.batch_size
