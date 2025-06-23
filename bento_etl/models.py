@@ -28,7 +28,6 @@ class LoadStep(BaseModel):
     Class to describe a Loader step to run in a pipeline job.
     """
 
-    # TODO: complete
     dataset_id: str
     batch_size: int
     data_type: Literal["phenopackets", "experiments"]
