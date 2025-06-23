@@ -19,6 +19,6 @@ class PhenopacketsLoader(BaseLoader):
             f"{self.config.katsu_url}ingest/{self.dataset_id}/phenopackets_json"
         )
         
-    def load(self, data):
-        self._load_json(data)
+    async def load(self, data):
+        await self._load_json(data)
 
