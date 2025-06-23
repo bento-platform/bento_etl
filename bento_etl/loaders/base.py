@@ -40,15 +40,24 @@ class BaseLoader:
             limits=limits, verify=self.config.bento_validate_ssl, headers=headers
         ) as client:
             try:
-                for index in range(0, len(data), self.batch_size):
-                    batch = data[index : index + self.batch_size]
-                    request = asyncio.ensure_future(self.send_request(client, batch))
+                if self.batch_size == 0:
+                    request = asyncio.ensure_future(self._send_json_data(client, data))
                     load_requests.append(request)
+                else:
+                    load_requests = await self.send_batch_requests(client, data)
                 await asyncio.gather(*load_requests)
             except Exception as ex:
                 self.logger.warning("Cancelling all uploads")
                 self.cancel_all_requests(load_requests)
                 raise ex
+
+    async def send_batch_requests(self, client: AsyncClient, data:json) -> list[Task]:
+        requests = []
+        for index in range(0, len(data), self.batch_size):
+            batch = data[index : index + self.batch_size]
+            request = asyncio.ensure_future(self._send_json_data(client, batch))
+            requests.append(request)
+        return requests
 
     async def _send_json_data(self, client: AsyncClient, data: json):
         response = await client.post(self.load_url, json=data)
