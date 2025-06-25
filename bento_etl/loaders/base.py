@@ -25,10 +25,7 @@ class BaseLoader:
         self.logger = logger
         self.config = config
 
-    def load(self, data):
-        pass
-
-    async def _load_json(self, data: json, url:str, batch_size:int = 0):
+    async def _load(self, data: list, load_url:str, batch_size:int = 0):
         load_requests = []
         limits = httpx.Limits(max_keepalive_connections=20, max_connections=len(data))
         headers = {
@@ -40,21 +37,21 @@ class BaseLoader:
         ) as client:
             try:
                 if batch_size == 0:
-                    load_requests = [asyncio.ensure_future(self._send_json_data(client, data, url))]
+                    load_requests = [asyncio.ensure_future(self._send_json_data(client, data, load_url))]
                 else:
                     batches = self._create_data_batches(data, batch_size)
-                    load_requests = [asyncio.ensure_future(self._send_json_data(client, batch, url)) for batch in batches]
+                    load_requests = [asyncio.ensure_future(self._send_json_data(client, batch, load_url)) for batch in batches]
                 await asyncio.gather(*load_requests)
             except Exception as ex:
                 self.logger.warning("Cancelling all uploads")
                 self._cancel_all_requests(load_requests)
                 raise ex
 
-    def _create_data_batches(self, data, batch_size) -> list:
+    def _create_data_batches(self, data:list, batch_size:int) -> list:
         return [data[index : index + batch_size] for index in range(0, len(data), batch_size)]
 
-    async def _send_json_data(self, client: AsyncClient, data: json, url:str):
-        response = await client.post(url, json=data)
+    async def _send_json_data(self, client: AsyncClient, data: list, load_url:str):
+        response = await client.post(load_url, json=data)
 
         if response.status_code != status.HTTP_204_NO_CONTENT:
             error_message = f"Upload to Katsu failed with status code {response.status_code}"
