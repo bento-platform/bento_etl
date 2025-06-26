@@ -88,12 +88,12 @@ class TestPhenopacketsLoader:
 
     @pytest.mark.asyncio
     async def test_invalid_dataset_id(self, logger, config, load_phenopacket_data, set_mock_for_invalid_post):
-        loader = PhenopacketsLoader(logger, config, "BAD_DATASET_ID", 4)
+        loader = PhenopacketsLoader(logger, config, "BAD_DATASET_ID", 0)
         with pytest.raises(Exception, match="400"):
             await loader.load(load_phenopacket_data)
 
     @pytest.mark.asyncio
     async def test_invalid_data(self, logger, config, set_mock_for_invalid_post):
-        loader = PhenopacketsLoader(logger, config, uuid.uuid4(), 4)
+        loader = PhenopacketsLoader(logger, config, uuid.uuid4(), 0)
         with pytest.raises(Exception, match="400"):
             await loader.load("BAD_DATA")
