@@ -4,7 +4,6 @@ import httpx
 import pytest
 import os
 import json
-from unittest.mock import patch
 from bento_etl import authz
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.phenopackets_loader import PhenopacketsLoader
@@ -61,7 +60,7 @@ class TestBaseLoader:
         requests = [asyncio.ensure_future(mock_long_task()) for _ in range(5)]
         loader = BaseLoader(logger, config)
 
-        assert all(request.done() == False for request in requests)
+        assert all(not request.done() for request in requests)
         loader._cancel_all_requests(requests)
         await asyncio.sleep(0.5)  # Sleep a bit to allow for the cancels to take affect
         assert all(request.done() for request in requests)

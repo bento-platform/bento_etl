@@ -1,6 +1,5 @@
 from asyncio import Task
 import asyncio
-import json
 from logging import Logger
 from fastapi import status
 from httpx import AsyncClient
