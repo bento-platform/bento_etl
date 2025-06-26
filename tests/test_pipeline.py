@@ -14,4 +14,4 @@ def test_csv_experiments_pipeline(logger, config):
     # Run pipeline
     raw_data = extractor.extract()
     transformed_data = transformer.transform(raw_data)
-    #loader.load(transformed_data)
+    # loader.load(transformed_data)
