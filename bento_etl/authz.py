@@ -13,7 +13,7 @@ authz_middleware = FastApiAuthMiddleware.build_from_fastapi_pydantic_config(
 
 def get_bearer_token_from_config(config: Config) -> str:
     return get_bearer_token(
-        config.openid_config_url,
+        config.bento_openid_config_url,
         config.etl_client_id,
         config.etl_client_secret,
         config.bento_validate_ssl,
