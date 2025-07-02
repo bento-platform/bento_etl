@@ -51,7 +51,7 @@ class BaseLoader:
             except Exception as ex:
                 self.logger.warning("Cancelling all uploads")
                 self._cancel_all_requests(load_requests)
-                raise ex
+                raise
 
     def _create_data_batches(self, data: list, batch_size: int) -> list:
         return [

@@ -1,5 +1,8 @@
+from enum import Enum
 from typing import Literal
+import uuid
 from pydantic import BaseModel
+from sqlmodel import Column, Enum as SQLModelEnum, Field, SQLModel
 
 __all__ = ["Job"]
 
@@ -32,14 +35,22 @@ class LoadStep(BaseModel):
     batch_size: int
     data_type: Literal["phenopackets", "experiments"]
 
+class JobStatusType(Enum):
+    SUBMITTED = "Submitted",
+    EXTRACTING = "Extracting",
+    TRANSFORMING = "Transforming",
+    LOADING = "Loading",
+    SUCCESS = "Success",
+    ERROR = "Error"
 
-class JobStatus(BaseModel):
+
+class JobStatus(SQLModel):
     """
     Describes the current status of a job
     """
-
-    # TODO: complete
-    pass
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    status: JobStatusType = Field(default=SQLModelEnum(JobStatusType.SUBMITTED))
+    extra_information: str
 
 
 class Job(BaseModel):

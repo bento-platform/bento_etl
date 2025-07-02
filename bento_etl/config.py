@@ -25,6 +25,7 @@ class Config(BentoFastAPIBaseConfig):
     etl_client_id: str = ""
     etl_client_secret: str = ""
     bento_openid_config_url: str = ""
+    database_uri: str = ""
 
 
 @lru_cache

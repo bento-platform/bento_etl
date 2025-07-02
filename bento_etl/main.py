@@ -1,5 +1,10 @@
+from typing import AsyncGenerator
 from bento_lib.apps.fastapi import BentoFastAPI
 from bento_lib.service_info.types import BentoExtraServiceInfo
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+
+
 
 from . import __version__
 from .authz import authz_middleware
@@ -7,6 +12,8 @@ from .config import get_config
 from .logger import get_logger
 from .constants import BENTO_SERVICE_KIND, SERVICE_TYPE
 from .routers.jobs import job_router
+
+from ???? import create_db_and_tables
 
 BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
     "serviceKind": BENTO_SERVICE_KIND,
@@ -18,6 +25,14 @@ BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
 config = get_config()
 logger = get_logger(config)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    logger.info("Starting up...")
+    create_db_and_tables()!!!!!!!!!!
+    yield
+    logger.info("Shutting down...")
+    logger.info("Finished shutting down.")
+
 app = BentoFastAPI(
     authz_middleware,
     config,
@@ -26,6 +41,7 @@ app = BentoFastAPI(
     SERVICE_TYPE,
     __version__,
     configure_structlog_access_logger=True,
+    lifespan=lifespan,
 )
 
 app.include_router(job_router)
