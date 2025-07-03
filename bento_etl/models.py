@@ -35,12 +35,12 @@ class LoadStep(BaseModel):
     batch_size: int
     data_type: Literal["phenopackets", "experiments"]
 
-class JobStatusType(Enum):
-    SUBMITTED = "Submitted",
-    EXTRACTING = "Extracting",
-    TRANSFORMING = "Transforming",
-    LOADING = "Loading",
-    SUCCESS = "Success",
+class JobStatusType(str, Enum):
+    SUBMITTED = "Submitted"
+    EXTRACTING = "Extracting"
+    TRANSFORMING = "Transforming"
+    LOADING = "Loading"
+    SUCCESS = "Success"
     ERROR = "Error"
 
 
@@ -49,7 +49,8 @@ class JobStatus(SQLModel):
     Describes the current status of a job
     """
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    status: JobStatusType = Field(default=SQLModelEnum(JobStatusType.SUBMITTED))
+    status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)), default=SQLModelEnum(JobStatusType.SUBMITTED))
+        
     extra_information: str
 
 

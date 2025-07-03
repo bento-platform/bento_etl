@@ -4,6 +4,7 @@ from bento_lib.service_info.types import BentoExtraServiceInfo
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
+from bento_etl.db import get_db
 
 
 from . import __version__
@@ -12,8 +13,6 @@ from .config import get_config
 from .logger import get_logger
 from .constants import BENTO_SERVICE_KIND, SERVICE_TYPE
 from .routers.jobs import job_router
-
-from ???? import create_db_and_tables
 
 BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
     "serviceKind": BENTO_SERVICE_KIND,
@@ -24,11 +23,12 @@ BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
 
 config = get_config()
 logger = get_logger(config)
+db = get_db(config)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("Starting up...")
-    create_db_and_tables()!!!!!!!!!!
+    db.setup()
     yield
     logger.info("Shutting down...")
     logger.info("Finished shutting down.")
