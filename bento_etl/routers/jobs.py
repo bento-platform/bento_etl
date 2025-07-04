@@ -5,7 +5,7 @@ from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import ExtractorDep
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import LoaderDep
-from bento_etl.models import Job, JobStatus, JobStatusType
+from bento_etl.models import Job, JobStatusType
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import TransformerDep
 
@@ -66,3 +66,13 @@ async def submit_job(
     job.id = db.create_job_status().id
     bt.add_task(run_pipeline, job.id, extractor, transformer, loader, db)
     return {"message": f"Running ETL job in the background {job.id}"}
+
+
+@job_router.get("")
+async def get_job_status(
+    db: DatabaseDependency,
+):
+    all_jobs = db.get_all_job_status()
+    for e in all_jobs:
+        print(e)
+    return all_jobs

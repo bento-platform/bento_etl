@@ -53,9 +53,20 @@ class Database():
 
             session.add(job)
             session.commit()
-
-            session.refresh(job) # TODO remove?
-            print(job.status)
+            
+    def get_all_job_status(self) -> list[JobStatus]:
+        with Session(self.engine) as session:
+            job_selection = select(JobStatus)
+            results = session.exec(job_selection)
+            return results
+    
+    def get_job_status(self, job_id:str):
+        with Session(self.engine) as session:
+            job_selection = select(JobStatus).where(JobStatus.id == job_id)
+            results = session.exec(job_selection)
+            job = results.one()
+            print(f"EEEEEEEEEEEEe {job}")
+            return job
 
 
 @lru_cache

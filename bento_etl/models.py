@@ -50,6 +50,9 @@ class JobStatus(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
     extra_information: str | None = Field(default=None)
+    
+    def __str__(self):
+        return f"Job {self.id} | status {self.status} | extra information {self.extra_information}"
 
 
 class Job(BaseModel):
