@@ -43,15 +43,13 @@ class JobStatusType(str, Enum):
     SUCCESS = "Success"
     ERROR = "Error"
 
-
-class JobStatus(SQLModel):
+class JobStatus(SQLModel, table=True):
     """
     Describes the current status of a job
     """
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)), default=SQLModelEnum(JobStatusType.SUBMITTED))
-        
-    extra_information: str
+    status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
+    extra_information: str | None = Field(default=None)
 
 
 class Job(BaseModel):

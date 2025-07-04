@@ -1,10 +1,11 @@
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, status
 
+from bento_etl.db import DatabaseDependency
 from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import ExtractorDep
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import LoaderDep
-from bento_etl.models import Job
+from bento_etl.models import Job, JobStatus
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import TransformerDep
 
@@ -27,6 +28,7 @@ def run_pipeline(
     extractor: BaseExtractor,
     transformer: BaseTransformer,
     loader: BaseLoader,
+    db: DatabaseDependency,
 ):
     # TODO: Run pipelines as a background task, figure out dep injection for ETL components
     # TODO: Update job state in the DB after each step to reflect progression status
@@ -54,7 +56,8 @@ async def submit_job(
     extractor: ExtractorDep,
     transformer: TransformerDep,
     loader: LoaderDep,
+    db: DatabaseDependency,
 ):
-    # TODO: save job to DB
-    bt.add_task(run_pipeline, job.id, extractor, transformer, loader)
+    job.id = db.create_job_status().id
+    bt.add_task(run_pipeline, job.id, extractor, transformer, loader, db)
     return {"message": f"Running ETL job in the background {job.id}"}

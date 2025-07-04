@@ -30,9 +30,19 @@ class Database():
 
     def setup(self):
         SQLModel.metadata.create_all(self.engine)
+        
+        
+    def create_job_status(self):
+        with Session(self.engine) as session:
+            job = JobStatus()
+            job.status = JobStatusType.SUBMITTED
+            session.add(job)
+            session.commit()
+            session.refresh(job)
+            return job
 
 
-    def change_status(self, job_id:str, status:JobStatusType, information:str=""):
+    def change_job_status(self, job_id:str, status:JobStatusType, information:str=""):
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
             results = session.exec(job_selection)
