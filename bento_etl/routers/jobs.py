@@ -5,7 +5,7 @@ from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import ExtractorDep
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import LoaderDep
-from bento_etl.models import Job, JobStatus
+from bento_etl.models import Job, JobStatus, JobStatusType
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import TransformerDep
 
@@ -32,17 +32,22 @@ def run_pipeline(
 ):
     # TODO: Run pipelines as a background task, figure out dep injection for ETL components
     # TODO: Update job state in the DB after each step to reflect progression status
+    # TODO: Pass error messages/more informative info to be persisted in case of error
+    db.change_job_status(job_id, JobStatusType.EXTRACTING)
     extracted_df = extractor.extract()
     if extracted_df:
+        db.change_job_status(job_id, JobStatusType.TRANSFORMING)
         transformed_df = transformer.transform(extracted_df)
         if transformed_df:
+            db.change_job_status(job_id, JobStatusType.LOADING)
             loader.load(transformed_df)
+            db.change_job_status(job_id, JobStatusType.SUCCESS)
         else:
             # TODO: log error and abort with callback
-            pass
+            db.change_job_status(job_id, JobStatusType.ERROR, "Issue with transforming step")
     else:
         # TODO: log error and abort with callback
-        pass
+        db.change_job_status(job_id, JobStatusType.ERROR, "Issue with extracting step")
     # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
 
 
