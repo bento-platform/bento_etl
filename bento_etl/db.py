@@ -7,7 +7,7 @@ from fastapi import Depends, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select, text
 
 from bento_etl.config import Config, ConfigDependency, get_config
-from bento_etl.models import JobStatus, JobStatusType, JobStatusUpdate
+from bento_etl.models import JobStatus, JobStatusType
 
 __all__ = [
     "Database",
