@@ -51,7 +51,7 @@ class JobStatus(SQLModel, table=True):
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
     extra_information: str | None = Field(default=None)
     
-    def __str__(self):
+    def to_str(self):
         return f"Job {self.id} | {self.status} | {self.extra_information}"
 
 

@@ -5,7 +5,7 @@ from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import ExtractorDep
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import LoaderDep
-from bento_etl.models import Job, JobStatusType
+from bento_etl.models import Job, JobStatus, JobStatusType
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import TransformerDep
 
@@ -18,12 +18,7 @@ Jobs router plan:
 /jobs/{ID}  [GET]       => get a specific job
 /jobs/{ID}  [DELETE]    => kill a job if it is running
 """
-
-# TODO: Job model describing a submitable ETL pipeline job
-# TODO: Add DB to keep track of jobs
-
-
-def run_pipeline(
+async def run_pipeline(
     job_id: str,
     extractor: BaseExtractor,
     transformer: BaseTransformer,
@@ -33,22 +28,23 @@ def run_pipeline(
     # TODO: Run pipelines as a background task, figure out dep injection for ETL components
     # TODO: Update job state in the DB after each step to reflect progression status
     # TODO: Pass error messages/more informative info to be persisted in case of error
-    db.change_job_status(job_id, JobStatusType.EXTRACTING)
-    extracted_df = extractor.extract()
-    if extracted_df:
-        db.change_job_status(job_id, JobStatusType.TRANSFORMING)
-        transformed_df = transformer.transform(extracted_df)
-        if transformed_df:
-            db.change_job_status(job_id, JobStatusType.LOADING)
-            loader.load(transformed_df)
-            db.change_job_status(job_id, JobStatusType.SUCCESS)
-        else:
-            # TODO: log error and abort with callback
-            db.change_job_status(job_id, JobStatusType.ERROR, "Issue with transforming step")
-    else:
-        # TODO: log error and abort with callback
-        db.change_job_status(job_id, JobStatusType.ERROR, "Issue with extracting step")
     # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
+
+    try:
+        db.change_job_status(job_id, JobStatusType.EXTRACTING)
+        extract_df = extractor.extract()
+
+        db.change_job_status(job_id, JobStatusType.TRANSFORMING)
+        transform_df = transformer.transform(extract_df)
+
+        db.change_job_status(job_id, JobStatusType.LOADING)
+        await loader.load(transform_df)
+
+        db.change_job_status(job_id, JobStatusType.SUCCESS)
+
+    except Exception as ex:
+        db.change_job_status(job_id, JobStatusType.ERROR, ex)
+
 
 
 job_router = APIRouter(prefix="/jobs")
@@ -68,22 +64,31 @@ async def submit_job(
     return {"message": f"Running ETL job in the background {job.id}"}
 
 
-@job_router.get("")
+@job_router.get("", response_model=list[JobStatus])
 async def get_all_job_status(
     db: DatabaseDependency,
 ):
     all_jobs = db.get_all_job_status()
     for e in all_jobs:
-        print(e)
+        print(e.to_str())
     return all_jobs
 
 
-@job_router.get("/{job_id}")
+@job_router.get("/{job_id}", response_model=JobStatus)
 async def get_job_status(
     job_id:str,
     db: DatabaseDependency,
 ):
      #TODO handle error when id not in db
     job = db.get_job_status(job_id)
-    print(job)
+    print(job.to_str())
     return job
+
+@job_router.delete("/{job_id}")
+async def delete_job(
+    job_id:str,
+    db: DatabaseDependency
+):
+    # TODO kill the job if it is running
+    db.delete_job(job_id)
+    return {"message": f"Job {job_id} has been deleted"}

@@ -3,11 +3,11 @@
 from typing import Annotated
 from functools import lru_cache
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select, text
 
 from bento_etl.config import Config, ConfigDependency, get_config
-from bento_etl.models import JobStatus, JobStatusType
+from bento_etl.models import JobStatus, JobStatusType, JobStatusUpdate
 
 __all__ = [
     "Database",
@@ -30,8 +30,7 @@ class Database():
 
     def setup(self):
         SQLModel.metadata.create_all(self.engine)
-        
-        
+
     def create_job_status(self):
         with Session(self.engine) as session:
             job = JobStatus()
@@ -41,32 +40,34 @@ class Database():
             session.refresh(job)
             return job
 
-
     def change_job_status(self, job_id:str, status:JobStatusType, information:str=""):
         with Session(self.engine) as session:
-            job_selection = select(JobStatus).where(JobStatus.id == job_id)
-            results = session.exec(job_selection)
-            job = results.one()
-
+            job = session.get(JobStatus, job_id)
+            if not job:
+                raise HTTPException(status_code=404, detail="Job not found")
             job.status = status
-            job.extra_information = information
-
+            job.extra_information=information
             session.add(job)
             session.commit()
 
     def get_all_job_status(self):
         with Session(self.engine) as session:
-            job_selection = select(JobStatus)
-            results = session.exec(job_selection, execution_options={"prebuffer_rows": True})
-        return results
-    
+            return session.exec(select(JobStatus), execution_options={"prebuffer_rows": True})
+
     def get_job_status(self, job_id:str):
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
-            results = session.exec(job_selection, execution_options={"prebuffer_rows": True})
-            job = results.one() # TODO or first()?
-        return job
-
+            results = session.exec(job_selection)
+            return results.one() # TODO or first()?
+        
+    
+    def delete_job(self, job_id):
+        with Session(self.engine) as session:
+            job = session.get(JobStatus, job_id)
+            if not job:
+                raise HTTPException(status_code=404, detail="Job not found")
+            session.delete(job)
+            session.commit()
 
 @lru_cache
 def get_db(config: ConfigDependency):
