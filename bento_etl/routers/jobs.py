@@ -69,10 +69,21 @@ async def submit_job(
 
 
 @job_router.get("")
-async def get_job_status(
+async def get_all_job_status(
     db: DatabaseDependency,
 ):
     all_jobs = db.get_all_job_status()
     for e in all_jobs:
         print(e)
     return all_jobs
+
+
+@job_router.get("/{job_id}")
+async def get_job_status(
+    job_id:str,
+    db: DatabaseDependency,
+):
+     #TODO handle error when id not in db
+    job = db.get_job_status(job_id)
+    print(job)
+    return job

@@ -53,20 +53,19 @@ class Database():
 
             session.add(job)
             session.commit()
-            
-    def get_all_job_status(self) -> list[JobStatus]:
+
+    def get_all_job_status(self):
         with Session(self.engine) as session:
             job_selection = select(JobStatus)
-            results = session.exec(job_selection)
-            return results
+            results = session.exec(job_selection, execution_options={"prebuffer_rows": True})
+        return results
     
     def get_job_status(self, job_id:str):
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
-            results = session.exec(job_selection)
-            job = results.one()
-            print(f"EEEEEEEEEEEEe {job}")
-            return job
+            results = session.exec(job_selection, execution_options={"prebuffer_rows": True})
+            job = results.one() # TODO or first()?
+        return job
 
 
 @lru_cache

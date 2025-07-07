@@ -52,7 +52,7 @@ class JobStatus(SQLModel, table=True):
     extra_information: str | None = Field(default=None)
     
     def __str__(self):
-        return f"Job {self.id} | status {self.status} | extra information {self.extra_information}"
+        return f"Job {self.id} | {self.status} | {self.extra_information}"
 
 
 class Job(BaseModel):
@@ -60,7 +60,7 @@ class Job(BaseModel):
     extractor: ExtractStep
     transformer: TransformStep
     loader: LoadStep
-    status: JobStatus
+    #status: JobStatus
 
     # TODO: add rest of fields
     # Should be able to describe an ETL pipeline to run
