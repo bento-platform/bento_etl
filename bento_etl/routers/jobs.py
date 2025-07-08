@@ -1,5 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, status
 
+from bento_etl.authz import authz_middleware
 from bento_etl.db import DatabaseDependency
 from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import ExtractorDep
@@ -46,11 +47,11 @@ async def run_pipeline(
         db.change_job_status(job_id, JobStatusType.ERROR, ex)
 
 
+# TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
+# Should use authz_middleware.dep_require_permissions_on_resource and at the endpoint level instead of the router.
+job_router = APIRouter(prefix="/jobs", dependencies=[authz_middleware.dep_public_endpoint()])
 
-job_router = APIRouter(prefix="/jobs")
-
-
-@job_router.post("")
+@job_router.post("", dependencies=[])
 async def submit_job(
     job: Job,
     bt: BackgroundTasks,
