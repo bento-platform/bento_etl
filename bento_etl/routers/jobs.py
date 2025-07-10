@@ -45,10 +45,8 @@ async def run_pipeline(
         db.change_job_status(job_id, JobStatusType.SUCCESS)
 
     except Exception as ex:
-        if hasattr(ex, 'message'):
-            db.change_job_status(job_id, JobStatusType.ERROR, ex.message)
-        else:
-            db.change_job_status(job_id, JobStatusType.ERROR)
+        db.change_job_status(job_id, JobStatusType.ERROR, str(ex))
+
 
 
 # TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
