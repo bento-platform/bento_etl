@@ -49,18 +49,17 @@ class JobStatus(SQLModel, table=True):
     """
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
-    extra_information: str | None = Field(default=None)
+    extra_information: str | None = Field(default=None)  # TODO: decide none/null vs ""; mayhaps we would wish to log timestamps?
     
     def to_str(self):
         return f"Job {self.id} | {self.status} | {self.extra_information}"
 
 
 class Job(BaseModel):
-    id: str  # TODO: auto gen uuid
+    id: str
     extractor: ExtractStep
     transformer: TransformStep
     loader: LoadStep
-    #status: JobStatus
 
     # TODO: add rest of fields
     # Should be able to describe an ETL pipeline to run

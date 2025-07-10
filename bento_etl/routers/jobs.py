@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, BackgroundTasks, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, status
 
 from bento_etl.authz import authz_middleware
 from bento_etl.db import DatabaseDependency
@@ -81,8 +81,10 @@ async def get_job_status(
     job_id:uuid.UUID,
     db: DatabaseDependency,
 ):
-     #TODO handle error when id not in db
-    return db.get_job_status(job_id)
+    job = db.get_job_status(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found in database")
+    return job
 
 
 @job_router.delete("/{job_id}")
@@ -93,3 +95,4 @@ async def delete_job(
     # TODO kill the job if it is running
     db.delete_job(job_id)
     return {"message": f"Job {job_id} has been deleted"}
+
