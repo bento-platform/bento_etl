@@ -18,15 +18,7 @@ __all__ = [
 
 class Database():
     def __init__(self, config):
-        #TODO refactor to method
-        try:
-            create_db_engine = create_engine(f"{config.database_path}/postgres", echo=True)
-            with create_db_engine.connect() as conn:
-                conn.execute(text("commit"))
-                conn.execute(text(f"create database {config.database_name}"))
-        except:
-            pass
-        self.engine = create_engine(f"{config.database_path}/{config.database_name}", echo=True)
+        self.engine = create_engine("sqlite:///jobstatus.db", echo=True)
 
     def setup(self):
         SQLModel.metadata.create_all(self.engine)

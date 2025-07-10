@@ -1,3 +1,4 @@
+import uuid
 from fastapi import APIRouter, BackgroundTasks, status
 
 from bento_etl.authz import authz_middleware
@@ -44,7 +45,10 @@ async def run_pipeline(
         db.change_job_status(job_id, JobStatusType.SUCCESS)
 
     except Exception as ex:
-        db.change_job_status(job_id, JobStatusType.ERROR, ex)
+        if hasattr(ex, 'message'):
+            db.change_job_status(job_id, JobStatusType.ERROR, ex.message)
+        else:
+            db.change_job_status(job_id, JobStatusType.ERROR)
 
 
 # TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
@@ -69,25 +73,21 @@ async def submit_job(
 async def get_all_job_status(
     db: DatabaseDependency,
 ):
-    all_jobs = db.get_all_job_status()
-    for e in all_jobs:
-        print(e.to_str())
-    return all_jobs
+    return db.get_all_job_status()
 
 
 @job_router.get("/{job_id}", response_model=JobStatus)
 async def get_job_status(
-    job_id:str,
+    job_id:uuid.UUID,
     db: DatabaseDependency,
 ):
      #TODO handle error when id not in db
-    job = db.get_job_status(job_id)
-    print(job.to_str())
-    return job
+    return db.get_job_status(job_id)
+
 
 @job_router.delete("/{job_id}")
 async def delete_job(
-    job_id:str,
+    job_id:uuid.UUID,
     db: DatabaseDependency
 ):
     # TODO kill the job if it is running
