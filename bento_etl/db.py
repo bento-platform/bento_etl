@@ -17,7 +17,7 @@ __all__ = [
 
 
 class Database():
-    def __init__(self, config):
+    def __init__(self):
         self.engine = create_engine("sqlite:///jobstatus.db", echo=True)
 
     def setup(self):
@@ -27,12 +27,13 @@ class Database():
         with Session(self.engine) as session:
             job = JobStatus()
             job.status = JobStatusType.SUBMITTED
+
             session.add(job)
             session.commit()
             session.refresh(job)
             return job
 
-    def change_job_status(self, job_id:str, status:JobStatusType, information:str=""):
+    def change_job_status(self, job_id:str, status:JobStatusType, information:str | None = None):
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
@@ -49,10 +50,8 @@ class Database():
     def get_job_status(self, job_id:str):
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
-            results = session.exec(job_selection)
-            return results.one() # TODO or first()?
-        
-    
+            return session.exec(job_selection).first()
+
     def delete_job(self, job_id):
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
@@ -62,8 +61,8 @@ class Database():
             session.commit()
 
 @lru_cache
-def get_db(config: ConfigDependency):
-    return Database(config)
+def get_db():
+    return Database()
 
 
 DatabaseDependency = Annotated[Database, Depends(get_db)]
