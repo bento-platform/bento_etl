@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 import os
 import json
 
+from bento_etl.db import Database, get_db
 from bento_etl.logger import get_logger
 
 os.environ["BENTO_DEBUG"] = "true"
@@ -31,6 +32,11 @@ def config() -> Config:
 def logger(config) -> Logger:
     return get_logger(config)
 
+@pytest.fixture
+def database() -> Database:
+    db = get_db()
+    db.setup()
+    return db
 
 @pytest.fixture
 def test_client():

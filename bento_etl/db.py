@@ -42,6 +42,7 @@ class Database():
             job.extra_information=information
             session.add(job)
             session.commit()
+            return job
 
     def get_all_job_status(self):
         with Session(self.engine) as session:
@@ -52,7 +53,7 @@ class Database():
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
             return session.exec(job_selection).first()
 
-    def delete_job(self, job_id):
+    def delete_job_status(self, job_id):
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:

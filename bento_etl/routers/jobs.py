@@ -91,6 +91,6 @@ async def delete_job(
     db: DatabaseDependency
 ):
     # TODO kill the job if it is running
-    db.delete_job(job_id)
+    db.delete_job_status(job_id)
     return {"message": f"Job {job_id} has been deleted"}
 
