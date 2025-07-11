@@ -7,8 +7,11 @@ from fastapi.testclient import TestClient
 import os
 import json
 
+from sqlmodel import Session, delete, select
+
 from bento_etl.db import Database, get_db
 from bento_etl.logger import get_logger
+from bento_etl.models import JobStatus
 
 os.environ["BENTO_DEBUG"] = "true"
 os.environ["BENTO_VALIDATE_SSL"] = "false"
@@ -33,9 +36,17 @@ def logger(config) -> Logger:
     return get_logger(config)
 
 @pytest.fixture
-def database() -> Database:
+def database(request) -> Database:
     db = get_db()
     db.setup()
+    
+    def teardown():
+        # Deletes the contents of the db after test
+        with Session(db.engine) as session:
+            session.exec(delete(JobStatus))
+            session.commit()
+
+    request.addfinalizer(teardown)
     return db
 
 @pytest.fixture
