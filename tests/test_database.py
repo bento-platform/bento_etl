@@ -20,5 +20,6 @@ def test_get_all_job_status_valid(database):
 
     fetched_all_status = database.get_all_job_status()
 
-    assert all_job_status == fetched_all_status
+    assert len(all_job_status) == len(fetched_all_status)
+    assert all([status in fetched_all_status for status in all_job_status])
 

@@ -42,11 +42,12 @@ class Database():
             job.extra_information=information
             session.add(job)
             session.commit()
+            session.refresh(job)
             return job
 
     def get_all_job_status(self):
         with Session(self.engine) as session:
-            return session.exec(select(JobStatus), execution_options={"prebuffer_rows": True})
+            return session.exec(select(JobStatus)).all()
 
     def get_job_status(self, job_id:str):
         with Session(self.engine) as session:
