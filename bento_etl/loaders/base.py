@@ -1,6 +1,7 @@
-from asyncio import Task
+from asyncio.tasks import Task
 import asyncio
 from logging import Logger
+from types import CoroutineType
 from fastapi import status
 from httpx import AsyncClient
 import httpx
@@ -24,8 +25,7 @@ class BaseLoader:
         self.logger = logger
         self.config = config
 
-    async def _load(self, data: list, load_url: str, batch_size: int = 0):
-        load_requests = []
+    async def _load(self, data: list[dict], load_url: str, batch_size: int = 0):
         limits = httpx.Limits(max_keepalive_connections=20, max_connections=len(data))
         headers = {"Authorization": authz.get_bearer_token_from_config(self.config)}
 
@@ -33,25 +33,23 @@ class BaseLoader:
             limits=limits, verify=self.config.bento_validate_ssl, headers=headers
         ) as client:
             try:
-                if batch_size == 0:
-                    load_requests = [
-                        asyncio.ensure_future(
-                            self._send_json_data(client, data, load_url)
-                        )
-                    ]
-                else:
-                    batches = self._create_data_batches(data, batch_size)
-                    load_requests = [
-                        asyncio.ensure_future(
-                            self._send_json_data(client, batch, load_url)
-                        )
-                        for batch in batches
-                    ]
+                load_requests = self.generate_requests(client, data, load_url, batch_size)
                 await asyncio.gather(*load_requests)
             except Exception:
                 self.logger.warning("Cancelling all uploads")
                 self._cancel_all_requests(load_requests)
                 raise
+
+    def generate_requests(self, client:AsyncClient, data:list[dict], load_url:str, batch_size:int = 0) -> set[Task]:
+        load_requests = set()
+        batches = data if batch_size == 0 else self._create_data_batches(data, batch_size)
+
+        for batch in batches:
+            load_task = asyncio.create_task(self._send_json_data(client, batch, load_url))
+            load_requests.add(load_task)
+            load_task.add_done_callback(load_requests.discard)
+
+        return load_requests
 
     def _create_data_batches(self, data: list, batch_size: int) -> list:
         return [
@@ -69,9 +67,6 @@ class BaseLoader:
             self.logger.error(error_message)
             raise Exception(error_message)
 
-    def _cancel_all_requests(self, requests: list[Task]):
+    def _cancel_all_requests(self, requests: set[Task]):
         for request in requests:
             request.cancel()
-
-
-# TODO: implement loaders for phenopackets and experiments
