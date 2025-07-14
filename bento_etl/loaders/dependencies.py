@@ -14,7 +14,7 @@ def get_loader(job: Job, logger: LoggerDependency, config: ConfigDependency):
     # returns the appropriate loader instance depending on the job description
     if job.loader.data_type == "phenopackets":
         return PhenopacketsLoader(
-            logger, config, job.loader.dataset_id, job.loader.batch_size
+            logger, config, job.loader.dataset_id, job.loader.batch_size, job.loader.expected_status_code
         )
     else:
         raise NotImplementedError

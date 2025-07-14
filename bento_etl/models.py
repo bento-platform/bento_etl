@@ -33,6 +33,7 @@ class LoadStep(BaseModel):
 
     dataset_id: str
     batch_size: int
+    expected_status_code: int
     data_type: Literal["phenopackets", "experiments"]
 
 
