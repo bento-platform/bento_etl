@@ -20,7 +20,7 @@ class JobStatusDatabase:
     def setup(self):
         SQLModel.metadata.create_all(self.engine)
 
-    def create_status(self):
+    def create_status(self) -> JobStatus:
         with Session(self.engine) as session:
             job = JobStatus()
             job.status = JobStatusType.SUBMITTED
@@ -32,7 +32,7 @@ class JobStatusDatabase:
 
     def change_status(
         self, job_id: str, status: JobStatusType, information: str | None = None
-    ):
+    ) -> JobStatus:
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
@@ -44,11 +44,11 @@ class JobStatusDatabase:
             session.refresh(job)
             return job
 
-    def get_all_status(self):
+    def get_all_status(self) -> list[JobStatus]:
         with Session(self.engine) as session:
             return session.exec(select(JobStatus)).all()
 
-    def get_status(self, job_id: str):
+    def get_status(self, job_id: str) -> JobStatus:
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
             return session.exec(job_selection).first()
