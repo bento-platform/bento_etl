@@ -1,5 +1,3 @@
-
-
 import uuid
 
 import pytest
@@ -9,6 +7,7 @@ from bento_etl.models import JobStatusType
 def test_create_status(database):
     status = database.create_job_status()
     assert status.id is not None
+
 
 def test_change_status_valid(database):
     status = database.create_job_status()
@@ -20,7 +19,9 @@ def test_change_status_valid(database):
 
 def test_change_status_invalid(database):
     with pytest.raises(Exception):
-        database.change_job_status(uuid.uuid4(), JobStatusType.SUCCESS)  # Job status with uuid doesn't exist
+        database.change_job_status(
+            uuid.uuid4(), JobStatusType.SUCCESS
+        )  # Job status with uuid doesn't exist
 
 
 def test_get_all_status_valid(database):
@@ -43,6 +44,7 @@ def test_get_status_valid(database):
 
 
 def test_get_status_invalid(database):
-    status_value = database.get_job_status(uuid.uuid4())  # Job status with uuid doesn't exist
+    status_value = database.get_job_status(
+        uuid.uuid4()
+    )  # Job status with uuid doesn't exist
     assert status_value is None
-

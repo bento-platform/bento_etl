@@ -25,6 +25,7 @@ config = get_config()
 logger = get_logger(config)
 db = get_db()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("Starting up database...")
@@ -32,6 +33,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
     logger.info("Shutting down database...")
     logger.info("Finished shutting down database.")
+
 
 app = BentoFastAPI(
     authz_middleware,

@@ -48,7 +48,7 @@ class BaseLoader:
                         for batch in batches
                     ]
                 await asyncio.gather(*load_requests)
-            except Exception as ex:
+            except Exception:
                 self.logger.warning("Cancelling all uploads")
                 self._cancel_all_requests(load_requests)
                 raise

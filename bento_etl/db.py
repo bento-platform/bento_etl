@@ -1,12 +1,9 @@
-
-
 from typing import Annotated
 from functools import lru_cache
 
 from fastapi import Depends, HTTPException
-from sqlmodel import Session, SQLModel, create_engine, select, text
+from sqlmodel import Session, SQLModel, create_engine, select
 
-from bento_etl.config import Config, ConfigDependency, get_config
 from bento_etl.models import JobStatus, JobStatusType
 
 __all__ = [
@@ -16,7 +13,7 @@ __all__ = [
 ]
 
 
-class Database():
+class Database:
     def __init__(self):
         self.engine = create_engine("sqlite:///jobstatus.db", echo=True)
 
@@ -33,13 +30,15 @@ class Database():
             session.refresh(job)
             return job
 
-    def change_job_status(self, job_id:str, status:JobStatusType, information:str | None = None):
+    def change_job_status(
+        self, job_id: str, status: JobStatusType, information: str | None = None
+    ):
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
                 raise HTTPException(status_code=404, detail="Job not found")
             job.status = status
-            job.extra_information=information
+            job.extra_information = information
             session.add(job)
             session.commit()
             session.refresh(job)
@@ -49,7 +48,7 @@ class Database():
         with Session(self.engine) as session:
             return session.exec(select(JobStatus)).all()
 
-    def get_job_status(self, job_id:str):
+    def get_job_status(self, job_id: str):
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
             return session.exec(job_selection).first()
@@ -62,10 +61,10 @@ class Database():
             session.delete(job)
             session.commit()
 
+
 @lru_cache
 def get_db():
     return Database()
 
 
 DatabaseDependency = Annotated[Database, Depends(get_db)]
-

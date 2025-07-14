@@ -35,6 +35,7 @@ class LoadStep(BaseModel):
     batch_size: int
     data_type: Literal["phenopackets", "experiments"]
 
+
 class JobStatusType(str, Enum):
     SUBMITTED = "Submitted"
     EXTRACTING = "Extracting"
@@ -43,14 +44,18 @@ class JobStatusType(str, Enum):
     SUCCESS = "Success"
     ERROR = "Error"
 
+
 class JobStatus(SQLModel, table=True):
     """
     Describes the current status of a job
     """
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
-    extra_information: str | None = Field(default=None)  # TODO: decide none/null vs ""; mayhaps we would wish to log timestamps?
-    
+    extra_information: str | None = Field(
+        default=None
+    )  # TODO: decide none/null vs ""; mayhaps we would wish to log timestamps?
+
     def to_str(self):
         return f"Job {self.id} | {self.status} | {self.extra_information}"
 

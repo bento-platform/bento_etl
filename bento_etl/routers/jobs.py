@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, BackgroundTasks, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 
 from bento_etl.authz import authz_middleware
 from bento_etl.db import DatabaseDependency
@@ -20,6 +20,8 @@ Jobs router plan:
 /jobs/{ID}  [GET]       => get a specific job
 /jobs/{ID}  [DELETE]    => kill a job if it is running
 """
+
+
 async def run_pipeline(
     job_id: str,
     extractor: BaseExtractor,
@@ -48,10 +50,12 @@ async def run_pipeline(
         db.change_job_status(job_id, JobStatusType.ERROR, str(ex))
 
 
-
 # TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
 # Should use authz_middleware.dep_require_permissions_on_resource and at the endpoint level instead of the router.
-job_router = APIRouter(prefix="/jobs", dependencies=[authz_middleware.dep_public_endpoint()])
+job_router = APIRouter(
+    prefix="/jobs", dependencies=[authz_middleware.dep_public_endpoint()]
+)
+
 
 @job_router.post("", dependencies=[])
 async def submit_job(
@@ -76,21 +80,19 @@ async def get_all_job_status(
 
 @job_router.get("/{job_id}", response_model=JobStatus)
 async def get_job_status(
-    job_id:uuid.UUID,
+    job_id: uuid.UUID,
     db: DatabaseDependency,
 ):
     job = db.get_job_status(job_id)
     if job is None:
-        raise HTTPException(status_code=404, detail=f"Job {job_id} not found in database")
+        raise HTTPException(
+            status_code=404, detail=f"Job {job_id} not found in database"
+        )
     return job
 
 
 @job_router.delete("/{job_id}")
-async def delete_job(
-    job_id:uuid.UUID,
-    db: DatabaseDependency
-):
+async def delete_job(job_id: uuid.UUID, db: DatabaseDependency):
     # TODO kill the job if it is running
     db.delete_job_status(job_id)
     return {"message": f"Job {job_id} has been deleted"}
-
