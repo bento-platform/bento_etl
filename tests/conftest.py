@@ -9,7 +9,7 @@ import json
 
 from sqlmodel import Session, delete
 
-from bento_etl.db import Database, get_db
+from bento_etl.db import JobStatusDatabase, get_job_status_db
 from bento_etl.logger import get_logger
 from bento_etl.models import JobStatus
 
@@ -37,8 +37,8 @@ def logger(config) -> Logger:
 
 
 @pytest.fixture
-def database(request) -> Database:
-    db = get_db()
+def database(request) -> JobStatusDatabase:
+    db = get_job_status_db()
     db.setup()
 
     def teardown():

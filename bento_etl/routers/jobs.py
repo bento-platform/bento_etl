@@ -2,7 +2,7 @@ import uuid
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 
 from bento_etl.authz import authz_middleware
-from bento_etl.db import DatabaseDependency
+from bento_etl.db import JobStatusDatabaseDependency
 from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import ExtractorDep
 from bento_etl.loaders.base import BaseLoader
@@ -27,7 +27,7 @@ async def run_pipeline(
     extractor: BaseExtractor,
     transformer: BaseTransformer,
     loader: BaseLoader,
-    db: DatabaseDependency,
+    db: JobStatusDatabaseDependency,
 ):
     # TODO: Run pipelines as a background task, figure out dep injection for ETL components
     # TODO: Update job state in the DB after each step to reflect progression status
@@ -35,19 +35,19 @@ async def run_pipeline(
     # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
 
     try:
-        db.change_job_status(job_id, JobStatusType.EXTRACTING)
+        db.change_status(job_id, JobStatusType.EXTRACTING)
         extract_df = extractor.extract()
 
-        db.change_job_status(job_id, JobStatusType.TRANSFORMING)
+        db.change_status(job_id, JobStatusType.TRANSFORMING)
         transform_df = transformer.transform(extract_df)
 
-        db.change_job_status(job_id, JobStatusType.LOADING)
+        db.change_status(job_id, JobStatusType.LOADING)
         await loader.load(transform_df)
 
-        db.change_job_status(job_id, JobStatusType.SUCCESS)
+        db.change_status(job_id, JobStatusType.SUCCESS)
 
     except Exception as ex:
-        db.change_job_status(job_id, JobStatusType.ERROR, str(ex))
+        db.change_status(job_id, JobStatusType.ERROR, str(ex))
 
 
 # TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
@@ -64,26 +64,26 @@ async def submit_job(
     extractor: ExtractorDep,
     transformer: TransformerDep,
     loader: LoaderDep,
-    db: DatabaseDependency,
+    db: JobStatusDatabaseDependency,
 ):
-    job.id = db.create_job_status().id
+    job.id = db.create_status().id
     bt.add_task(run_pipeline, job.id, extractor, transformer, loader, db)
     return {"message": f"Running ETL job in the background {job.id}"}
 
 
 @job_router.get("", response_model=list[JobStatus])
 async def get_all_job_status(
-    db: DatabaseDependency,
+    db: JobStatusDatabaseDependency,
 ):
-    return db.get_all_job_status()
+    return db.get_all_status()
 
 
 @job_router.get("/{job_id}", response_model=JobStatus)
 async def get_job_status(
     job_id: uuid.UUID,
-    db: DatabaseDependency,
+    db: JobStatusDatabaseDependency,
 ):
-    job = db.get_job_status(job_id)
+    job = db.get_status(job_id)
     if job is None:
         raise HTTPException(
             status_code=404, detail=f"Job {job_id} not found in database"
@@ -92,7 +92,7 @@ async def get_job_status(
 
 
 @job_router.delete("/{job_id}")
-async def delete_job(job_id: uuid.UUID, db: DatabaseDependency):
+async def delete_job(job_id: uuid.UUID, db: JobStatusDatabaseDependency):
     # TODO kill the job if it is running
     db.delete_job_status(job_id)
     return {"message": f"Job {job_id} has been deleted"}

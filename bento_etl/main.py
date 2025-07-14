@@ -4,7 +4,7 @@ from bento_lib.service_info.types import BentoExtraServiceInfo
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from bento_etl.db import get_db
+from bento_etl.db import get_job_status_db
 
 
 from . import __version__
@@ -23,7 +23,7 @@ BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
 
 config = get_config()
 logger = get_logger(config)
-db = get_db()
+db = get_job_status_db()
 
 
 @asynccontextmanager

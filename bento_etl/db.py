@@ -7,20 +7,20 @@ from sqlmodel import Session, SQLModel, create_engine, select
 from bento_etl.models import JobStatus, JobStatusType
 
 __all__ = [
-    "Database",
-    "get_db",
-    "DatabaseDependency",
+    "JobStatusDatabase",
+    "get_job_status_db",
+    "JobStatusDatabaseDependency",
 ]
 
 
-class Database:
+class JobStatusDatabase:
     def __init__(self):
         self.engine = create_engine("sqlite:///jobstatus.db", echo=True)
 
     def setup(self):
         SQLModel.metadata.create_all(self.engine)
 
-    def create_job_status(self):
+    def create_status(self):
         with Session(self.engine) as session:
             job = JobStatus()
             job.status = JobStatusType.SUBMITTED
@@ -30,7 +30,7 @@ class Database:
             session.refresh(job)
             return job
 
-    def change_job_status(
+    def change_status(
         self, job_id: str, status: JobStatusType, information: str | None = None
     ):
         with Session(self.engine) as session:
@@ -44,11 +44,11 @@ class Database:
             session.refresh(job)
             return job
 
-    def get_all_job_status(self):
+    def get_all_status(self):
         with Session(self.engine) as session:
             return session.exec(select(JobStatus)).all()
 
-    def get_job_status(self, job_id: str):
+    def get_status(self, job_id: str):
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
             return session.exec(job_selection).first()
@@ -63,8 +63,8 @@ class Database:
 
 
 @lru_cache
-def get_db():
-    return Database()
+def get_job_status_db():
+    return JobStatusDatabase()
 
 
-DatabaseDependency = Annotated[Database, Depends(get_db)]
+JobStatusDatabaseDependency = Annotated[JobStatusDatabase, Depends(get_job_status_db)]
