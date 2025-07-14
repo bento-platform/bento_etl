@@ -21,11 +21,15 @@ class BaseLoader:
     and load it into the target destination.
     """
 
-    def __init__(self, logger: Logger, config: Config):
+    def __init__(self, logger: Logger, config: Config, load_url:str, service_name:str, expected_status_code:int = 204, batch_size:int = 0):
         self.logger = logger
         self.config = config
+        self.load_url = load_url
+        self.service_name = service_name
+        self.expected_status_code = expected_status_code
+        self.batch_size = batch_size
 
-    async def _load(self, data: list[dict], load_url: str, expected_status_code: int, batch_size: int = 0):
+    async def _load(self, data: list[dict]):
         limits = httpx.Limits(max_keepalive_connections=20, max_connections=len(data))
         headers = {"Authorization": authz.get_bearer_token_from_config(self.config)}
         load_requests = set()
@@ -34,10 +38,10 @@ class BaseLoader:
             limits=limits, verify=self.config.bento_validate_ssl, headers=headers
         ) as client:
             try:
-                data_batches = data if batch_size == 0 else self._create_data_batches(data, batch_size)
+                data_batches = data if self.batch_size == 0 else self._create_data_batches(data)
 
                 for batch in data_batches:
-                    load_task = asyncio.create_task(self._send_json_data(client, batch, load_url, expected_status_code))
+                    load_task = asyncio.create_task(self._send_json_data(client, batch))
                     load_requests.add(load_task)
                     load_task.add_done_callback(load_requests.discard)
 
@@ -47,18 +51,18 @@ class BaseLoader:
                 self._cancel_all_requests(load_requests)
                 raise
 
-    def _create_data_batches(self, data: list, batch_size: int) -> list:
+    def _create_data_batches(self, data: list[dict]) -> list[dict]:
         return [
-            data[index : index + batch_size]
-            for index in range(0, len(data), batch_size)
+            data[index : index + self.batch_size]
+            for index in range(0, len(data), self.batch_size)
         ]
 
-    async def _send_json_data(self, client: AsyncClient, data: list[dict], load_url: str, expected_status_code: int):
-        response = await client.post(load_url, json=data)
+    async def _send_json_data(self, client: AsyncClient, data: list[dict]):
+        response = await client.post(self.load_url, json=data)
 
-        if response.status_code != expected_status_code:
+        if response.status_code != self.expected_status_code:
             error_message = (
-                f"Upload to Katsu failed with status code {response.status_code}"
+                f"Upload to {self.service_name} failed with status code {response.status_code}"
             )
             self.logger.error(error_message)
             raise Exception(error_message)

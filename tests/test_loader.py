@@ -32,7 +32,7 @@ class TestBaseLoader:
 
     @pytest.mark.asyncio
     async def test_cancel_all_requests(self, logger, config):
-        requests = [asyncio.ensure_future(mock_long_task()) for _ in range(5)]
+        requests = [asyncio.create_task(mock_long_task()) for _ in range(5)]
         loader = BaseLoader(logger, config)
 
         assert all(not request.done() for request in requests)
