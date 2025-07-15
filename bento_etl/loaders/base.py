@@ -21,7 +21,15 @@ class BaseLoader:
     and load it into the target destination.
     """
 
-    def __init__(self, logger: Logger, config: Config, load_url:str, service_name:str, expected_status_code:int = 204, batch_size:int = 0):
+    def __init__(self, logger: Logger, config: Config, load_url:str, service_name:str, expected_status_code:int, batch_size:int = 0):
+        if batch_size < 0:
+            raise ValueError("Batch size must be at least 0")
+        if not load_url:
+            raise ValueError("Load URL must be non-empty")
+        if not service_name:
+            raise ValueError("Service name must be non-empty")
+        if not 200 <= expected_status_code <= 299:
+            logger.warning(f"Status code {expected_status_code} is outside the expected [200-299] range")
         self.logger = logger
         self.config = config
         self.load_url = load_url
