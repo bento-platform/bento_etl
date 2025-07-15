@@ -1,8 +1,9 @@
+from datetime import datetime
 from enum import Enum
-from typing import Literal
+from typing import Literal, Optional
 import uuid
 from pydantic import BaseModel
-from sqlmodel import Column, Enum as SQLModelEnum, Field, SQLModel
+from sqlmodel import Column, DateTime, Enum as SQLModelEnum, Field, SQLModel, func
 
 __all__ = ["Job"]
 
@@ -52,9 +53,18 @@ class JobStatus(SQLModel, table=True):
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
-    extra_information: str | None = Field(
+    created_at:Optional[datetime] = Field(
+        sa_column=Column(DateTime(timezone=True), server_default=func.now())
+    )
+    completed_at:Optional[datetime] = Field(
+        sa_column=Column(DateTime(timezone=True))
+    )
+    error_at:Optional[datetime] = Field(
+        sa_column=Column(DateTime(timezone=True))
+    )
+    error_message: str | None = Field(
         default=None
-    )  # TODO: decide none/null vs ""; mayhaps we would wish to log timestamps?
+    )
 
     def to_str(self):
         return f"Job {self.id} | {self.status} | {self.extra_information}"
