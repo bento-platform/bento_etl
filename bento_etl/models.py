@@ -66,9 +66,6 @@ class JobStatus(SQLModel, table=True):
         default=None
     )
 
-    def to_str(self):
-        return f"Job {self.id} | {self.status} | {self.extra_information}"
-
 
 class Job(BaseModel):
     id: str

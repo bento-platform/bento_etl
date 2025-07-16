@@ -29,9 +29,6 @@ async def run_pipeline(
     loader: BaseLoader,
     db: JobStatusDatabaseDependency,
 ):
-    # TODO: Run pipelines as a background task, figure out dep injection for ETL components
-    # TODO: Update job state in the DB after each step to reflect progression status
-    # TODO: Pass error messages/more informative info to be persisted in case of error
     # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
 
     try:
@@ -83,16 +80,11 @@ async def get_job_status(
     job_id: uuid.UUID,
     db: JobStatusDatabaseDependency,
 ):
-    job = db.get_status(job_id)
-    if job is None:
-        raise HTTPException(
-            status_code=404, detail=f"Job {job_id} not found in database"
-        )
-    return job
+    return db.get_status(job_id)
 
 
+# TODO remove if not used
 @job_router.delete("/{job_id}")
 async def delete_job(job_id: uuid.UUID, db: JobStatusDatabaseDependency):
-    # TODO kill the job if it is running
     db.delete_job_status(job_id)
     return {"message": f"Job {job_id} has been deleted"}

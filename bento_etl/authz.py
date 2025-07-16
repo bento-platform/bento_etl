@@ -20,7 +20,7 @@ def get_bearer_token_from_config(config: Config) -> str:
     )
 
 
-def get_bearer_token(openid_config_url, client_id, client_secret, validate_ssl) -> str:
+def get_bearer_token(openid_config_url:str, client_id:str, client_secret:str, validate_ssl:bool) -> str:
     openid_config = httpx.get(openid_config_url, verify=validate_ssl).json()
 
     token_res = httpx.post(
