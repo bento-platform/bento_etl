@@ -38,12 +38,12 @@ class LoadStep(BaseModel):
 
 
 class JobStatusType(str, Enum):
-    SUBMITTED = "Submitted"
-    EXTRACTING = "Extracting"
-    TRANSFORMING = "Transforming"
-    LOADING = "Loading"
-    SUCCESS = "Success"
-    ERROR = "Error"
+    SUBMITTED = "submitted"
+    EXTRACTING = "extracting"
+    TRANSFORMING = "transforming"
+    LOADING = "loading"
+    SUCCESS = "success"
+    ERROR = "error"
 
 
 class JobStatus(SQLModel, table=True):

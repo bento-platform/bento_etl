@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, BackgroundTasks
 
 from bento_etl.authz import authz_middleware
 from bento_etl.db import JobStatusDatabaseDependency
@@ -32,19 +32,19 @@ async def run_pipeline(
     # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
 
     try:
-        db.change_status(job_id, JobStatusType.EXTRACTING)
+        db.update_status(job_id, JobStatusType.EXTRACTING)
         extract_df = extractor.extract()
 
-        db.change_status(job_id, JobStatusType.TRANSFORMING)
+        db.update_status(job_id, JobStatusType.TRANSFORMING)
         transform_df = transformer.transform(extract_df)
 
-        db.change_status(job_id, JobStatusType.LOADING)
+        db.update_status(job_id, JobStatusType.LOADING)
         await loader.load(transform_df)
 
-        db.change_status(job_id, JobStatusType.SUCCESS)
+        db.update_status(job_id, JobStatusType.SUCCESS)
 
     except Exception as ex:
-        db.change_status(job_id, JobStatusType.ERROR, str(ex))
+        db.update_status(job_id, JobStatusType.ERROR, str(ex))
 
 
 # TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.

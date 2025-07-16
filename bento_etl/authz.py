@@ -3,7 +3,7 @@ import httpx
 from .config import Config, get_config
 from .logger import get_logger
 
-__all__ = ["authz_middleware"]
+__all__ = ["authz_middleware", "get_bearer_token_from_config", "get_bearer_token"]
 
 config = get_config()
 authz_middleware = FastApiAuthMiddleware.build_from_fastapi_pydantic_config(
