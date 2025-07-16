@@ -1,10 +1,10 @@
-from logging import Logger
 from typing import Annotated
 from functools import lru_cache
 
 from fastapi import Depends, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, func, select
 
+from bento_etl.logger import LoggerDependency
 from bento_etl.models import JobStatus, JobStatusType
 
 __all__ = [
@@ -15,7 +15,7 @@ __all__ = [
 
 
 class JobStatusDatabase:
-    def __init__(self, logger:Logger):
+    def __init__(self, logger: LoggerDependency):
         self.engine = create_engine("sqlite:///jobstatus.db", echo=True)
         self.logger = logger
 
@@ -33,11 +33,14 @@ class JobStatusDatabase:
             return job
 
     def update_status(
-        self, job_id: str, status: JobStatusType, error_info: str | None = None) -> JobStatus:
+        self, job_id: str, status: JobStatusType, error_info: str | None = None
+    ) -> JobStatus:
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
-                self.logger.error(f"Request job with id {job_id} is not found in database. Cannot update status")
+                self.logger.error(
+                    f"Request job with id {job_id} is not found in database. Cannot update status"
+                )
                 return
 
             job.status = status
@@ -68,7 +71,7 @@ class JobStatusDatabase:
             return result
 
     # TODO delete if not used
-    def delete_job_status(self, job_id:str):
+    def delete_job_status(self, job_id: str):
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
@@ -78,7 +81,7 @@ class JobStatusDatabase:
 
 
 @lru_cache
-def get_job_status_db(logger:Logger):
+def get_job_status_db(logger: LoggerDependency):
     return JobStatusDatabase(logger)
 
 

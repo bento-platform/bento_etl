@@ -26,6 +26,7 @@ class Config(BentoFastAPIBaseConfig):
     etl_client_secret: str = ""
     bento_openid_config_url: str = ""
 
+
 @lru_cache
 def get_config():
     return Config()

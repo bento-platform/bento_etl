@@ -19,7 +19,15 @@ class BaseLoader:
     and load it into the target destination.
     """
 
-    def __init__(self, logger: Logger, config: Config, load_url:str, service_name:str, expected_status_code:int, batch_size:int = 0):
+    def __init__(
+        self,
+        logger: Logger,
+        config: Config,
+        load_url: str,
+        service_name: str,
+        expected_status_code: int,
+        batch_size: int = 0,
+    ):
         if batch_size < 0:
             raise ValueError("Batch size must be at least 0")
         if not load_url:
@@ -27,7 +35,9 @@ class BaseLoader:
         if not service_name:
             raise ValueError("Service name must be non-empty")
         if not 200 <= expected_status_code <= 299:
-            logger.warning(f"Status code {expected_status_code} is outside the expected [200-299] range")
+            logger.warning(
+                f"Status code {expected_status_code} is outside the expected [200-299] range"
+            )
 
         self.logger = logger
         self.config = config
@@ -45,7 +55,9 @@ class BaseLoader:
             limits=limits, verify=self.config.bento_validate_ssl, headers=headers
         ) as client:
             try:
-                data_batches = data if self.batch_size == 0 else self._create_data_batches(data)
+                data_batches = (
+                    data if self.batch_size == 0 else self._create_data_batches(data)
+                )
 
                 for batch in data_batches:
                     load_task = asyncio.create_task(self._send_json_data(client, batch))
@@ -68,9 +80,7 @@ class BaseLoader:
         response = await client.post(self.load_url, json=data)
 
         if response.status_code != self.expected_status_code:
-            error_message = (
-                f"Upload to {self.service_name} failed with status code {response.status_code}"
-            )
+            error_message = f"Upload to {self.service_name} failed with status code {response.status_code}"
             self.logger.error(error_message)
             raise Exception(error_message)
 
