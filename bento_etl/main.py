@@ -23,7 +23,7 @@ BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
 
 config = get_config()
 logger = get_logger(config)
-db = get_job_status_db()
+db = get_job_status_db(logger)
 
 
 @asynccontextmanager
