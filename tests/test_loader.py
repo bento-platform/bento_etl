@@ -25,7 +25,7 @@ class TestBaseLoader:
     def test_constructor_invalid_service_name(self, logger, config):
         with pytest.raises(Exception):
             BaseLoader(logger, config, "some_url", "", 200)
-    
+
     def test_constructor_invalid_batch_size(self, logger, config):
         with pytest.raises(Exception):
             BaseLoader(logger, config, "some_url", "some_service", 200, -5)
@@ -33,7 +33,9 @@ class TestBaseLoader:
     def test_create_data_batches_small_batch_size(
         self, logger, config, load_phenopacket_data
     ):
-        loader = BaseLoader(logger, config, "some_url", "some_service", 200, batch_size=5)
+        loader = BaseLoader(
+            logger, config, "some_url", "some_service", 200, batch_size=5
+        )
 
         batches = loader._create_data_batches(load_phenopacket_data)
         assert len(batches) == 2
@@ -42,7 +44,9 @@ class TestBaseLoader:
     def test_create_data_batches_large_batch_size(
         self, logger, config, load_phenopacket_data
     ):
-        loader = BaseLoader(logger, config, "some_url", "some_service", 200, batch_size=100)
+        loader = BaseLoader(
+            logger, config, "some_url", "some_service", 200, batch_size=100
+        )
 
         batches = loader._create_data_batches(load_phenopacket_data)
         assert len(batches) == 1

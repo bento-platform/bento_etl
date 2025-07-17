@@ -37,7 +37,9 @@ def logger(config: Config) -> Logger:
 
 
 @pytest.fixture
-def job_status_database(logger:Logger, request: pytest.FixtureRequest) -> JobStatusDatabase:
+def job_status_database(
+    logger: Logger, request: pytest.FixtureRequest
+) -> JobStatusDatabase:
     db = get_job_status_db(logger)
     db.setup()
 
