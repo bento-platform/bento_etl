@@ -32,13 +32,13 @@ def config() -> Config:
 
 
 @pytest.fixture
-def logger(config) -> Logger:
+def logger(config: Config) -> Logger:
     return get_logger(config)
 
 
 @pytest.fixture
-def job_status_database(request) -> JobStatusDatabase:
-    db = get_job_status_db()
+def job_status_database(logger:Logger, request: pytest.FixtureRequest) -> JobStatusDatabase:
+    db = get_job_status_db(logger)
     db.setup()
 
     def teardown():

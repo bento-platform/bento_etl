@@ -86,5 +86,5 @@ async def get_job_status(
 # TODO remove if not used
 @job_router.delete("/{job_id}")
 async def delete_job(job_id: uuid.UUID, db: JobStatusDatabaseDependency):
-    db.delete_job_status(job_id)
+    db.delete_status(job_id)
     return {"message": f"Job {job_id} has been deleted"}

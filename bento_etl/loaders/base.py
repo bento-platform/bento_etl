@@ -56,7 +56,7 @@ class BaseLoader:
         ) as client:
             try:
                 data_batches = (
-                    data if self.batch_size == 0 else self._create_data_batches(data)
+                    [data] if self.batch_size == 0 else self._create_data_batches(data)
                 )
 
                 for batch in data_batches:
