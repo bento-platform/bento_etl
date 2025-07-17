@@ -69,22 +69,21 @@ async def submit_job(
 
 
 @job_router.get("", response_model=list[JobStatus])
-async def get_all_job_status(
+async def get_all_status(
     db: JobStatusDatabaseDependency,
 ):
     return db.get_all_status()
 
 
 @job_router.get("/{job_id}", response_model=JobStatus)
-async def get_job_status(
+async def get_status(
     job_id: uuid.UUID,
     db: JobStatusDatabaseDependency,
 ):
     return db.get_status(job_id)
 
 
-# TODO remove if not used
 @job_router.delete("/{job_id}")
-async def delete_job(job_id: uuid.UUID, db: JobStatusDatabaseDependency):
+async def delete_status(job_id: uuid.UUID, db: JobStatusDatabaseDependency):
     db.delete_status(job_id)
     return {"message": f"Job {job_id} has been deleted"}
