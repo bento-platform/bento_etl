@@ -38,10 +38,9 @@ class JobStatusDatabase:
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
-                self.logger.error(
-                    f"Request job with id {job_id} is not found in database. Cannot update status"
-                )
-                return
+                error_message = f"Requested job with id {job_id} is not found in database. Cannot update status"
+                self.logger.error(error_message)
+                raise ValueError(error_info)
 
             job.status = status
             if job.status == JobStatusType.SUCCESS:
@@ -55,7 +54,6 @@ class JobStatusDatabase:
             session.refresh(job)
             return job
 
-    # TODO Error 404 if no jobs found?
     def get_all_status(self) -> list[JobStatus]:
         with Session(self.engine) as session:
             return session.exec(select(JobStatus)).all()
@@ -70,8 +68,7 @@ class JobStatusDatabase:
                 )
             return result
 
-    # TODO delete if not used
-    def delete_job_status(self, job_id: str):
+    def delete_status(self, job_id: str):
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
