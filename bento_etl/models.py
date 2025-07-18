@@ -62,7 +62,7 @@ class JobStatus(SQLModel, table=True):
 
 
 class Job(BaseModel):
-    id: str 
+    id: str
     extractor: ExtractStep
     transformer: TransformStep
     loader: LoadStep
