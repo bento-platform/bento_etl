@@ -55,9 +55,7 @@ class BaseLoader:
             limits=limits, verify=self.config.bento_validate_ssl, headers=headers
         ) as client:
             try:
-                data_batches = (
-                    [data] if self.batch_size == 0 else self._create_data_batches(data)
-                )
+                data_batches = self._create_data_batches(data)
 
                 for batch in data_batches:
                     load_task = asyncio.create_task(self._send_json_data(client, batch))
@@ -71,16 +69,19 @@ class BaseLoader:
                 raise
 
     def _create_data_batches(self, data: list[dict]) -> list[dict]:
-        return [
-            data[index : index + self.batch_size]
-            for index in range(0, len(data), self.batch_size)
-        ]
+        if self.batch_size == 0:
+            return [data]
+        else:
+            return [
+                data[index : index + self.batch_size]
+                for index in range(0, len(data), self.batch_size)
+            ]
 
     async def _send_json_data(self, client: AsyncClient, data: list[dict]):
         response = await client.post(self.load_url, json=data)
 
         if response.status_code != self.expected_status_code:
-            error_message = f"Upload to {self.service_name} failed with status code {response.status_code}"
+            error_message = f"Upload to {self.service_name} failed. Expected status code {self.expected_status_code}, but received {response.status_code}."
             self.logger.error(error_message)
             raise Exception(error_message)
 
