@@ -29,8 +29,10 @@ class TestBaseLoader:
     def test_constructor_invalid_batch_size(self, logger, config):
         with pytest.raises(Exception):
             BaseLoader(logger, config, "some_url", "some_service", 200, -5)
-    
-    def test_create_data_batch_zero_batch_size(self, logger, config, load_phenopacket_data):
+
+    def test_create_data_batch_zero_batch_size(
+        self, logger, config, load_phenopacket_data
+    ):
         loader = BaseLoader(
             logger, config, "some_url", "some_service", 200, batch_size=0
         )
