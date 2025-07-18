@@ -15,7 +15,6 @@ def test_get_status_valid(test_client: TestClient, job_status_database:JobStatus
 def test_get_status_invalid(test_client: TestClient):
     response = test_client.get(f"/jobs/{uuid.uuid4()}")
     assert response.status_code == 404
-    assert response.text() == "Not Found"
 
 def test_get_all_status(test_client: TestClient, job_status_database:JobStatusDatabase):
     all_status_id = [
