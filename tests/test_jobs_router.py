@@ -23,7 +23,7 @@ def test_post_submit_job_valid(test_client: TestClient):
             "data_type": "phenopackets",
         },
     }
-    response = test_client.post("/jobs", data=json.dumps(job_schema))
+    response = test_client.post("/jobs", content=json.dumps(job_schema))
     assert response.status_code == 200
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
