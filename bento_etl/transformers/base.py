@@ -1,27 +1,18 @@
-import polars as pl
 from logging import Logger
 
 __all__ = ["BaseTransformer"]
 
-
 class BaseTransformer:
-    """
-    Base class for ETL transformer implementation.
-
-    Transformers read the raw data from an Extractor, transform it to the desired format
-    and then forward it to a Loader.
-    """
-
-    def __init__(self, logger: Logger):
+    def __init__(self, logger: Logger, plugin: str):
         self.logger = logger
+        self.plugin = plugin
 
-    def transform(
-        self, raw: pl.DataFrame | pl.LazyFrame
-    ) -> pl.DataFrame | pl.LazyFrame:
-        # TODO: figure out best return type hint
-        pass
-
-
-# TODO: implement Phenopacket and Experiment transformers that take in PCGL JSON data.
-
-# TODO: implement plugin registration for custom transformers
+    def transform(self, data: list[dict]) -> list[dict]:
+        self.logger.info(f"Applying transformation with plugin: {self.plugin}")
+        if not data:
+            self.logger.warning("Received empty data for transformation")
+            return []
+        # For now, pass the input JSON unchanged
+        # TODO: Implement specific transformations based on plugin
+        self.logger.info(f"Transformed {len(data)} items")
+        return data

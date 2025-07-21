@@ -1,41 +1,29 @@
 from enum import Enum
-from typing import Literal
+from typing import Literal, Optional, List, Dict
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, AnyUrl
 from sqlmodel import Column, Enum as SQLModelEnum, Field, SQLModel
 
-__all__ = ["Job"]
+__all__ = ["Job", "JobStatus", "PipelineType"]
 
+class PipelineType(str, Enum):
+    PHENOPACKETS = "phenopackets"
+    EXPERIMENTS = "experiments"
 
 class ExtractStep(BaseModel):
-    """
-    Class to describe an Extractor step to run in a pipeline job.
-    """
-
     format: Literal["json", "csv", "tsv", "vcf", "vcf.gz"]
     type: str
-    # TODO: complete
-
+    endpoint: AnyUrl
+    interval: Optional[str] = None
 
 class TransformStep(BaseModel):
-    """
-    Class to describe a Transformer step to run in a pipeline job.
-    """
-
-    # TODO: complete
-    pass
-
+    plugin: str
 
 class LoadStep(BaseModel):
-    """
-    Class to describe a Loader step to run in a pipeline job.
-    """
-
     dataset_id: str
     batch_size: int
     expected_status_code: int
-    data_type: Literal["phenopackets", "experiments"]
-
+    data_type: PipelineType
 
 class JobStatusType(str, Enum):
     SUBMITTED = "Submitted"
@@ -45,30 +33,19 @@ class JobStatusType(str, Enum):
     SUCCESS = "Success"
     ERROR = "Error"
 
-
 class JobStatus(SQLModel, table=True):
-    """
-    Describes the current status of a job
-    """
-
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
-    extra_information: str | None = Field(
-        default=None
-    )  # TODO: decide none/null vs ""; mayhaps we would wish to log timestamps?
+    extra_information: str | None = Field(default=None)
 
     def to_str(self):
         return f"Job {self.id} | {self.status} | {self.extra_information}"
 
-
 class Job(BaseModel):
     id: str
+    pipeline_type: PipelineType
     extractor: ExtractStep
     transformer: TransformStep
     loader: LoadStep
-
-    # TODO: add rest of fields
-    # Should be able to describe an ETL pipeline to run
-    # - Extractor to use and its config
-    # - Transformer to use and its config
-    # - Loader to use and its config
+    status: JobStatusType = JobStatusType.SUBMITTED
+    result: Optional[List[Dict]] = None
