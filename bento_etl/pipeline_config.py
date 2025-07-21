@@ -33,6 +33,7 @@ class EtlPipelines(BaseModel):
     @classmethod
     def load_from_env(cls) -> "EtlPipelines":
         config_env = os.getenv("PIPELINE_CONFIG")
+        print("config_envconfig_envconfig_env", config_env)
         if config_env:
             config_path = config_env
             logger.info(f"Loading pipeline config from {config_path}")
