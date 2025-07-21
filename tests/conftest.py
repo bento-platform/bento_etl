@@ -1,4 +1,5 @@
 from logging import Logger
+from typing import Any
 import httpx
 import pytest
 
@@ -11,7 +12,7 @@ from sqlmodel import Session, delete
 
 from bento_etl.db import JobStatusDatabase, get_job_status_db
 from bento_etl.logger import get_logger
-from bento_etl.models import JobStatus
+from bento_etl.models import ExtractStep, Job, JobStatus, LoadStep, TransformStep
 
 os.environ["BENTO_DEBUG"] = "true"
 os.environ["BENTO_VALIDATE_SSL"] = "false"
@@ -57,6 +58,13 @@ def job_status_database(
 def test_client():
     with TestClient(app) as client:
         yield client
+
+@pytest.fixture
+def mocked_job_dict():
+    extractor = ExtractStep(format="json", type="some_type")
+    tranformer = TransformStep()
+    loader = LoadStep(dataset_id="some_dataset_id", batch_size=0, data_type="phenopackets")
+    yield Job(extractor=extractor, transformer=tranformer, loader=loader).model_dump()
 
 
 @pytest.fixture(autouse=True)

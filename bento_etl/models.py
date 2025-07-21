@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Literal, Optional
 import uuid
 from pydantic import BaseModel
-from sqlmodel import Column, DateTime, Enum as SQLModelEnum, Field, SQLModel, func
+from sqlmodel import JSON, Column, DateTime, Enum as SQLModelEnum, Field, SQLModel, func
 
 __all__ = ["Job"]
 
@@ -36,31 +36,6 @@ class LoadStep(BaseModel):
     batch_size: int
     data_type: Literal["phenopackets", "experiments"]
 
-
-class JobStatusType(str, Enum):
-    SUBMITTED = "submitted"
-    EXTRACTING = "extracting"
-    TRANSFORMING = "transforming"
-    LOADING = "loading"
-    SUCCESS = "success"
-    ERROR = "error"
-
-
-class JobStatus(SQLModel, table=True):
-    """
-    Describes the current status of a job
-    """
-
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
-    created_at: Optional[datetime] = Field(
-        sa_column=Column(DateTime(), server_default=func.now())
-    )
-    completed_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
-    error_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
-    error_message: str | None = Field(default=None)
-
-
 class Job(BaseModel):
     extractor: ExtractStep
     transformer: TransformStep
@@ -71,3 +46,27 @@ class Job(BaseModel):
     # - Extractor to use and its config
     # - Transformer to use and its config
     # - Loader to use and its config
+
+
+class JobStatusType(str, Enum):
+    SUBMITTED = "submitted"
+    EXTRACTING = "extracting"
+    TRANSFORMING = "transforming"
+    LOADING = "loading"
+    SUCCESS = "success"
+    ERROR = "error"
+
+class JobStatus(SQLModel, table=True):
+    """
+    Describes the current status of a job
+    """
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
+    job_data: dict = Field(sa_column=Column(JSON))
+    created_at: datetime = Field(
+        sa_column=Column(DateTime(), server_default=func.now())
+    )
+    completed_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
+    error_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
+    error_message: Optional[str] = Field(default=None)

@@ -1,3 +1,4 @@
+import json
 import uuid
 from fastapi import APIRouter, BackgroundTasks
 
@@ -63,7 +64,7 @@ async def submit_job(
     loader: LoaderDep,
     db: JobStatusDatabaseDependency,
 ):
-    job_id = db.create_status().id
+    job_id = db.create_status(job.model_dump()).id
     bt.add_task(run_pipeline, job_id, extractor, transformer, loader, db)
     return {"message": f"Running ETL job in the background {job_id}"}
 
