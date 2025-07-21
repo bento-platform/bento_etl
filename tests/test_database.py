@@ -4,10 +4,12 @@ import uuid
 from fastapi import HTTPException
 import pytest
 from bento_etl.db import JobStatusDatabase
-from bento_etl.models import Job, JobStatusType
+from bento_etl.models import JobStatusType
 
 
-def test_create_status(job_status_database: JobStatusDatabase, mocked_job_dict: dict[str, Any]):
+def test_create_status(
+    job_status_database: JobStatusDatabase, mocked_job_dict: dict[str, Any]
+):
     status = job_status_database.create_status(mocked_job_dict)
 
     assert status.id is not None
@@ -50,7 +52,9 @@ def test_update_status_invalid(
         job_status_database.update_status(inexistant_job_id, JobStatusType.LOADING)
 
 
-def test_get_all_status(job_status_database: JobStatusDatabase, mocked_job_dict: dict[str, Any]):
+def test_get_all_status(
+    job_status_database: JobStatusDatabase, mocked_job_dict: dict[str, Any]
+):
     all_job_status = [
         job_status_database.create_status(mocked_job_dict) for _ in range(5)
     ]
@@ -67,7 +71,9 @@ def test_get_all_status_empty_db(job_status_database: JobStatusDatabase):
     assert fetched_all_status == []
 
 
-def test_get_status_valid(job_status_database: JobStatusDatabase, mocked_job_dict: dict[str, Any]):
+def test_get_status_valid(
+    job_status_database: JobStatusDatabase, mocked_job_dict: dict[str, Any]
+):
     status = job_status_database.create_status(mocked_job_dict)
     status_value = job_status_database.get_status(status.id)
     assert status_value.status == status.status

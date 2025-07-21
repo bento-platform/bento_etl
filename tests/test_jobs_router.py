@@ -4,7 +4,6 @@ import uuid
 from fastapi.testclient import TestClient
 
 from bento_etl.db import JobStatusDatabase
-from bento_etl.models import Job
 
 
 # TODO: Once Extractor and Transformer are integrated:
