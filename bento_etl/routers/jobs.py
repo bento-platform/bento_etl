@@ -63,9 +63,9 @@ async def submit_job(
     loader: LoaderDep,
     db: JobStatusDatabaseDependency,
 ):
-    job.id = db.create_status().id
-    bt.add_task(run_pipeline, job.id, extractor, transformer, loader, db)
-    return {"message": f"Running ETL job in the background {job.id}"}
+    job_id = db.create_status().id
+    bt.add_task(run_pipeline, job_id, extractor, transformer, loader, db)
+    return {"message": f"Running ETL job in the background {job_id}"}
 
 
 @job_router.get("", response_model=list[JobStatus])
