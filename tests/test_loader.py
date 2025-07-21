@@ -19,15 +19,15 @@ class TestBaseLoader:
         BaseLoader(logger, config, "some_url", "some_service", 200, 3)
 
     def test_constructor_invalid_load_url(self, logger, config):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             BaseLoader(logger, config, "", "some_service", 200)
 
     def test_constructor_invalid_service_name(self, logger, config):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             BaseLoader(logger, config, "some_url", "", 200)
 
     def test_constructor_invalid_batch_size(self, logger, config):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             BaseLoader(logger, config, "some_url", "some_service", 200, -5)
 
     def test_create_data_batch_zero_batch_size(
@@ -76,7 +76,7 @@ class TestBaseLoader:
 
 class TestPhenopacketsLoader:
     def test_constructor_invalid_dataset_id(self, logger, config):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             PhenopacketsLoader(logger, config, "")
 
     @pytest.mark.asyncio
