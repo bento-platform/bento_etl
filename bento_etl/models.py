@@ -54,10 +54,10 @@ class JobStatus(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
     created_at: Optional[datetime] = Field(
-        sa_column=Column(DateTime(timezone=True), server_default=func.now())
+        sa_column=Column(DateTime(), server_default=func.now())
     )
-    completed_at: Optional[datetime] = Field(sa_column=Column(DateTime(timezone=True)))
-    error_at: Optional[datetime] = Field(sa_column=Column(DateTime(timezone=True)))
+    completed_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
+    error_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
     error_message: str | None = Field(default=None)
 
 
