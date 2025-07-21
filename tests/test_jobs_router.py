@@ -30,7 +30,9 @@ def test_post_submit_job_valid(test_client: TestClient):
 
 
 def test_get_status_valid(
-    test_client: TestClient, job_status_database: JobStatusDatabase, mocked_job_dict:Job
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mocked_job_dict: Job,
 ):
     status = job_status_database.create_status(mocked_job_dict)
 
@@ -45,9 +47,13 @@ def test_get_status_invalid(test_client: TestClient):
 
 
 def test_get_all_status(
-    test_client: TestClient, job_status_database: JobStatusDatabase, mocked_job_dict:Job
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mocked_job_dict: Job,
 ):
-    all_status_id = [str(job_status_database.create_status(mocked_job_dict).id) for _ in range(5)]
+    all_status_id = [
+        str(job_status_database.create_status(mocked_job_dict).id) for _ in range(5)
+    ]
 
     response = test_client.get("/jobs")
     response_body = response.json()
@@ -64,7 +70,9 @@ def test_get_all_status_empty_db(test_client: TestClient):
 
 
 def test_delete_status_valid(
-    test_client: TestClient, job_status_database: JobStatusDatabase, mocked_job_dict:Job
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mocked_job_dict: Job,
 ):
     status = job_status_database.create_status(mocked_job_dict)
     response = test_client.delete(f"/jobs/{status.id}")

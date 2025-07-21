@@ -36,6 +36,7 @@ class LoadStep(BaseModel):
     batch_size: int
     data_type: Literal["phenopackets", "experiments"]
 
+
 class Job(BaseModel):
     extractor: ExtractStep
     transformer: TransformStep
@@ -55,6 +56,7 @@ class JobStatusType(str, Enum):
     LOADING = "loading"
     SUCCESS = "success"
     ERROR = "error"
+
 
 class JobStatus(SQLModel, table=True):
     """

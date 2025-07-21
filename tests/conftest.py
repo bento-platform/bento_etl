@@ -1,5 +1,4 @@
 from logging import Logger
-from typing import Any
 import httpx
 import pytest
 
@@ -59,11 +58,14 @@ def test_client():
     with TestClient(app) as client:
         yield client
 
+
 @pytest.fixture
 def mocked_job_dict():
     extractor = ExtractStep(format="json", type="some_type")
     tranformer = TransformStep()
-    loader = LoadStep(dataset_id="some_dataset_id", batch_size=0, data_type="phenopackets")
+    loader = LoadStep(
+        dataset_id="some_dataset_id", batch_size=0, data_type="phenopackets"
+    )
     yield Job(extractor=extractor, transformer=tranformer, loader=loader).model_dump()
 
 

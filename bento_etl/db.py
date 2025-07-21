@@ -22,7 +22,7 @@ class JobStatusDatabase:
     def setup(self):
         SQLModel.metadata.create_all(self.engine)
 
-    def create_status(self, job_data:dict[str, Any]) -> JobStatus:
+    def create_status(self, job_data: dict[str, Any]) -> JobStatus:
         with Session(self.engine) as session:
             job = JobStatus()
             job.status = JobStatusType.SUBMITTED

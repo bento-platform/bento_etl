@@ -1,4 +1,3 @@
-import json
 import uuid
 
 from fastapi import HTTPException
@@ -7,7 +6,7 @@ from bento_etl.db import JobStatusDatabase
 from bento_etl.models import Job, JobStatusType
 
 
-def test_create_status(job_status_database: JobStatusDatabase, mocked_job_dict:Job):
+def test_create_status(job_status_database: JobStatusDatabase, mocked_job_dict: Job):
     status = job_status_database.create_status(mocked_job_dict)
 
     assert status.id is not None
@@ -15,7 +14,9 @@ def test_create_status(job_status_database: JobStatusDatabase, mocked_job_dict:J
     assert status.job_data == mocked_job_dict
 
 
-def test_update_status_to_success(job_status_database: JobStatusDatabase, mocked_job_dict:Job):
+def test_update_status_to_success(
+    job_status_database: JobStatusDatabase, mocked_job_dict: Job
+):
     status = job_status_database.create_status(mocked_job_dict)
     new_status = job_status_database.update_status(status.id, JobStatusType.SUCCESS)
 
@@ -24,7 +25,9 @@ def test_update_status_to_success(job_status_database: JobStatusDatabase, mocked
     assert new_status.completed_at is not None
 
 
-def test_update_status_to_error(job_status_database: JobStatusDatabase, mocked_job_dict:Job):
+def test_update_status_to_error(
+    job_status_database: JobStatusDatabase, mocked_job_dict: Job
+):
     error_description = "Some error description"
     status = job_status_database.create_status(mocked_job_dict)
     new_status = job_status_database.update_status(
@@ -37,15 +40,19 @@ def test_update_status_to_error(job_status_database: JobStatusDatabase, mocked_j
     assert new_status.error_message == error_description
 
 
-def test_update_status_invalid(job_status_database: JobStatusDatabase, mocked_job_dict:Job):
+def test_update_status_invalid(
+    job_status_database: JobStatusDatabase, mocked_job_dict: Job
+):
     job_status_database.create_status(mocked_job_dict)
     inexistant_job_id = uuid.uuid4()
     with pytest.raises(ValueError):
         job_status_database.update_status(inexistant_job_id, JobStatusType.LOADING)
 
 
-def test_get_all_status(job_status_database: JobStatusDatabase, mocked_job_dict:Job):
-    all_job_status = [job_status_database.create_status(mocked_job_dict) for _ in range(5)]
+def test_get_all_status(job_status_database: JobStatusDatabase, mocked_job_dict: Job):
+    all_job_status = [
+        job_status_database.create_status(mocked_job_dict) for _ in range(5)
+    ]
     fetched_all_status = job_status_database.get_all_status()
 
     assert len(all_job_status) == len(fetched_all_status)
@@ -59,7 +66,7 @@ def test_get_all_status_empty_db(job_status_database: JobStatusDatabase):
     assert fetched_all_status == []
 
 
-def test_get_status_valid(job_status_database: JobStatusDatabase, mocked_job_dict:Job):
+def test_get_status_valid(job_status_database: JobStatusDatabase, mocked_job_dict: Job):
     status = job_status_database.create_status(mocked_job_dict)
     status_value = job_status_database.get_status(status.id)
     assert status_value.status == status.status
@@ -71,7 +78,9 @@ def test_get_status_invalid(job_status_database: JobStatusDatabase):
         job_status_database.get_status(inexistant_job_id)
 
 
-def test_delete_status_valid(job_status_database: JobStatusDatabase, mocked_job_dict:Job):
+def test_delete_status_valid(
+    job_status_database: JobStatusDatabase, mocked_job_dict: Job
+):
     status = job_status_database.create_status(mocked_job_dict)
     job_status_database.delete_status(status.id)
 
