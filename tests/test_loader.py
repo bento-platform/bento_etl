@@ -3,6 +3,7 @@ import uuid
 import httpx
 import pytest
 from bento_etl.loaders.base import BaseLoader
+from bento_etl.loaders.experiments_loader import ExperimentsLoader
 from bento_etl.loaders.phenopackets_loader import PhenopacketsLoader
 
 
@@ -111,5 +112,46 @@ class TestPhenopacketsLoader:
     @pytest.mark.asyncio
     async def test_load_invalid_data(self, logger, config, set_mock_for_invalid_post):
         loader = PhenopacketsLoader(logger, config, uuid.uuid4())
+        with pytest.raises(Exception, match="400"):
+            await loader.load("BAD_DATA")
+            
+
+class TestExperimentsLoader:
+    def test_constructor_invalid_dataset_id(self, logger, config):
+        with pytest.raises(ValueError):
+            ExperimentsLoader(logger, config, "")
+
+    @pytest.mark.asyncio
+    async def test_valid_load_no_batches(
+        self, logger, config, load_experiment_data, set_mock_for_valid_post
+    ):
+        loader = ExperimentsLoader(logger, config, uuid.uuid4())
+        await loader.load(load_experiment_data)
+
+    @pytest.mark.asyncio
+    async def test_valid_load_small_batch_size(
+        self, logger, config, load_experiment_data, set_mock_for_valid_post
+    ):
+        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 2)
+        await loader.load(load_experiment_data)
+
+    @pytest.mark.asyncio
+    async def test_valid_load_large_batch_size(
+        self, logger, config, load_experiment_data, set_mock_for_valid_post
+    ):
+        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 10)
+        await loader.load(load_experiment_data)
+
+    @pytest.mark.asyncio
+    async def test_load_invalid_dataset_id(
+        self, logger, config, load_experiment_data, set_mock_for_invalid_post
+    ):
+        loader = ExperimentsLoader(logger, config, "BAD_DATASET_ID")
+        with pytest.raises(Exception, match="400"):
+            await loader.load(load_experiment_data)
+
+    @pytest.mark.asyncio
+    async def test_load_invalid_data(self, logger, config, set_mock_for_invalid_post):
+        loader = ExperimentsLoader(logger, config, uuid.uuid4())
         with pytest.raises(Exception, match="400"):
             await loader.load("BAD_DATA")
