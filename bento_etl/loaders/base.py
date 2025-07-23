@@ -68,14 +68,17 @@ class BaseLoader:
                 self._cancel_all_requests(load_requests)
                 raise
 
+    def _slice_data(self, data: list[dict]) -> list[dict]:
+        return [
+            data[index : index + self.batch_size]
+            for index in range(0, len(data), self.batch_size)
+        ]
+
     def _create_data_batches(self, data: list[dict]) -> list[dict]:
         if self.batch_size == 0:
             return [data]
         else:
-            return [
-                data[index : index + self.batch_size]
-                for index in range(0, len(data), self.batch_size)
-            ]
+            return self._slice_data(data)
 
     async def _send_json_data(self, client: AsyncClient, data: list[dict]):
         response = await client.post(self.load_url, json=data)
