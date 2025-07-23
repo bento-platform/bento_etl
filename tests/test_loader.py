@@ -114,12 +114,38 @@ class TestPhenopacketsLoader:
         loader = PhenopacketsLoader(logger, config, uuid.uuid4())
         with pytest.raises(Exception, match="400"):
             await loader.load("BAD_DATA")
-            
+
 
 class TestExperimentsLoader:
     def test_constructor_invalid_dataset_id(self, logger, config):
         with pytest.raises(ValueError):
             ExperimentsLoader(logger, config, "")
+
+    def test_create_data_batch_zero_batch_size(
+        self, logger, config, load_experiment_data
+    ):
+        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 0)
+
+        batches = loader._create_data_batches(load_experiment_data)
+        assert len(batches) == 1
+        assert batches[0] == load_experiment_data
+
+    def test_create_data_batch_small_batch_size(
+        self, logger, config, load_experiment_data
+    ):
+        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 2)
+
+        batches = loader._create_data_batches(load_experiment_data)
+        assert len(batches) == 5
+        assert len(batches[0]["experiments"]) == 2
+
+    def test_create_data_batch_large_batch_size(
+        self, logger, config, load_experiment_data
+    ):
+        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 200)
+        batches = loader._create_data_batches(load_experiment_data)
+        assert len(batches) == 1
+        assert batches[0] == load_experiment_data
 
     @pytest.mark.asyncio
     async def test_valid_load_no_batches(

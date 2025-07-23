@@ -20,7 +20,7 @@ class ExperimentsLoader(BaseLoader):
             return [
                 {
                     "experiments": data["experiments"][index : index + self.batch_size],
-                    "resources": data["resources"]
+                    "resources": data["resources"],
                 }
                 for index in range(0, len(data["experiments"]), self.batch_size)
             ]
