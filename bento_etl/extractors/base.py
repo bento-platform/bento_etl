@@ -20,7 +20,7 @@ class ApiPollExtractor(BaseExtractor):
         self._payload = None  # Store JSON payload
 
     def extract(self) -> list[dict]:
-        with httpx.Client() as client:
+        with httpx.Client(verify=False) as client:
             try:
                 r = client.request(self.http_verb, self.endpoint)
                 if r.status_code != status.HTTP_200_OK:

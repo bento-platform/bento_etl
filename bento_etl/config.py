@@ -2,6 +2,7 @@ from bento_lib.config.pydantic import BentoFastAPIBaseConfig
 from fastapi import Depends
 from functools import lru_cache
 from typing import Annotated
+import os
 
 from .constants import SERVICE_GROUP, SERVICE_ARTIFACT
 
@@ -27,6 +28,7 @@ class Config(BentoFastAPIBaseConfig):
     bento_openid_config_url: str = ""
     database_path: str = ""
     database_name: str = ""
+    files_dir: str = os.path.dirname(os.path.abspath(__file__)) + "/.."  # Project root
 
 
 @lru_cache

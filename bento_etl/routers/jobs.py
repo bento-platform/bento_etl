@@ -1,3 +1,4 @@
+from __future__ import annotations
 import uuid
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Body
 from bento_etl.authz import authz_middleware
@@ -17,8 +18,6 @@ from bento_etl.models import (
 from bento_etl.extractors.dependencies import get_extractor
 from bento_etl.transformers.dependencies import get_transformer
 from bento_etl.loaders.dependencies import get_loader
-
-__all__ = ["job_router", "set_pipeline_registry"]
 
 job_router = APIRouter(
     prefix="/jobs",
@@ -79,13 +78,13 @@ async def run_pipeline(
 ):
     try:
         db.change_status(job_id, JobStatusType.EXTRACTING)
-        data = extractor.extract()  # Returns JSON payload (list[dict])
+        data = extractor.extract()
 
         db.change_status(job_id, JobStatusType.TRANSFORMING)
-        transformed_data = transformer.transform(data)  # Returns JSON payload (list[dict])
+        transformed_data = transformer.transform(data)
 
         db.change_status(job_id, JobStatusType.LOADING)
-        await loader.load(transformed_data)  # Accepts JSON payload
+        await loader.load(transformed_data)
 
         db.change_status(job_id, JobStatusType.SUCCESS)
     except Exception as ex:
@@ -119,7 +118,7 @@ async def submit_job(
     job.id = status.id
 
     extractor = get_extractor(job, logger)
-    transformer = get_transformer(job, logger)
+    transformer = get_transformer(job, logger, config)
     loader = get_loader(job, logger, config, registry)
 
     bt.add_task(run_pipeline, job.id, extractor, transformer, loader, db)
