@@ -139,7 +139,7 @@ class TestExperimentsLoader:
     async def test_valid_load_large_batch_size(
         self, logger, config, load_experiment_data, set_mock_for_valid_post
     ):
-        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 10)
+        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 20)
         await loader.load(load_experiment_data)
 
     @pytest.mark.asyncio

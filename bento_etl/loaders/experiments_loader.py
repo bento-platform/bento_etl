@@ -13,5 +13,17 @@ class ExperimentsLoader(BaseLoader):
         load_url = f"{config.katsu_url}ingest/{dataset_id}/experiments_json"
         super().__init__(logger, config, load_url, "katsu", 204, batch_size)
 
+    def _create_data_batches(self, data: dict) -> list[dict]:
+        if self.batch_size == 0:
+            return [data]
+        else:
+            return [
+                {
+                    "experiments": data["experiments"][index : index + self.batch_size],
+                    "resources": data["resources"]
+                }
+                for index in range(0, len(data["experiments"]), self.batch_size)
+            ]
+
     async def load(self, data: list[dict]):
         await self._load(data)
