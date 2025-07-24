@@ -1,0 +1,28 @@
+loader_defaults: &loader_defaults
+  expected_status_code: 204
+  batch_size: 100
+
+pipelines:
+  phenopackets:
+    extractor:
+      type: 'api-fetch'
+      endpoint: 'https://submission.submission.dev.pcgl.sd4h.ca/data/category/1'
+      interval: '5m'
+    transformer:
+      plugin: 'phenopacket-v2-json'
+    loader:
+      <<: *loader_defaults
+      data_type: phenopackets
+      service_name: 'katsu'
+
+  experiments:
+    extractor:
+      type: 'api-fetch'
+      endpoint: 'https://submission.submission.dev.pcgl.sd4h.ca/data/category/2'
+      interval: '10m'
+    transformer:
+      plugin: 'experiment-json'
+    loader:
+      <<: *loader_defaults
+      data_type: experiments
+      service_name: 'katsu'

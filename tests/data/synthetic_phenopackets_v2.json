@@ -1,0 +1,1161 @@
+[
+    {
+        "id": "51154a27-f523-40cc-87c9-8701f316389e",
+        "subject": {
+            "id": "McGill0020",
+            "sex": "MALE",
+            "time_at_last_encounter": {
+                "age": {
+                    "iso8601duration": "P30Y"
+                }
+            },
+            "taxonomy": {
+                "id": "NCBITaxon:9606",
+                "label": "Homo sapiens"
+            },
+            "karyotypic_sex": "XY",
+            "extra_properties": {
+                "mobility": "I have slight problems in walking about",
+                "covid_severity": "Uninfected",
+                "date_of_consent": "2021-10-05",
+                "lab_test_result_value": 39,
+                "smoking_status": "Not specified"
+            }
+        },
+        "phenotypic_features": [
+            {
+                "type": {
+                    "id": "SNOMED:386661006",
+                    "label": "Fever"
+                }
+            },
+            {
+                "type": {
+                    "id": "SNOMED:52448006",
+                    "label": "Dementia"
+                }
+            }
+        ],
+        "biosamples": [
+            {
+                "id": "MS002001",
+                "sampled_tissue": {
+                    "id": "UBERON:0000955",
+                    "label": "Brodmann (1909) area 11"
+                },
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C15189",
+                        "label": "Biopsy"
+                    }
+                }
+            },
+            {
+                "id": "McGill0020-0"
+            },
+            {
+                "id": "McGill0020-1"
+            },
+            {
+                "id": "McGill0020-2",
+                "sampled_tissue": {
+                    "id": "NCIT:C13325",
+                    "label": "Serum"
+                }
+            }
+        ],
+        "measurements": [
+            {
+                "assay": {
+                    "id": "NCIT:C16358",
+                    "label": "Body Mass Index"
+                },
+                "value": {
+                    "quantity": {
+                        "unit": {
+                            "id": "NCIT:C49671",
+                            "label": "Kilogram per Square Meter"
+                        },
+                        "value": 20.49
+                    }
+                }
+            },
+            {
+                "assay": {
+                    "id": "NCIT:C167233",
+                    "label": "Blood Pressure Measurement"
+                },
+                "complex_value": {
+                    "typed_quantities": [
+                        {
+                            "type": {
+                                "id": "NCIT:C25298",
+                                "label": "Systolic Blood Pressure"
+                            },
+                            "quantity": {
+                                "unit": {
+                                    "id": "NCIT:C49670",
+                                    "label": "Millimeter of Mercury"
+                                },
+                                "value": 152
+                            }
+                        },
+                        {
+                            "type": {
+                                "id": "NCIT:C25299",
+                                "label": "Diastolic Blood Pressure"
+                            },
+                            "quantity": {
+                                "unit": {
+                                    "id": "NCIT:C49670",
+                                    "label": "Millimeter of Mercury"
+                                },
+                                "value": 132
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "medical_actions": [
+            {
+                "treatment": {
+                    "agent": {
+                        "id": "NCIT:C1119",
+                        "label": "Ondansetron"
+                    }
+                },
+                "treatment_target": {
+                    "id": "NCIT:C3258",
+                    "label": "Nausea"
+                },
+                "adverse_events": [
+                    {
+                        "id": "NCIT:C3038",
+                        "label": "Fever"
+                    }
+                ]
+            }
+        ],
+        "interpretations": [
+            {
+                "id": "McGill0020-interpretation-000",
+                "progress_status": "UNKNOWN_PROGRESS",
+                "summary": "diagnosis in progress"
+            }
+        ],
+        "diseases": [
+            {
+                "term": {
+                    "id": "MONDO:0012011",
+                    "label": "coronary artery disease, autosomal dominant, 1"
+                }
+            },
+            {
+                "term": {
+                    "id": "SNOMED:85828009",
+                    "label": "Rheumatologic disease"
+                }
+            }
+        ],
+        "meta_data": {
+            "created": "2025-02-20T15:28:17+00:00",
+            "created_by": "C3G_synthetic_data",
+            "phenopacket_schema_version": "2.0",
+            "resources": [
+                {
+                    "name": "NCBI Taxonomy OBO Edition",
+                    "version": "2023-09-19",
+                    "namespace_prefix": "NCBITaxon",
+                    "id": "NCBITaxon:2023-09-19",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "url": "http://purl.obolibrary.org/obo/ncbitaxon/2023-09-19/ncbitaxon.owl"
+                },
+                {
+                    "id": "UBERON:2019-06-27",
+                    "name": "Uber-anatomy ontology",
+                    "namespace_prefix": "UBERON",
+                    "url": "http://purl.obolibrary.org/obo/uberon.owl",
+                    "version": "2019-06-27",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/UBERON_"
+                },
+                {
+                    "name": "National Cancer Institute Thesaurus",
+                    "version": "2021-02-12",
+                    "namespace_prefix": "NCIT",
+                    "id": "NCIT:2021-02-12",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCIT_",
+                    "url": "http://purl.obolibrary.org/obo/ncit/releases/2021-02-12/ncit.owl"
+                },
+                {
+                    "name": "GENO ontology",
+                    "version": "2023-10-08",
+                    "namespace_prefix": "GENO",
+                    "id": "GENO:2023-10-08",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/GENO_",
+                    "url": "http://purl.obolibrary.org/obo/geno/releases/2023-10-08/geno.owl"
+                },
+                {
+                    "name": "The Human Phenotype Ontology",
+                    "version": "2023-09-01",
+                    "namespace_prefix": "HP",
+                    "id": "HP:2023-09-01",
+                    "iri_prefix": "https://hpo.jax.org/app/browse/term/",
+                    "url": "http://purl.obolibrary.org/obo/hp/releases/2023-09-01/hp.owl"
+                },
+                {
+                    "name": "SNOMED Clinical Terms",
+                    "version": "2019-04-11",
+                    "namespace_prefix": "SNOMED",
+                    "id": "SNOMED:2019-04-11",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
+                    "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
+                }
+            ]
+        }
+    },
+    {
+        "id": "b5a7f746-3a42-4d51-b05b-a72022c9d861",
+        "subject": {
+            "id": "McGill0022",
+            "sex": "FEMALE",
+            "time_at_last_encounter": {
+                "age": {
+                    "iso8601duration": "P60Y"
+                }
+            },
+            "taxonomy": {
+                "id": "NCBITaxon:9606",
+                "label": "Homo sapiens"
+            },
+            "karyotypic_sex": "XX",
+            "extra_properties": {
+                "mobility": "I have no problems in walking about",
+                "covid_severity": "Moderate",
+                "date_of_consent": "2023-08-23",
+                "lab_test_result_value": 9,
+                "smoking_status": "Non-smoker"
+            }
+        },
+        "phenotypic_features": [],
+        "biosamples": [
+            {
+                "id": "MS002201",
+                "sampled_tissue": {
+                    "id": "NCIT:C12415",
+                    "label": "Kidney"
+                },
+                "histological_diagnosis": {
+                    "id": "NCIT:C9384",
+                    "label": "Renal Carcinoma"
+                },
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C15189",
+                        "label": "Biopsy"
+                    }
+                }
+            }
+        ],
+        "measurements": [
+            {
+                "assay": {
+                    "id": "NCIT:C16358",
+                    "label": "Body Mass Index"
+                },
+                "value": {
+                    "quantity": {
+                        "unit": {
+                            "id": "NCIT:C49671",
+                            "label": "Kilogram per Square Meter"
+                        },
+                        "value": 27.15
+                    }
+                }
+            },
+            {
+                "assay": {
+                    "id": "NCIT:C167233",
+                    "label": "Blood Pressure Measurement"
+                },
+                "complex_value": {
+                    "typed_quantities": [
+                        {
+                            "type": {
+                                "id": "NCIT:C25298",
+                                "label": "Systolic Blood Pressure"
+                            },
+                            "quantity": {
+                                "unit": {
+                                    "id": "NCIT:C49670",
+                                    "label": "Millimeter of Mercury"
+                                },
+                                "value": 135
+                            }
+                        },
+                        {
+                            "type": {
+                                "id": "NCIT:C25299",
+                                "label": "Diastolic Blood Pressure"
+                            },
+                            "quantity": {
+                                "unit": {
+                                    "id": "NCIT:C49670",
+                                    "label": "Millimeter of Mercury"
+                                },
+                                "value": 97
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "medical_actions": [
+            {
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C17007",
+                        "label": "Positron Emission Tomography"
+                    }
+                },
+                "treatment_intent": {
+                    "id": "NCIT:C15220",
+                    "label": "Diagnosis"
+                },
+                "adverse_events": [
+                    {
+                        "id": "NCIT:C3258",
+                        "label": "Nausea"
+                    },
+                    {
+                        "id": "NCIT:C39594",
+                        "label": "Skin Rash"
+                    }
+                ],
+                "treatment_target": {
+                    "id": "NCIT:C34660",
+                    "label": "Head Injury"
+                }
+            },
+            {
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C16809",
+                        "label": "Magnetic Resonance Imaging"
+                    }
+                }
+            },
+            {
+                "treatment": {
+                    "agent": {
+                        "id": "NCIT:C198",
+                        "label": "Acetaminophen"
+                    },
+                    "route_of_administration": {
+                        "id": "NCIT:C38288",
+                        "label": "Oral Route of Administration"
+                    },
+                    "dose_intervals": [
+                        {
+                            "quantity": {
+                                "unit": {
+                                    "id": "UO:0000022",
+                                    "label": "milligram"
+                                },
+                                "value": 500
+                            },
+                            "schedule_frequency": {
+                                "id": "NCIT:C64496",
+                                "label": "Twice Daily"
+                            },
+                            "interval": {
+                                "start": "2023-10-04T06:31:41+00:00",
+                                "end": "2023-10-18T06:31:41+00:00"
+                            }
+                        }
+                    ],
+                    "drug_type": "PRESCRIPTION"
+                },
+                "treatment_target": {
+                    "id": "NCIT:C34661",
+                    "label": "Headache"
+                }
+            },
+            {
+                "treatment": {
+                    "agent": {
+                        "id": "NCIT:C1119",
+                        "label": "Ondansetron"
+                    }
+                },
+                "treatment_target": {
+                    "id": "NCIT:C3258",
+                    "label": "Nausea"
+                },
+                "adverse_events": [
+                    {
+                        "id": "NCIT:C3038",
+                        "label": "Fever"
+                    }
+                ]
+            },
+            {
+                "treatment": {
+                    "agent": {
+                        "id": "NCIT:C561",
+                        "label": "Ibuprofen"
+                    },
+                    "route_of_administration": {
+                        "id": "NCIT:C38288",
+                        "label": "Oral Route of Administration"
+                    },
+                    "dose_intervals": [
+                        {
+                            "quantity": {
+                                "unit": {
+                                    "id": "UO:0000022",
+                                    "label": "milligram"
+                                },
+                                "value": 500
+                            },
+                            "schedule_frequency": {
+                                "id": "NCIT:C64496",
+                                "label": "Twice Daily"
+                            },
+                            "interval": {
+                                "start": "2023-10-04T06:31:41+00:00",
+                                "end": "2023-10-18T06:31:41+00:00"
+                            }
+                        }
+                    ],
+                    "drug_type": "PRESCRIPTION"
+                }
+            }
+        ],
+        "diseases": [
+            {
+                "term": {
+                    "id": "NCIT:C9384",
+                    "label": "Renal Carcinoma"
+                },
+                "onset": {
+                    "timestamp": "2020-03-17T00:00:00Z"
+                }
+            },
+            {
+                "term": {
+                    "id": "SNOMED:840539006",
+                    "label": "COVID-19"
+                }
+            }
+        ],
+        "meta_data": {
+            "created": "2025-02-20T15:28:17+00:00",
+            "created_by": "C3G_synthetic_data",
+            "phenopacket_schema_version": "2.0",
+            "resources": [
+                {
+                    "name": "NCBI Taxonomy OBO Edition",
+                    "version": "2023-09-19",
+                    "namespace_prefix": "NCBITaxon",
+                    "id": "NCBITaxon:2023-09-19",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "url": "http://purl.obolibrary.org/obo/ncbitaxon/2023-09-19/ncbitaxon.owl"
+                },
+                {
+                    "id": "UBERON:2019-06-27",
+                    "name": "Uber-anatomy ontology",
+                    "namespace_prefix": "UBERON",
+                    "url": "http://purl.obolibrary.org/obo/uberon.owl",
+                    "version": "2019-06-27",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/UBERON_"
+                },
+                {
+                    "name": "National Cancer Institute Thesaurus",
+                    "version": "2021-02-12",
+                    "namespace_prefix": "NCIT",
+                    "id": "NCIT:2021-02-12",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCIT_",
+                    "url": "http://purl.obolibrary.org/obo/ncit/releases/2021-02-12/ncit.owl"
+                },
+                {
+                    "name": "GENO ontology",
+                    "version": "2023-10-08",
+                    "namespace_prefix": "GENO",
+                    "id": "GENO:2023-10-08",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/GENO_",
+                    "url": "http://purl.obolibrary.org/obo/geno/releases/2023-10-08/geno.owl"
+                },
+                {
+                    "name": "The Human Phenotype Ontology",
+                    "version": "2023-09-01",
+                    "namespace_prefix": "HP",
+                    "id": "HP:2023-09-01",
+                    "iri_prefix": "https://hpo.jax.org/app/browse/term/",
+                    "url": "http://purl.obolibrary.org/obo/hp/releases/2023-09-01/hp.owl"
+                },
+                {
+                    "name": "SNOMED Clinical Terms",
+                    "version": "2019-04-11",
+                    "namespace_prefix": "SNOMED",
+                    "id": "SNOMED:2019-04-11",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
+                    "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
+                }
+            ]
+        }
+    },
+    {
+        "id": "efd61faa-bff9-4467-a132-f383dc00eba3",
+        "subject": {
+            "id": "FAKE-001",
+            "sex": "MALE",
+            "time_at_last_encounter": {
+                "age": {
+                    "iso8601duration": "P32Y"
+                }
+            },
+            "taxonomy": {
+                "id": "NCBITaxon:9606",
+                "label": "Homo sapiens"
+            },
+            "karyotypic_sex": "XY",
+            "extra_properties": {
+                "mobility": "I am unable to walk about",
+                "covid_severity": "Moderate",
+                "date_of_consent": "2022-04-30",
+                "lab_test_result_value": 128,
+                "smoking_status": "Non-smoker"
+            }
+        },
+        "phenotypic_features": [],
+        "measurements": [
+            {
+                "assay": {
+                    "id": "NCIT:C16358",
+                    "label": "Body Mass Index"
+                },
+                "value": {
+                    "quantity": {
+                        "unit": {
+                            "id": "NCIT:C49671",
+                            "label": "Kilogram per Square Meter"
+                        },
+                        "value": 23.46
+                    }
+                }
+            },
+            {
+                "assay": {
+                    "id": "NCIT:C167233",
+                    "label": "Blood Pressure Measurement"
+                },
+                "complex_value": {
+                    "typed_quantities": [
+                        {
+                            "type": {
+                                "id": "NCIT:C25298",
+                                "label": "Systolic Blood Pressure"
+                            },
+                            "quantity": {
+                                "unit": {
+                                    "id": "NCIT:C49670",
+                                    "label": "Millimeter of Mercury"
+                                },
+                                "value": 111
+                            }
+                        },
+                        {
+                            "type": {
+                                "id": "NCIT:C25299",
+                                "label": "Diastolic Blood Pressure"
+                            },
+                            "quantity": {
+                                "unit": {
+                                    "id": "NCIT:C49670",
+                                    "label": "Millimeter of Mercury"
+                                },
+                                "value": 79
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "medical_actions": [
+            {
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C17007",
+                        "label": "Positron Emission Tomography"
+                    }
+                },
+                "treatment_intent": {
+                    "id": "NCIT:C15220",
+                    "label": "Diagnosis"
+                },
+                "adverse_events": [
+                    {
+                        "id": "NCIT:C3258",
+                        "label": "Nausea"
+                    },
+                    {
+                        "id": "NCIT:C39594",
+                        "label": "Skin Rash"
+                    }
+                ],
+                "treatment_target": {
+                    "id": "NCIT:C34660",
+                    "label": "Head Injury"
+                }
+            },
+            {
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C38101",
+                        "label": "X-Ray Imaging"
+                    }
+                }
+            },
+            {
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C16809",
+                        "label": "Magnetic Resonance Imaging"
+                    }
+                }
+            }
+        ],
+        "diseases": [
+            {
+                "term": {
+                    "id": "SNOMED:840539006",
+                    "label": "COVID-19"
+                }
+            }
+        ],
+        "meta_data": {
+            "created": "2025-02-20T15:28:17+00:00",
+            "created_by": "C3G_synthetic_data",
+            "phenopacket_schema_version": "2.0",
+            "resources": [
+                {
+                    "name": "NCBI Taxonomy OBO Edition",
+                    "version": "2023-09-19",
+                    "namespace_prefix": "NCBITaxon",
+                    "id": "NCBITaxon:2023-09-19",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "url": "http://purl.obolibrary.org/obo/ncbitaxon/2023-09-19/ncbitaxon.owl"
+                },
+                {
+                    "id": "UBERON:2019-06-27",
+                    "name": "Uber-anatomy ontology",
+                    "namespace_prefix": "UBERON",
+                    "url": "http://purl.obolibrary.org/obo/uberon.owl",
+                    "version": "2019-06-27",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/UBERON_"
+                },
+                {
+                    "name": "National Cancer Institute Thesaurus",
+                    "version": "2021-02-12",
+                    "namespace_prefix": "NCIT",
+                    "id": "NCIT:2021-02-12",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCIT_",
+                    "url": "http://purl.obolibrary.org/obo/ncit/releases/2021-02-12/ncit.owl"
+                },
+                {
+                    "name": "GENO ontology",
+                    "version": "2023-10-08",
+                    "namespace_prefix": "GENO",
+                    "id": "GENO:2023-10-08",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/GENO_",
+                    "url": "http://purl.obolibrary.org/obo/geno/releases/2023-10-08/geno.owl"
+                },
+                {
+                    "name": "The Human Phenotype Ontology",
+                    "version": "2023-09-01",
+                    "namespace_prefix": "HP",
+                    "id": "HP:2023-09-01",
+                    "iri_prefix": "https://hpo.jax.org/app/browse/term/",
+                    "url": "http://purl.obolibrary.org/obo/hp/releases/2023-09-01/hp.owl"
+                },
+                {
+                    "name": "SNOMED Clinical Terms",
+                    "version": "2019-04-11",
+                    "namespace_prefix": "SNOMED",
+                    "id": "SNOMED:2019-04-11",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
+                    "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
+                }
+            ]
+        }
+    },
+    {
+        "id": "d24c03a2-0d29-4c68-acfb-a1dba27fc801",
+        "subject": {
+            "id": "FAKE-002",
+            "sex": "MALE",
+            "time_at_last_encounter": {
+                "age": {
+                    "iso8601duration": "P50Y"
+                }
+            },
+            "taxonomy": {
+                "id": "NCBITaxon:9606",
+                "label": "Homo sapiens"
+            },
+            "karyotypic_sex": "XY",
+            "extra_properties": {
+                "mobility": "I am unable to walk about",
+                "covid_severity": "Uninfected",
+                "date_of_consent": "2020-05-02",
+                "lab_test_result_value": 129,
+                "smoking_status": "Smoker"
+            }
+        },
+        "phenotypic_features": [
+            {
+                "type": {
+                    "id": "SNOMED:410429000",
+                    "label": "Cardiac arrest"
+                }
+            },
+            {
+                "type": {
+                    "id": "SNOMED:25064002",
+                    "label": "Headache"
+                }
+            }
+        ],
+        "measurements": [
+            {
+                "assay": {
+                    "id": "NCIT:C16358",
+                    "label": "Body Mass Index"
+                },
+                "value": {
+                    "quantity": {
+                        "unit": {
+                            "id": "NCIT:C49671",
+                            "label": "Kilogram per Square Meter"
+                        },
+                        "value": 18.27
+                    }
+                }
+            }
+        ],
+        "medical_actions": [
+            {
+                "procedure": {
+                    "code": {
+                        "id": "NCIT:C51677",
+                        "label": "Liver Biopsy"
+                    },
+                    "body_site": {
+                        "id": "UBERON:0001115",
+                        "label": "left lobe of liver"
+                    }
+                }
+            }
+        ],
+        "diseases": [
+            {
+                "term": {
+                    "id": "NCIT:C27191",
+                    "label": "Hashimoto Thyroiditis"
+                }
+            }
+        ],
+        "meta_data": {
+            "created": "2025-02-20T15:28:17+00:00",
+            "created_by": "C3G_synthetic_data",
+            "phenopacket_schema_version": "2.0",
+            "resources": [
+                {
+                    "name": "NCBI Taxonomy OBO Edition",
+                    "version": "2023-09-19",
+                    "namespace_prefix": "NCBITaxon",
+                    "id": "NCBITaxon:2023-09-19",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "url": "http://purl.obolibrary.org/obo/ncbitaxon/2023-09-19/ncbitaxon.owl"
+                },
+                {
+                    "id": "UBERON:2019-06-27",
+                    "name": "Uber-anatomy ontology",
+                    "namespace_prefix": "UBERON",
+                    "url": "http://purl.obolibrary.org/obo/uberon.owl",
+                    "version": "2019-06-27",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/UBERON_"
+                },
+                {
+                    "name": "National Cancer Institute Thesaurus",
+                    "version": "2021-02-12",
+                    "namespace_prefix": "NCIT",
+                    "id": "NCIT:2021-02-12",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCIT_",
+                    "url": "http://purl.obolibrary.org/obo/ncit/releases/2021-02-12/ncit.owl"
+                },
+                {
+                    "name": "GENO ontology",
+                    "version": "2023-10-08",
+                    "namespace_prefix": "GENO",
+                    "id": "GENO:2023-10-08",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/GENO_",
+                    "url": "http://purl.obolibrary.org/obo/geno/releases/2023-10-08/geno.owl"
+                },
+                {
+                    "name": "The Human Phenotype Ontology",
+                    "version": "2023-09-01",
+                    "namespace_prefix": "HP",
+                    "id": "HP:2023-09-01",
+                    "iri_prefix": "https://hpo.jax.org/app/browse/term/",
+                    "url": "http://purl.obolibrary.org/obo/hp/releases/2023-09-01/hp.owl"
+                },
+                {
+                    "name": "SNOMED Clinical Terms",
+                    "version": "2019-04-11",
+                    "namespace_prefix": "SNOMED",
+                    "id": "SNOMED:2019-04-11",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
+                    "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68b4c6a9-bf3e-483c-aba8-f4a05a062f07",
+        "subject": {
+            "id": "FAKE-003",
+            "sex": "MALE",
+            "time_at_last_encounter": {
+                "age": {
+                    "iso8601duration": "P78Y"
+                }
+            },
+            "taxonomy": {
+                "id": "NCBITaxon:9606",
+                "label": "Homo sapiens"
+            },
+            "karyotypic_sex": "XY",
+            "extra_properties": {
+                "mobility": "I have slight problems in walking about",
+                "covid_severity": "Moderate",
+                "date_of_consent": "2020-12-11",
+                "lab_test_result_value": 30,
+                "smoking_status": "Non-smoker"
+            }
+        },
+        "phenotypic_features": [],
+        "biosamples": [
+            {
+                "id": "FAKE-003-0",
+                "sampled_tissue": {
+                    "id": "NCIT:C13356",
+                    "label": "Plasma"
+                }
+            }
+        ],
+        "measurements": [
+            {
+                "assay": {
+                    "id": "NCIT:C16358",
+                    "label": "Body Mass Index"
+                },
+                "value": {
+                    "quantity": {
+                        "unit": {
+                            "id": "NCIT:C49671",
+                            "label": "Kilogram per Square Meter"
+                        },
+                        "value": 29.89
+                    }
+                }
+            }
+        ],
+        "interpretations": [
+            {
+                "id": "FAKE-003-interpretation:001",
+                "progress_status": "SOLVED",
+                "diagnosis": {
+                    "disease": {
+                        "id": "SNOMED:66038001",
+                        "label": "Miller syndrome"
+                    },
+                    "genomic_interpretations": [
+                        {
+                            "subject_or_biosample_id": "FAKE-003",
+                            "interpretation_status": "CONTRIBUTORY",
+                            "gene_descriptor": {
+                                "value_id": "HGNC:2867",
+                                "symbol": "DHODH"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "diseases": [
+            {
+                "term": {
+                    "id": "SNOMED:66038001",
+                    "label": "Miller syndrome"
+                }
+            },
+            {
+                "term": {
+                    "id": "SNOMED:840539006",
+                    "label": "COVID-19"
+                }
+            }
+        ],
+        "meta_data": {
+            "created": "2025-02-20T15:28:17+00:00",
+            "created_by": "C3G_synthetic_data",
+            "phenopacket_schema_version": "2.0",
+            "resources": [
+                {
+                    "name": "NCBI Taxonomy OBO Edition",
+                    "version": "2023-09-19",
+                    "namespace_prefix": "NCBITaxon",
+                    "id": "NCBITaxon:2023-09-19",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "url": "http://purl.obolibrary.org/obo/ncbitaxon/2023-09-19/ncbitaxon.owl"
+                },
+                {
+                    "id": "UBERON:2019-06-27",
+                    "name": "Uber-anatomy ontology",
+                    "namespace_prefix": "UBERON",
+                    "url": "http://purl.obolibrary.org/obo/uberon.owl",
+                    "version": "2019-06-27",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/UBERON_"
+                },
+                {
+                    "name": "National Cancer Institute Thesaurus",
+                    "version": "2021-02-12",
+                    "namespace_prefix": "NCIT",
+                    "id": "NCIT:2021-02-12",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCIT_",
+                    "url": "http://purl.obolibrary.org/obo/ncit/releases/2021-02-12/ncit.owl"
+                },
+                {
+                    "name": "GENO ontology",
+                    "version": "2023-10-08",
+                    "namespace_prefix": "GENO",
+                    "id": "GENO:2023-10-08",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/GENO_",
+                    "url": "http://purl.obolibrary.org/obo/geno/releases/2023-10-08/geno.owl"
+                },
+                {
+                    "name": "The Human Phenotype Ontology",
+                    "version": "2023-09-01",
+                    "namespace_prefix": "HP",
+                    "id": "HP:2023-09-01",
+                    "iri_prefix": "https://hpo.jax.org/app/browse/term/",
+                    "url": "http://purl.obolibrary.org/obo/hp/releases/2023-09-01/hp.owl"
+                },
+                {
+                    "name": "SNOMED Clinical Terms",
+                    "version": "2019-04-11",
+                    "namespace_prefix": "SNOMED",
+                    "id": "SNOMED:2019-04-11",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
+                    "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
+                }
+            ]
+        }
+    },
+    {
+        "id": "bb724a87-d13d-4d3c-9a80-fd7f32dce00c",
+        "subject": {
+            "id": "FAKE-004",
+            "sex": "MALE",
+            "time_at_last_encounter": {
+                "age": {
+                    "iso8601duration": "P95Y"
+                }
+            },
+            "taxonomy": {
+                "id": "NCBITaxon:9606",
+                "label": "Homo sapiens"
+            },
+            "karyotypic_sex": "XY",
+            "extra_properties": {
+                "mobility": "I have no problems in walking about",
+                "covid_severity": "Uninfected",
+                "date_of_consent": "2023-02-26",
+                "lab_test_result_value": 21
+            }
+        },
+        "phenotypic_features": [
+            {
+                "type": {
+                    "id": "SNOMED:195967001",
+                    "label": "Asthma"
+                }
+            }
+        ],
+        "biosamples": [
+            {
+                "id": "FAKE-004-0"
+            }
+        ],
+        "medical_actions": [
+            {
+                "treatment": {
+                    "agent": {
+                        "id": "NCIT:C1119",
+                        "label": "Ondansetron"
+                    }
+                },
+                "treatment_target": {
+                    "id": "NCIT:C3258",
+                    "label": "Nausea"
+                },
+                "adverse_events": [
+                    {
+                        "id": "NCIT:C3038",
+                        "label": "Fever"
+                    }
+                ]
+            },
+            {
+                "treatment": {
+                    "agent": {
+                        "id": "NCIT:C561",
+                        "label": "Ibuprofen"
+                    },
+                    "route_of_administration": {
+                        "id": "NCIT:C38288",
+                        "label": "Oral Route of Administration"
+                    },
+                    "dose_intervals": [
+                        {
+                            "quantity": {
+                                "unit": {
+                                    "id": "UO:0000022",
+                                    "label": "milligram"
+                                },
+                                "value": 500
+                            },
+                            "schedule_frequency": {
+                                "id": "NCIT:C64496",
+                                "label": "Twice Daily"
+                            },
+                            "interval": {
+                                "start": "2021-05-20T15:15:48+00:00",
+                                "end": "2021-06-01T15:15:48+00:00"
+                            }
+                        }
+                    ],
+                    "drug_type": "PRESCRIPTION"
+                }
+            },
+            {
+                "treatment": {
+                    "agent": {
+                        "id": "NCIT:C198",
+                        "label": "Acetaminophen"
+                    },
+                    "route_of_administration": {
+                        "id": "NCIT:C38288",
+                        "label": "Oral Route of Administration"
+                    },
+                    "dose_intervals": [
+                        {
+                            "quantity": {
+                                "unit": {
+                                    "id": "UO:0000022",
+                                    "label": "milligram"
+                                },
+                                "value": 500
+                            },
+                            "schedule_frequency": {
+                                "id": "NCIT:C64496",
+                                "label": "Twice Daily"
+                            },
+                            "interval": {
+                                "start": "2021-05-20T15:15:48+00:00",
+                                "end": "2021-06-01T15:15:48+00:00"
+                            }
+                        }
+                    ],
+                    "drug_type": "PRESCRIPTION"
+                },
+                "treatment_target": {
+                    "id": "NCIT:C34661",
+                    "label": "Headache"
+                }
+            }
+        ],
+        "interpretations": [
+            {
+                "id": "FAKE-004-interpretation-000",
+                "progress_status": "UNKNOWN_PROGRESS",
+                "summary": "diagnosis in progress"
+            }
+        ],
+        "diseases": [
+            {
+                "term": {
+                    "id": "MONDO:0012011",
+                    "label": "coronary artery disease, autosomal dominant, 1"
+                }
+            }
+        ],
+        "meta_data": {
+            "created": "2025-02-20T15:28:17+00:00",
+            "created_by": "C3G_synthetic_data",
+            "phenopacket_schema_version": "2.0",
+            "resources": [
+                {
+                    "name": "NCBI Taxonomy OBO Edition",
+                    "version": "2023-09-19",
+                    "namespace_prefix": "NCBITaxon",
+                    "id": "NCBITaxon:2023-09-19",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCBITaxon_",
+                    "url": "http://purl.obolibrary.org/obo/ncbitaxon/2023-09-19/ncbitaxon.owl"
+                },
+                {
+                    "id": "UBERON:2019-06-27",
+                    "name": "Uber-anatomy ontology",
+                    "namespace_prefix": "UBERON",
+                    "url": "http://purl.obolibrary.org/obo/uberon.owl",
+                    "version": "2019-06-27",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/UBERON_"
+                },
+                {
+                    "name": "National Cancer Institute Thesaurus",
+                    "version": "2021-02-12",
+                    "namespace_prefix": "NCIT",
+                    "id": "NCIT:2021-02-12",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/NCIT_",
+                    "url": "http://purl.obolibrary.org/obo/ncit/releases/2021-02-12/ncit.owl"
+                },
+                {
+                    "name": "GENO ontology",
+                    "version": "2023-10-08",
+                    "namespace_prefix": "GENO",
+                    "id": "GENO:2023-10-08",
+                    "iri_prefix": "http://purl.obolibrary.org/obo/GENO_",
+                    "url": "http://purl.obolibrary.org/obo/geno/releases/2023-10-08/geno.owl"
+                },
+                {
+                    "name": "The Human Phenotype Ontology",
+                    "version": "2023-09-01",
+                    "namespace_prefix": "HP",
+                    "id": "HP:2023-09-01",
+                    "iri_prefix": "https://hpo.jax.org/app/browse/term/",
+                    "url": "http://purl.obolibrary.org/obo/hp/releases/2023-09-01/hp.owl"
+                },
+                {
+                    "name": "SNOMED Clinical Terms",
+                    "version": "2019-04-11",
+                    "namespace_prefix": "SNOMED",
+                    "id": "SNOMED:2019-04-11",
+                    "iri_prefix": "http://purl.bioontology.org/ontology/SNOMEDCT/",
+                    "url": "http://purl.bioontology.org/ontology/SNOMEDCT"
+                }
+            ]
+        }
+    }
+]

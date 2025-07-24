@@ -1,4 +1,14 @@
+from asyncio.tasks import Task
+import asyncio
 from logging import Logger
+from types import CoroutineType
+from fastapi import status
+from httpx import AsyncClient
+import httpx
+
+from bento_etl.config import Config
+from bento_etl import authz
+
 
 __all__ = ["BaseLoader"]
 
@@ -11,11 +21,52 @@ class BaseLoader:
     and load it into the target destination.
     """
 
-    def __init__(self, logger: Logger):
+    def __init__(self, logger: Logger, config: Config, load_url:str, service_name:str, expected_status_code:int = 204, batch_size:int = 0):
         self.logger = logger
+        self.config = config
+        self.load_url = load_url
+        self.service_name = service_name
+        self.expected_status_code = expected_status_code
+        self.batch_size = batch_size
 
-    def load(self, data):
-        pass
+    async def _load(self, data: list[dict]):
+        limits = httpx.Limits(max_keepalive_connections=20, max_connections=len(data))
+        headers = {"Authorization": authz.get_bearer_token_from_config(self.config)}
+        load_requests = set()
 
+        async with AsyncClient(
+            limits=limits, verify=self.config.bento_validate_ssl, headers=headers
+        ) as client:
+            try:
+                data_batches = data if self.batch_size == 0 else self._create_data_batches(data)
 
-# TODO: implement loaders for phenopackets and experiments
+                for batch in data_batches:
+                    load_task = asyncio.create_task(self._send_json_data(client, batch))
+                    load_requests.add(load_task)
+                    load_task.add_done_callback(load_requests.discard)
+
+                await asyncio.gather(*load_requests)
+            except Exception:
+                self.logger.warning("Cancelling all uploads")
+                self._cancel_all_requests(load_requests)
+                raise
+
+    def _create_data_batches(self, data: list[dict]) -> list[dict]:
+        return [
+            data[index : index + self.batch_size]
+            for index in range(0, len(data), self.batch_size)
+        ]
+
+    async def _send_json_data(self, client: AsyncClient, data: list[dict]):
+        response = await client.post(self.load_url, json=data)
+
+        if response.status_code != self.expected_status_code:
+            error_message = (
+                f"Upload to {self.service_name} failed with status code {response.status_code}"
+            )
+            self.logger.error(error_message)
+            raise Exception(error_message)
+
+    def _cancel_all_requests(self, requests: set[Task]):
+        for request in requests:
+            request.cancel()

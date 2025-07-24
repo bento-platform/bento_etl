@@ -1,60 +1,159 @@
-from fastapi import APIRouter, BackgroundTasks
+from __future__ import annotations
+import uuid
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Body
+from bento_etl.authz import authz_middleware
+from bento_etl.config import ConfigDependency
+from bento_etl.db import JobStatusDatabaseDependency
+from bento_etl.logger import LoggerDependency
+from bento_etl.pipeline_config import EtlPipelines
+from bento_etl.models import (
+    Job,
+    PipelineType,
+    ExtractStep,
+    TransformStep,
+    LoadStep,
+    JobStatus,
+    JobStatusType,
+)
+from bento_etl.extractors.dependencies import get_extractor
+from bento_etl.transformers.dependencies import get_transformer
+from bento_etl.loaders.dependencies import get_loader
 
-from bento_etl.extractors.base import BaseExtractor
-from bento_etl.extractors.dependencies import ExtractorDep
-from bento_etl.loaders.base import BaseLoader
-from bento_etl.loaders.dependencies import LoaderDep
-from bento_etl.models import Job
-from bento_etl.transformers.base import BaseTransformer
-from bento_etl.transformers.dependencies import TransformerDep
+job_router = APIRouter(
+    prefix="/jobs",
+    dependencies=[authz_middleware.dep_public_endpoint()],
+)
 
-__all__ = ["job_router"]
+_PIPELINE_REGISTRY: EtlPipelines | None = None
 
-"""
-Jobs router plan:
-/jobs       [GET]       => list submitted jobs
-/jobs       [POST]      => submit a job
-/jobs/{ID}  [GET]       => get a specific job
-/jobs/{ID}  [DELETE]    => kill a job if it is running
-"""
+def set_pipeline_registry(registry: EtlPipelines):
+    global _PIPELINE_REGISTRY
+    _PIPELINE_REGISTRY = registry
 
-# TODO: Job model describing a submitable ETL pipeline job
-# TODO: Add DB to keep track of jobs
+def get_pipeline_registry() -> EtlPipelines:
+    if _PIPELINE_REGISTRY is None:
+        raise RuntimeError("Pipeline registry not initialized. Call set_pipeline_registry first.")
+    return _PIPELINE_REGISTRY
 
+PipelineRegistryDep = Depends(get_pipeline_registry)
 
-def run_pipeline(
-    job_id: str,
-    extractor: BaseExtractor,
-    transformer: BaseTransformer,
-    loader: BaseLoader,
+def build_job_from_pipeline(
+    pipeline_type: PipelineType,
+    registry: EtlPipelines,
+) -> Job:
+    pipeline_name = pipeline_type.value
+    pipeline_cfg = registry.pipelines.get(pipeline_name)
+
+    if not pipeline_cfg:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Pipeline '{pipeline_name}' not found"
+        )
+    return Job(
+        id=str(uuid.uuid4()),
+        pipeline_type=pipeline_type,
+        extractor=ExtractStep(
+            format="json",
+            type=pipeline_cfg.extractor.type,
+            endpoint=pipeline_cfg.extractor.endpoint,
+            interval=pipeline_cfg.extractor.interval,
+        ),
+        transformer=TransformStep(
+            plugin=pipeline_cfg.transformer.plugin,
+        ),
+        loader=LoadStep(
+            dataset_id=pipeline_name,
+            data_type=pipeline_type,
+            expected_status_code=pipeline_cfg.loader.expected_status_code,
+            batch_size=pipeline_cfg.loader.batch_size,
+        ),
+    )
+
+async def run_pipeline(
+    job_id: uuid.UUID,
+    extractor,
+    transformer,
+    loader,
+    db: JobStatusDatabaseDependency,
 ):
-    # TODO: Run pipelines as a background task, figure out dep injection for ETL components
-    # TODO: Update job state in the DB after each step to reflect progression status
-    extracted_df = extractor.extract()
-    if extracted_df:
-        transformed_df = transformer.transform(extracted_df)
-        if transformed_df:
-            loader.load(transformed_df)
-        else:
-            # TODO: log error and abort with callback
-            pass
-    else:
-        # TODO: log error and abort with callback
-        pass
-    # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
+    try:
+        db.change_status(job_id, JobStatusType.EXTRACTING)
+        data = extractor.extract()
 
+        db.change_status(job_id, JobStatusType.TRANSFORMING)
+        transformed_data = transformer.transform(data)
 
-job_router = APIRouter(prefix="/jobs")
+        db.change_status(job_id, JobStatusType.LOADING)
+        await loader.load(transformed_data)
 
+        db.change_status(job_id, JobStatusType.SUCCESS)
+    except Exception as ex:
+        db.change_status(job_id, JobStatusType.ERROR, str(ex))
 
-@job_router.post("")
+@job_router.post("", summary="Submit a new ETL job")
 async def submit_job(
-    job: Job,
     bt: BackgroundTasks,
-    extractor: ExtractorDep,
-    transformer: TransformerDep,
-    loader: LoaderDep,
+    logger: LoggerDependency = LoggerDependency,
+    config: ConfigDependency = ConfigDependency,
+    db: JobStatusDatabaseDependency = JobStatusDatabaseDependency,
+    pipeline_type: PipelineType = Query(
+        ..., description="Which pipeline to run (phenopackets|experiments)"
+    ),
+    loader_config: LoadStep = Body(
+        ..., embed=True,
+        description="Loader configuration (dataset_id, data_type, expected_status_code, batch_size)"
+    ),
+    registry: EtlPipelines = PipelineRegistryDep,
 ):
-    # TODO: save job to DB
-    bt.add_task(run_pipeline, job.id, extractor, transformer, loader)
-    return {"message": f"Running ETL job in the background {job.id}"}
+    job = build_job_from_pipeline(pipeline_type, registry)
+    
+    job.loader = LoadStep(
+        dataset_id=loader_config.dataset_id or job.loader.dataset_id,
+        data_type=loader_config.data_type or job.loader.data_type,
+        expected_status_code=loader_config.expected_status_code or job.loader.expected_status_code,
+        batch_size=loader_config.batch_size or job.loader.batch_size,
+    )
+
+    status = db.create_status()
+    job.id = status.id
+
+    extractor = get_extractor(job, logger)
+    transformer = get_transformer(job, logger, config)
+    loader = get_loader(job, logger, config, registry)
+
+    bt.add_task(run_pipeline, job.id, extractor, transformer, loader, db)
+
+    return {
+        "id": job.id,
+        "pipeline_type": pipeline_type,
+        "loader": job.loader,
+        "status": status.status,
+        "message": "ETL job is running in the background",
+    }
+
+@job_router.get("", response_model=list[JobStatus])
+async def list_jobs(
+    db: JobStatusDatabaseDependency,
+):
+    return db.get_all_status()
+
+@job_router.get("/{job_id}", response_model=JobStatus)
+async def get_job_status(
+    job_id: uuid.UUID,
+    db: JobStatusDatabaseDependency,
+):
+    status = db.get_status(job_id)
+    if not status:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Job {job_id} not found"
+        )
+    return status
+
+@job_router.delete("/{job_id}")
+async def delete_job(
+    job_id: uuid.UUID,
+    db: JobStatusDatabaseDependency,
+):
+    db.delete_job_status(job_id)
+    return {"message": f"Job {job_id} has been deleted"}

@@ -6,15 +6,17 @@ services:
       dockerfile: ./dev.Dockerfile
     ports:
       - 5000:5000
+    volumes:
+      - $PWD:/etl
     environment:
       - BENTO_UID=${UID}
-      - BENTO_DEBUG=False
+      - BENTO_DEBUG=True
       - CORS_ORIGINS="*"
       - BENTO_AUTHZ_SERVICE_URL=""
       - BENTO_AUTHZ_ENABLED=False
       - INTERNAL_PORT=5000
-    volumes:
-      - $PWD:/etl
+      - PIPELINE_CONFIG=/etl/config.yml
+      - FILES_DIR=/etl
     healthcheck:
       test: [ "CMD", "curl", "http://localhost:5000/service-info" ]
       timeout: 5s
