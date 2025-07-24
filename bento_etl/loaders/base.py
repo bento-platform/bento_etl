@@ -68,13 +68,21 @@ class BaseLoader:
                 self._cancel_all_requests(load_requests)
                 raise
 
-    def _slice_data(self, data: list[dict]) -> list[dict]:
+    def _slice_data(self, data: list[dict]) -> list[list[dict]]:
+        """
+        Slices the data into smaller and independant sections, which are returned by _create_data_batches as batches when the batch_size > 0.
+        These batches are then uploaded separately.
+
+        Default implementation: Slices a list of data entries into multiple sublists of size batch_size (or smaller if size batch_size cannot be achieved).
+            These sublists are then returned in a list.
+        Overridable: Should be overriden by custom Loaders to account for unique data shapes. Return type must be list.
+        """
         return [
             data[index : index + self.batch_size]
             for index in range(0, len(data), self.batch_size)
         ]
 
-    def _create_data_batches(self, data: list[dict]) -> list[dict]:
+    def _create_data_batches(self, data: list[dict]) -> list:
         if self.batch_size == 0:
             return [data]
         else:
