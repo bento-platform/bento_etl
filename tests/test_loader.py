@@ -121,29 +121,18 @@ class TestExperimentsLoader:
         with pytest.raises(ValueError):
             ExperimentsLoader(logger, config, "")
 
-    def test_create_data_batch_zero_batch_size(
-        self, logger, config, load_experiment_data
-    ):
-        loader = ExperimentsLoader(logger, config, uuid.uuid4(), 0)
-
-        batches = loader._create_data_batches(load_experiment_data)
-        assert len(batches) == 1
-        assert batches[0] == load_experiment_data
-
-    def test_create_data_batch_small_batch_size(
-        self, logger, config, load_experiment_data
-    ):
+    def test_slice_data_small_batch_size(self, logger, config, load_experiment_data):
         loader = ExperimentsLoader(logger, config, uuid.uuid4(), 2)
 
-        batches = loader._create_data_batches(load_experiment_data)
+        batches = loader._slice_data(load_experiment_data)
         assert len(batches) == 5
         assert len(batches[0]["experiments"]) == 2
+        assert all(batch["experiments"] for batch in batches)
+        assert all(batch["resources"] for batch in batches)
 
-    def test_create_data_batch_large_batch_size(
-        self, logger, config, load_experiment_data
-    ):
+    def test_slice_data_large_batch_size(self, logger, config, load_experiment_data):
         loader = ExperimentsLoader(logger, config, uuid.uuid4(), 200)
-        batches = loader._create_data_batches(load_experiment_data)
+        batches = loader._slice_data(load_experiment_data)
         assert len(batches) == 1
         assert batches[0] == load_experiment_data
 
