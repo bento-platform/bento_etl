@@ -13,8 +13,5 @@ class PhenopacketsLoader(BaseLoader):
         load_url = f"{config.katsu_url}ingest/{dataset_id}/phenopackets_json"
         super().__init__(logger, config, load_url, "katsu", 204, batch_size)
 
-    def _slice_data(self, data: list[dict]) -> list[dict]:
-        return super()._slice_data(data)
-
     async def load(self, data: list[dict]):
         await self._load(data)
