@@ -1,0 +1,23 @@
+{
+  "vital_status": {
+    "Deceased": {"id": "SNOMED:419099009", "label": "Dead"},
+    "Alive": {"id": "SNOMED:263654008", "label": "Alive"}
+  },
+  "gender": {
+    "F": {"id": "SNOMED:2200", "label": "Female"},
+    "M": {"id": "SNOMED:2201", "label": "Male"}
+  },
+  "disease": {
+    "Poisoning": {"id": "SNOMED:XXXXX", "label": "Poisoning"},
+    "Hysterical paralysis": {"id": "ICD10:F88.89", "label": "Hysterical paralysis"}
+  },
+  "sample_storage": {
+    "Frozen in vapour phase": {"id": "SNOMED:YYYYY", "label": "Frozen in vapour phase"}
+  },
+  "sample_processing": {
+    "Cryopreservation in liquid nitrogen (dead tissue)": {
+      "id": "SNOMED:ZZZZZ",
+      "label": "Cryopreservation in liquid nitrogen (dead tissue)"
+    }
+  }
+}

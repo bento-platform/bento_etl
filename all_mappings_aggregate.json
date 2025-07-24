@@ -1,0 +1,132 @@
+[
+    {
+        "Class Name": "base_Treatment",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Comorbidity",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Comorbidity",
+        "PCGL Field": "comorbidity_term",
+        "Phenopacket Field": "disease.term"
+    },
+    {
+        "Class Name": "base_Follow_up",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Exposure",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Measurement",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "age_at_diagnosis",
+        "Phenopacket Field": "disease.onset"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "disease_code",
+        "Phenopacket Field": "disease.term"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "disease_term",
+        "Phenopacket Field": "disease.term"
+    },
+    {
+        "Class Name": "base_Participant",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Participant",
+        "PCGL Field": "vital_status",
+        "Phenopacket Field": "individual.vital_status"
+    },
+    {
+        "Class Name": "base_Treatment",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Specimen",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Specimen",
+        "PCGL Field": "submitter_specimen_id",
+        "Phenopacket Field": "biosample.id"
+    },
+    {
+        "Class Name": "base_Specimen",
+        "PCGL Field": "specimen_tissue_source_code",
+        "Phenopacket Field": "biosample.sampled_tissue"
+    },
+    {
+        "Class Name": "base_Specimen",
+        "PCGL Field": "specimen_storage",
+        "Phenopacket Field": "biosample.sample_storage"
+    },
+    {
+        "Class Name": "base_Specimen",
+        "PCGL Field": "specimen_processing",
+        "Phenopacket Field": "biosample.sample_processing"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "age_at_diagnosis",
+        "Phenopacket Field": "disease.onset"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "disease_code",
+        "Phenopacket Field": "disease.term"
+    },
+    {
+        "Class Name": "base_Diagnosis",
+        "PCGL Field": "disease_term",
+        "Phenopacket Field": "disease.term"
+    },
+    {
+        "Class Name": "base_Phenotype",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Demographic",
+        "PCGL Field": "submitter_participant_id",
+        "Phenopacket Field": "individual.id"
+    },
+    {
+        "Class Name": "base_Demographic",
+        "PCGL Field": "gender",
+        "Phenopacket Field": "individual.gender"
+    },
+    {
+        "Class Name": "base_Demographic",
+        "PCGL Field": "sex_at_birth",
+        "Phenopacket Field": "individual.sex"
+    }
+]
