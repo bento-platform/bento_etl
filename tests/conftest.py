@@ -87,6 +87,15 @@ def load_phenopacket_data():
 
 
 @pytest.fixture
+def load_experiment_data():
+    caller_path = os.path.dirname(__file__)
+    file_path = os.path.join(caller_path, "data/synthetic_experiments.json")
+    with open(file_path) as f:
+        file_content = json.load(f)
+    return file_content
+
+
+@pytest.fixture
 def set_mock_for_valid_post(monkeypatch):
     async def mock_valid_post(*args, **kwargs):
         return httpx.Response(204)
