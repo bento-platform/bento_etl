@@ -5,6 +5,8 @@ from fastapi.testclient import TestClient
 
 from bento_etl.db import JobStatusDatabase
 
+AUTHZ_HEADER = {"Authorization": "Token bearer"}
+
 
 # TODO: Once Extractor and Transformer are integrated:
 #   - Test for Error if
@@ -12,7 +14,7 @@ from bento_etl.db import JobStatusDatabase
 #       - Correct extractor params but bad transformer params
 #       - Correct extractor and transformer params but bad loader params
 #   - Finish test for Success if the params to ETL are valid
-def test_post_submit_job_valid(test_client: TestClient):
+def test_post_submit_job_valid(test_client: TestClient, mock_authz):
     job_schema = {
         "id": "some_id",
         "extractor": {"format": "json", "type": "string"},
@@ -23,7 +25,7 @@ def test_post_submit_job_valid(test_client: TestClient):
             "data_type": "phenopackets",
         },
     }
-    response = test_client.post("/jobs", content=json.dumps(job_schema))
+    response = test_client.post("/jobs", content=json.dumps(job_schema), headers=AUTHZ_HEADER)
     assert response.status_code == 200
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
@@ -68,23 +70,24 @@ def test_get_all_status_empty_db(test_client: TestClient):
     assert response.status_code == 200
     assert response.json() == []
 
-
 def test_delete_status_valid(
     test_client: TestClient,
     job_status_database: JobStatusDatabase,
     mocked_job_dict: dict[str, Any],
+    mock_authz
 ):
-    status = job_status_database.create_status(mocked_job_dict)
-    response = test_client.delete(f"/jobs/{status.id}")
+        status = job_status_database.create_status(mocked_job_dict)
 
-    assert response.status_code == 200
-    assert response.json()["message"]
-    assert (
-        test_client.get(f"/jobs/{status.id}").status_code == 404
-    )  # Get should return 404 because the status was deleted from db
+        response = test_client.delete(f"/jobs/{status.id}", headers=AUTHZ_HEADER)
+
+        assert response.status_code == 200
+        assert response.json()["message"]
+        assert (
+            test_client.get(f"/jobs/{status.id}").status_code == 404
+        )  # Get should return 404 because the status was deleted from db
 
 
-def test_delete_status_invalid(test_client: TestClient):
+def test_delete_status_invalid(test_client: TestClient, mock_authz):
     inexistant_status_id = uuid.uuid4()
-    response = test_client.delete(f"/jobs/{inexistant_status_id}")
+    response = test_client.delete(f"/jobs/{inexistant_status_id}", headers=AUTHZ_HEADER)
     assert response.status_code == 404
