@@ -25,7 +25,9 @@ def test_post_submit_job_valid(test_client: TestClient, mock_authz):
             "data_type": "phenopackets",
         },
     }
-    response = test_client.post("/jobs", content=json.dumps(job_schema), headers=AUTHZ_HEADER)
+    response = test_client.post(
+        "/jobs", content=json.dumps(job_schema), headers=AUTHZ_HEADER
+    )
     assert response.status_code == 200
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
@@ -70,21 +72,22 @@ def test_get_all_status_empty_db(test_client: TestClient):
     assert response.status_code == 200
     assert response.json() == []
 
+
 def test_delete_status_valid(
     test_client: TestClient,
     job_status_database: JobStatusDatabase,
     mocked_job_dict: dict[str, Any],
-    mock_authz
+    mock_authz,
 ):
-        status = job_status_database.create_status(mocked_job_dict)
+    status = job_status_database.create_status(mocked_job_dict)
 
-        response = test_client.delete(f"/jobs/{status.id}", headers=AUTHZ_HEADER)
+    response = test_client.delete(f"/jobs/{status.id}", headers=AUTHZ_HEADER)
 
-        assert response.status_code == 200
-        assert response.json()["message"]
-        assert (
-            test_client.get(f"/jobs/{status.id}").status_code == 404
-        )  # Get should return 404 because the status was deleted from db
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert (
+        test_client.get(f"/jobs/{status.id}").status_code == 404
+    )  # Get should return 404 because the status was deleted from db
 
 
 def test_delete_status_invalid(test_client: TestClient, mock_authz):

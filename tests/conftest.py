@@ -76,10 +76,13 @@ def mock_bearer_token(monkeypatch):
 
     monkeypatch.setattr(authz, "get_bearer_token", mock_get_bearer_token)
 
+
 @pytest.fixture
 def mock_authz():
     with aioresponses() as mock:
-        yield mock.post("https://authz.local/policy/evaluate", payload={"result": [[True]]})
+        yield mock.post(
+            "https://authz.local/policy/evaluate", payload={"result": [[True]]}
+        )
 
 
 @pytest.fixture
