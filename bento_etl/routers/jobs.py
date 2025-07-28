@@ -57,8 +57,6 @@ async def run_pipeline(
         db.update_status(job_id, JobStatusType.ERROR, str(ex))
 
 
-# TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
-# Should use authz_middleware.dep_require_permissions_on_resource and at the endpoint level instead of the router.
 job_router = APIRouter(prefix="/jobs")
 
 
