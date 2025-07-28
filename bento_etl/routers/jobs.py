@@ -59,9 +59,7 @@ async def run_pipeline(
 
 # TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
 # Should use authz_middleware.dep_require_permissions_on_resource and at the endpoint level instead of the router.
-job_router = APIRouter(
-    prefix="/jobs"
-)
+job_router = APIRouter(prefix="/jobs")
 
 
 @job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
@@ -78,14 +76,22 @@ async def submit_job(
     return {"message": f"Running ETL job in the background {job_id}"}
 
 
-@job_router.get("", response_model=list[JobStatus], dependencies=[authz_middleware.dep_public_endpoint()])
+@job_router.get(
+    "",
+    response_model=list[JobStatus],
+    dependencies=[authz_middleware.dep_public_endpoint()],
+)
 async def get_all_status(
     db: JobStatusDatabaseDependency,
 ):
     return db.get_all_status()
 
 
-@job_router.get("/{job_id}", response_model=JobStatus, dependencies=[authz_middleware.dep_public_endpoint()])
+@job_router.get(
+    "/{job_id}",
+    response_model=JobStatus,
+    dependencies=[authz_middleware.dep_public_endpoint()],
+)
 async def get_status(
     job_id: uuid.UUID,
     db: JobStatusDatabaseDependency,
