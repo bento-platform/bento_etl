@@ -1,6 +1,9 @@
 import uuid
 from fastapi import APIRouter, BackgroundTasks
 
+from bento_lib.auth.permissions import P_DELETE_DATA, P_INGEST_DATA
+from bento_lib.auth.resources import RESOURCE_EVERYTHING
+
 from bento_etl.authz import authz_middleware
 from bento_etl.db import JobStatusDatabaseDependency
 from bento_etl.extractors.base import BaseExtractor
@@ -10,6 +13,13 @@ from bento_etl.loaders.dependencies import LoaderDep
 from bento_etl.models import Job, JobStatus, JobStatusType
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import TransformerDep
+
+DEPENDENCY_INGEST_DATA = authz_middleware.dep_require_permissions_on_resource(
+    frozenset({P_INGEST_DATA}), RESOURCE_EVERYTHING
+)
+DEPENDENCY_DELETE_DATA = authz_middleware.dep_require_permissions_on_resource(
+    frozenset({P_DELETE_DATA}), RESOURCE_EVERYTHING
+)
 
 __all__ = ["job_router"]
 
@@ -47,14 +57,10 @@ async def run_pipeline(
         db.update_status(job_id, JobStatusType.ERROR, str(ex))
 
 
-# TODO: Use propper authorization checks instead of dep_public_endpoint before deploying.
-# Should use authz_middleware.dep_require_permissions_on_resource and at the endpoint level instead of the router.
-job_router = APIRouter(
-    prefix="/jobs", dependencies=[authz_middleware.dep_public_endpoint()]
-)
+job_router = APIRouter(prefix="/jobs")
 
 
-@job_router.post("", dependencies=[])
+@job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
 async def submit_job(
     job: Job,
     bt: BackgroundTasks,
@@ -68,14 +74,22 @@ async def submit_job(
     return {"message": f"Running ETL job in the background {job_id}"}
 
 
-@job_router.get("", response_model=list[JobStatus])
+@job_router.get(
+    "",
+    response_model=list[JobStatus],
+    dependencies=[authz_middleware.dep_public_endpoint()],
+)
 async def get_all_status(
     db: JobStatusDatabaseDependency,
 ):
     return db.get_all_status()
 
 
-@job_router.get("/{job_id}", response_model=JobStatus)
+@job_router.get(
+    "/{job_id}",
+    response_model=JobStatus,
+    dependencies=[authz_middleware.dep_public_endpoint()],
+)
 async def get_status(
     job_id: uuid.UUID,
     db: JobStatusDatabaseDependency,
@@ -83,7 +97,7 @@ async def get_status(
     return db.get_status(job_id)
 
 
-@job_router.delete("/{job_id}")
+@job_router.delete("/{job_id}", dependencies=[DEPENDENCY_DELETE_DATA])
 async def delete_status(job_id: uuid.UUID, db: JobStatusDatabaseDependency):
     db.delete_status(job_id)
     return {"message": f"Job {job_id} has been deleted"}
