@@ -1,0 +1,214 @@
+{
+    "experiments": [
+        {
+            "id": "MS002001-01",
+            "study_type": "Transcriptomics",
+            "experiment_type": "RNA-Seq",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0001177",
+                    "label": "RNA sequencing assay"
+                }
+            ],
+            "library_strategy": "RNA-Seq",
+            "library_source": "Transcriptomic",
+            "library_selection": "Random PCR",
+            "molecule": "total RNA",
+            "molecule_ontology": [
+                {
+                    "id": "EFO:0004964",
+                    "label": "total RNA"
+                }
+            ],
+            "biosample": "MS002001",
+            "experiment_results": [
+                {
+                    "identifier": "MS002001-01-00",
+                    "description": "RNAseq alignment, forward signal",
+                    "filename": "51570.CEEHRC.MS002001.RNA-Seq.signal_forward.bigWig",
+                    "url": "https://epigenomesportal.ca/tracks/CEEHRC/hg19/51570.CEEHRC.MS002001.RNA-Seq.signal_forward.bigWig",
+                    "file_format": "BigWig",
+                    "genome_assembly_id": "GRCh37",
+                    "data_output_type": "Derived data",
+                    "creation_date": "2022-02-08 00:00:00"
+                },
+                {
+                    "identifier": "MS002001-01-01",
+                    "description": "RNAseq alignment, reverse signal",
+                    "filename": "51571.CEEHRC.MS002001.RNA-Seq.signal_reverse.bigWig",
+                    "url": "https://epigenomesportal.ca/tracks/CEEHRC/hg19/51571.CEEHRC.MS002001.RNA-Seq.signal_reverse.bigWig",
+                    "file_format": "BigWig",
+                    "genome_assembly_id": "GRCh37",
+                    "data_output_type": "Derived data",
+                    "creation_date": "2022-02-08 00:00:00"
+                }
+            ]
+        },
+        {
+            "id": "0ba18733-40a8-4e86-b93b-a660f00241e9",
+            "biosample": "McGill0020-1",
+            "study_type": "Other",
+            "experiment_type": "Other",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0000537",
+                    "label": "copy number variation profiling assay"
+                }
+            ]
+        },
+        {
+            "id": "MS002201-01",
+            "study_type": "Transcriptomics",
+            "experiment_type": "RNA-Seq",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0001177",
+                    "label": "RNA sequencing assay"
+                }
+            ],
+            "library_source": "Transcriptomic",
+            "library_strategy": "RNA-Seq",
+            "library_selection": "Random PCR",
+            "molecule": "total RNA",
+            "molecule_ontology": [
+                {
+                    "id": "EFO:0004964",
+                    "label": "total RNA"
+                }
+            ],
+            "biosample": "MS002201",
+            "experiment_results": [
+                {
+                    "identifier": "MS002201-01-00",
+                    "description": "RNAseq alignment, forward signal",
+                    "filename": "51598.CEEHRC.MS002201.RNA-Seq.signal_forward.bigWig",
+                    "url": "https://epigenomesportal.ca/tracks/CEEHRC/hg19/51598.CEEHRC.MS002201.RNA-Seq.signal_forward.bigWig",
+                    "file_format": "BigWig",
+                    "genome_assembly_id": "GRCh37",
+                    "data_output_type": "Derived data",
+                    "creation_date": "2022-02-08 00:00:00"
+                }
+            ]
+        },
+        {
+            "id": "c1e494c6-e805-4300-823b-36a4ef9c9c24",
+            "biosample": "FAKE-003-0",
+            "study_type": "Metabolomics",
+            "experiment_type": "Metabolite profiling",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0000366",
+                    "label": "metabolite profiling assay"
+                }
+            ],
+            "experiment_results": [
+                {
+                    "identifier": "c16d16b5-6edf-495f-8b59-61760eb64944",
+                    "usage": "Downloaded",
+                    "created_by": "C3G_synthetic_data",
+                    "filename": "example.docx",
+                    "file_format": "DOCX"
+                }
+            ]
+        },
+        {
+            "id": "a5e69c87-24fd-4903-8b6f-76c418c9ed76",
+            "biosample": "FAKE-004-0",
+            "study_type": "Other",
+            "experiment_type": "Other",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0000537",
+                    "label": "copy number variation profiling assay"
+                }
+            ]
+        },
+        {
+            "id": "491d7073-6796-4609-98ce-1aa664ca33c8",
+            "biosample": "FAKE-005-1",
+            "study_type": "Other",
+            "experiment_type": "Other",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0003172",
+                    "label": "thyroid stimulating hormone concentration assay"
+                }
+            ]
+        },
+        {
+            "id": "e4960450-acce-45a7-810c-db68fc89ab0c",
+            "biosample": "FAKE-008-0",
+            "study_type": "Other",
+            "experiment_type": "Other",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0000537",
+                    "label": "copy number variation profiling assay"
+                }
+            ],
+            "experiment_results": [
+                {
+                    "identifier": "2580b225-d688-4f53-bccc-5608ef7525d2",
+                    "usage": "Downloaded",
+                    "created_by": "C3G_synthetic_data",
+                    "filename": "example.md",
+                    "file_format": "MARKDOWN"
+                }
+            ]
+        },
+        {
+            "id": "e685e4af-0a43-411f-ba76-e698d60f955d",
+            "biosample": "FAKE-009-0",
+            "study_type": "Other",
+            "experiment_type": "Other",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0000537",
+                    "label": "copy number variation profiling assay"
+                }
+            ]
+        },
+        {
+            "id": "3781684b-401f-4082-b367-6885d841def1",
+            "biosample": "FAKE-011-0",
+            "study_type": "Other",
+            "experiment_type": "Other",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0000537",
+                    "label": "copy number variation profiling assay"
+                }
+            ]
+        },
+        {
+            "id": "ce341086-a627-4be3-b847-99f06c3b5dc2",
+            "biosample": "FAKE-015-0",
+            "study_type": "Other",
+            "experiment_type": "Other",
+            "experiment_ontology": [
+                {
+                    "id": "OBI:0000537",
+                    "label": "copy number variation profiling assay"
+                }
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "name": "Ontology for Biomedical Investigations",
+            "version": "2020-12-16",
+            "namespace_prefix": "OBI",
+            "id": "OBI:2020-12-16",
+            "iri_prefix": "http://purl.obolibrary.org/obo/OBI_",
+            "url": "http://purl.obolibrary.org/obo/obi.owl"
+        },
+        {
+            "name": "Experimental Factor Ontology",
+            "version": "2021-02-16",
+            "namespace_prefix": "EFO",
+            "id": "EFO:2021-02-16",
+            "iri_prefix": "http://www.ebi.ac.uk/efo/EFO_",
+            "url": "http://www.ebi.ac.uk/efo/releases/v3.27.0/efo.owl"
+        }
+    ]
+}
