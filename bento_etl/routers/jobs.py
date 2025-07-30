@@ -8,6 +8,7 @@ from bento_etl.extractors.dependencies import ExtractorDep
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import LoaderDep
 from bento_etl.models import Job, JobStatus, JobStatusType
+from bento_etl.pipeline_config import PipelineRegistryDep
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import TransformerDep
 
@@ -28,6 +29,7 @@ async def run_pipeline(
     transformer: BaseTransformer,
     loader: BaseLoader,
     db: JobStatusDatabaseDependency,
+    pipeline_registry: PipelineRegistryDep = None
 ):
     # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
 
