@@ -1,5 +1,4 @@
 import httpx
-import polars as pl
 from logging import Logger
 from fastapi import status
 
@@ -21,7 +20,7 @@ class BaseExtractor:
     def __init__(self, logger: Logger):
         self.logger = logger
 
-    def extract(self) -> pl.DataFrame | pl.LazyFrame:
+    def extract(self) -> dict:
         pass
 
 
@@ -32,20 +31,16 @@ class ApiPollExtractor(BaseExtractor):
         self.http_verb = http_verb
         super().__init__(logger)
 
-    def extract(self) -> pl.DataFrame:
-        df: pl.DataFrame = None
-        with httpx.Client() as client:
+    def extract(self) -> dict:
+        with httpx.Client(verify=False) as client:
             r = client.request(self.http_verb, self.endpoint)
             if r.status_code != status.HTTP_200_OK:
-                # TODO: more specific exception
-                raise Exception()
+                self.logger.error(f"API request failed with status {r.status_code}")
+                raise Exception(f"API request failed with status {r.status_code}")
 
-            # Response implements read() function
-            df = pl.read_json(r)
-
-        if df.is_empty():
-            self.logger.warning("Extracted payload results in an empty data frame")
-            # TODO: more specific exception
-            raise Exception()
-
-        return df
+            data = r.json()
+            if not data:
+                self.logger.warning("Extracted payload is empty")
+                raise Exception("Extracted payload is empty")
+            print(data)
+            return data
