@@ -62,7 +62,9 @@ async def run_pipeline(
 job_router = APIRouter(prefix="/jobs")
 
 
-@job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
+# TODO replace
+#@job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
+@job_router.post("", dependencies=[authz_middleware.dep_public_endpoint()])
 async def submit_job(
     job: Job,
     bt: BackgroundTasks,
@@ -71,14 +73,6 @@ async def submit_job(
     loader: LoaderDep,
     db: JobStatusDatabaseDependency,
 ):
-    import os
-    import json
-    batch_size = 4
-    caller_path =os.path.dirname(__file__)
-    file_path = os.path.join(caller_path, "phenopackets_result.json")
-    with open(file_path) as f:
-        json_content = json.load(f)
-        response = await loader.load(json_content)
     job_id = db.create_status(job.model_dump()).id
     bt.add_task(run_pipeline, job_id, extractor, transformer, loader, db)
     return {"message": f"Running ETL job in the background {job_id}"}
