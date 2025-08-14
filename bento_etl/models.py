@@ -13,9 +13,9 @@ class ExtractStep(BaseModel):
     Class to describe an Extractor step to run in a pipeline job.
     """
 
-    format: Literal["json", "csv", "tsv", "vcf", "vcf.gz"]
-    type: str
-    # TODO: complete
+    extract_url: str
+    frequency_ms: int
+    type: Literal["api-fetch"]
 
 
 class TransformStep(BaseModel):
