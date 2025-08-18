@@ -16,13 +16,16 @@ AUTHZ_HEADER = {"Authorization": "Token bearer"}
 #   - Finish test for Success if the params to ETL are valid
 def test_post_submit_job_valid(test_client: TestClient, mock_authz):
     job_schema = {
-        "id": "some_id",
-        "extractor": {"format": "json", "type": "string"},
+        "extractor": {
+            "extract_url": "some_url",
+            "frequency_ms": 0,
+            "type": "api-fetch"
+        },
         "transformer": {},
         "loader": {
             "dataset_id": "some_dataset_id",
             "batch_size": 0,
-            "data_type": "phenopackets",
+            "data_type": "phenopackets"
         },
     }
     response = test_client.post(

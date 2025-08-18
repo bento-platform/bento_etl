@@ -61,7 +61,7 @@ def test_client():
 
 @pytest.fixture
 def mocked_job_dict():
-    extractor = ExtractStep(format="json", type="some_type")
+    extractor = ExtractStep(extract_url="some_url", frequency_ms=0, type="api-fetch")
     tranformer = TransformStep()
     loader = LoadStep(
         dataset_id="some_dataset_id", batch_size=0, data_type="phenopackets"
