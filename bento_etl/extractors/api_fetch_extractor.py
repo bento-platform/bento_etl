@@ -1,6 +1,6 @@
 from logging import Logger
-from httpx import Client
 from fastapi import status
+import httpx
 
 from bento_etl.config import Config
 from bento_etl.extractors.base import BaseExtractor
@@ -14,17 +14,16 @@ class ApiPollExtractor(BaseExtractor):
         super().__init__(logger, config)
 
     def extract(self) -> dict:
-        with Client() as client:
-            response = client.request(self.http_verb, self.endpoint)
+        response = httpx.request(self.http_verb, self.endpoint)
 
-            if response.status_code != status.HTTP_200_OK:  #TODO set expected range of values or custom status?
-                error_message = f"API request failed with status {response.status_code}"
-                self.logger.error(error_message)
-                raise Exception(error_message)
+        if response.status_code != status.HTTP_200_OK:  #TODO set expected range of values or custom status?
+            error_message = f"API request failed with status {response.status_code}"
+            self.logger.error(error_message)
+            raise Exception(error_message)
 
-            data = response.json()
-            if not data:
-                error_message = "Extracted payload is empty"
-                self.logger.error(error_message)
-                raise Exception(error_message)
-            return data
+        data = response.json()
+        if not data:
+            error_message = "Extracted payload is empty"
+            self.logger.error(error_message)
+            raise Exception(error_message)
+        return data
