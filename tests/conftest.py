@@ -102,18 +102,37 @@ def load_experiment_data():
         file_content = json.load(f)
     return file_content
 
+#### EXTRACTOR MOCKS
+EXTRACTOR_REQUEST_PATH = "bento_etl.extractors.api_fetch_extractor.httpx.request"
 
 @pytest.fixture
-def set_mock_for_valid_post(monkeypatch):
+def mock_extractor_success_call(monkeypatch, load_phenopacket_data):
+    phenopacket_content = json.dumps(load_phenopacket_data).encode('utf-8')
+    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args: httpx.Response(200, content=phenopacket_content))
+
+@pytest.fixture
+def mock_extractor_bad_status_code(monkeypatch):
+    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args,: httpx.Response(400))
+
+@pytest.fixture
+def mock_extractor_valid_empty_response(monkeypatch):
+    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args: httpx.Response(200, content=b''))
+
+
+#### LOADER MOCKS
+LOADER_POST_REQUEST_PATH = "bento_etl.loaders.base.httpx.AsyncClient.post"
+
+@pytest.fixture
+def mock_loader_valid_post(monkeypatch):
     async def mock_valid_post(*args, **kwargs):
         return httpx.Response(204)
 
-    monkeypatch.setattr(httpx.AsyncClient, "post", mock_valid_post)
+    monkeypatch.setattr(LOADER_POST_REQUEST_PATH, mock_valid_post)
 
 
 @pytest.fixture
-def set_mock_for_invalid_post(monkeypatch):
+def mock_loader_invalid_post(monkeypatch):
     async def mock_invalid_post(*args, **kwargs):
         return httpx.Response(400)
 
-    monkeypatch.setattr(httpx.AsyncClient, "post", mock_invalid_post)
+    monkeypatch.setattr(LOADER_POST_REQUEST_PATH, mock_invalid_post)
