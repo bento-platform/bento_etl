@@ -1,12 +1,14 @@
 import json
+import time
 from typing import Any
 import uuid
 from fastapi.testclient import TestClient
+import httpx
+import pytest
 
 from bento_etl.db import JobStatusDatabase
 
 AUTHZ_HEADER = {"Authorization": "Token bearer"}
-
 
 # TODO: Once Extractor and Transformer are integrated:
 #   - Test for Error if
@@ -14,7 +16,12 @@ AUTHZ_HEADER = {"Authorization": "Token bearer"}
 #       - Correct extractor params but bad transformer params
 #       - Correct extractor and transformer params but bad loader params
 #   - Finish test for Success if the params to ETL are valid
-def test_post_submit_job_valid(test_client: TestClient, mock_authz):
+#@pytest.mark.asyncio
+def test_post_submit_job_valid(test_client: TestClient,
+                               job_status_database: JobStatusDatabase,
+                               mock_authz,
+                               mock_extractor_success_call,
+                               mock_loader_valid_post):
     job_schema = {
         "extractor": {
             "extract_url": "some_url",
@@ -34,6 +41,17 @@ def test_post_submit_job_valid(test_client: TestClient, mock_authz):
     assert response.status_code == 200
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
+
+    time.sleep(1) # Time delay to let the job run and get updated in the db. might need to be longer
+    
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
+
+    print(response_body)
+
+    assert db_response.status_code == 200
+    assert 1 == len(response_body)
+    assert response_body[0]["status"] == "success"
 
 
 def test_get_status_valid(
