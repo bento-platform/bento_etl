@@ -39,7 +39,6 @@ async def run_pipeline(
     transformer: BaseTransformer,
     loader: BaseLoader,
     db: JobStatusDatabaseDependency,
-    pipeline_registry: PipelineRegistryDep = None
 ):
     # TODO: completion POST callback if job includes a callback URL (success, errors, warnings)
 
@@ -62,7 +61,7 @@ async def run_pipeline(
 job_router = APIRouter(prefix="/jobs")
 
 
-# TODO replace
+# TODO replace 
 #@job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
 @job_router.post("", dependencies=[authz_middleware.dep_public_endpoint()])
 async def submit_job(
