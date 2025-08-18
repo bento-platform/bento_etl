@@ -2,7 +2,8 @@ from fastapi import Depends
 from typing import Annotated
 
 from bento_etl.config import ConfigDependency
-from bento_etl.extractors.base import BaseExtractor, ApiPollExtractor
+from bento_etl.extractors.api_fetch_extractor import ApiPollExtractor
+from bento_etl.extractors.base import BaseExtractor
 from bento_etl.logger import LoggerDependency
 from bento_etl.models import Job
 from bento_etl.pipeline_config import PipelineRegistryDep

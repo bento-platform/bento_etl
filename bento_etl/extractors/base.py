@@ -1,6 +1,5 @@
-import httpx
 from logging import Logger
-from fastapi import status
+from bento_etl.config import Config
 
 __all__ = ["BaseExtractor"]
 
@@ -17,30 +16,9 @@ class BaseExtractor:
     a Polars DataFrame or a LazyFrame.
     """
 
-    def __init__(self, logger: Logger):
+    def __init__(self, logger: Logger, config: Config):
         self.logger = logger
+        self.config = config
 
     def extract(self) -> dict:
         pass
-
-
-class ApiPollExtractor(BaseExtractor):
-    def __init__(self, logger, endpoint: str, frequency: str, http_verb: str = "GET"):
-        self.endpoint = endpoint
-        self.frequency = frequency
-        self.http_verb = http_verb
-        super().__init__(logger)
-
-    def extract(self) -> dict:
-        with httpx.Client(verify=False) as client:
-            r = client.request(self.http_verb, self.endpoint)
-            if r.status_code != status.HTTP_200_OK:
-                self.logger.error(f"API request failed with status {r.status_code}")
-                raise Exception(f"API request failed with status {r.status_code}")
-
-            data = r.json()
-            if not data:
-                self.logger.warning("Extracted payload is empty")
-                raise Exception("Extracted payload is empty")
-            print(data)
-            return data
