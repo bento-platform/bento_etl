@@ -123,9 +123,7 @@ def mock_extractor_bad_status_code(monkeypatch):
 
 @pytest.fixture
 def mock_extractor_valid_empty_response(monkeypatch):
-    monkeypatch.setattr(
-        EXTRACTOR_REQUEST_PATH, lambda *args: httpx.Response(200, content=b"")
-    )
+    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args: httpx.Response(200))
 
 
 #### LOADER MOCKS
