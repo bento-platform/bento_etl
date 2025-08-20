@@ -10,48 +10,86 @@ from bento_etl.db import JobStatusDatabase
 
 AUTHZ_HEADER = {"Authorization": "Token bearer"}
 
-# TODO: Once Extractor and Transformer are integrated:
-#   - Test for Error if
-#       - Bad params are passed in extractor
-#       - Correct extractor params but bad transformer params
-#       - Correct extractor and transformer params but bad loader params
-#   - Finish test for Success if the params to ETL are valid
-#@pytest.mark.asyncio
+DEFAULT_JOB_SCHEMA = {
+    "extractor": {
+        "extract_url": "some_url",
+        "frequency_ms": 0,
+        "type": "api-fetch"
+    },
+    "transformer": {},
+    "loader": {
+        "dataset_id": "some_dataset_id",
+        "batch_size": 0,
+        "data_type": "phenopackets"
+    },
+}
+
 def test_post_submit_job_valid(test_client: TestClient,
                                job_status_database: JobStatusDatabase,
                                mock_authz,
                                mock_extractor_success_call,
                                mock_loader_valid_post):
-    job_schema = {
-        "extractor": {
-            "extract_url": "some_url",
-            "frequency_ms": 0,
-            "type": "api-fetch"
-        },
-        "transformer": {},
-        "loader": {
-            "dataset_id": "some_dataset_id",
-            "batch_size": 0,
-            "data_type": "phenopackets"
-        },
-    }
+
     response = test_client.post(
-        "/jobs", content=json.dumps(job_schema), headers=AUTHZ_HEADER
+        "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
+    )
+
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(test_client.get("/jobs").json()) == 1
+
+    time.sleep(1) # Time delay to let the job run and get updated in the db. might need to be longer
+
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
+
+    assert db_response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "success"
+
+def test_post_submit_job_invalid_bad_extractor(test_client: TestClient,
+                               job_status_database: JobStatusDatabase,
+                               mock_authz,
+                               mock_extractor_bad_status_code,
+                               mock_loader_valid_post):
+
+    response = test_client.post(
+        "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
     )
     assert response.status_code == 200
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
 
     time.sleep(1) # Time delay to let the job run and get updated in the db. might need to be longer
-    
+
     db_response = test_client.get("/jobs")
     response_body = db_response.json()
 
-    print(response_body)
+    assert db_response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "error"
+
+def test_post_submit_job_invalid_bad_loader(test_client: TestClient,
+                               job_status_database: JobStatusDatabase,
+                               mock_authz,
+                               mock_extractor_success_call,
+                               mock_loader_invalid_post):
+
+    response = test_client.post(
+        "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
+    )
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(test_client.get("/jobs").json()) == 1
+
+    time.sleep(1) # Time delay to let the job run and get updated in the db. might need to be longer
+
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
 
     assert db_response.status_code == 200
-    assert 1 == len(response_body)
-    assert response_body[0]["status"] == "success"
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "error"
 
 
 def test_get_status_valid(
