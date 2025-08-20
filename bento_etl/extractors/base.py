@@ -13,7 +13,7 @@ class BaseExtractor:
     this is the Tranformer's job in an ETL pipeline.
 
     Concrete extractors should be configured in the constructor and implement the `extract` function, which returns
-    a Polars DataFrame or a LazyFrame.
+    a json dict.
     """
 
     def __init__(self, logger: Logger, config: Config):

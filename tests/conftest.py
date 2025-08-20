@@ -86,7 +86,7 @@ def mock_authz():
 
 
 @pytest.fixture
-def load_phenopacket_data():
+def load_phenopacket_data() -> dict:
     caller_path = os.path.dirname(__file__)
     file_path = os.path.join(caller_path, "data/synthetic_phenopackets_v2.json")
     with open(file_path) as f:
@@ -95,12 +95,13 @@ def load_phenopacket_data():
 
 
 @pytest.fixture
-def load_experiment_data():
+def load_experiment_data() -> dict:
     caller_path = os.path.dirname(__file__)
     file_path = os.path.join(caller_path, "data/synthetic_experiments.json")
     with open(file_path) as f:
         file_content = json.load(f)
     return file_content
+
 
 #### EXTRACTOR MOCKS
 EXTRACTOR_REQUEST_PATH = "bento_etl.extractors.api_fetch_extractor.httpx.request"
