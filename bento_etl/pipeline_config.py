@@ -10,18 +10,22 @@ from .logger import get_logger
 config = get_config()
 logger = get_logger(config)
 
+
 class ExtractorConfig(BaseModel):
     type: str
     endpoint: str
     interval: str
 
+
 class LoaderConfig(BaseModel):
     data_type: str
     service_name: str
 
+
 class PipelineConfig(BaseModel):
     extractor: ExtractorConfig
     loader: LoaderConfig
+
 
 class EtlPipelines(BaseModel):
     pipelines: Dict[str, PipelineConfig]
@@ -48,7 +52,9 @@ class EtlPipelines(BaseModel):
 
         return cls(pipelines=raw_data["pipelines"])
 
+
 def get_pipeline_registry() -> EtlPipelines:
     return EtlPipelines.load_from_yaml()
+
 
 PipelineRegistryDep = Annotated[EtlPipelines, Depends(get_pipeline_registry)]

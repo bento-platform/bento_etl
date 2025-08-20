@@ -11,7 +11,6 @@ from bento_etl.extractors.dependencies import ExtractorDep
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import LoaderDep
 from bento_etl.models import Job, JobStatus, JobStatusType
-from bento_etl.pipeline_config import PipelineRegistryDep
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import TransformerDep
 
@@ -61,8 +60,8 @@ async def run_pipeline(
 job_router = APIRouter(prefix="/jobs")
 
 
-# TODO replace 
-#@job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
+# TODO replace
+# @job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
 @job_router.post("", dependencies=[authz_middleware.dep_public_endpoint()])
 async def submit_job(
     job: Job,

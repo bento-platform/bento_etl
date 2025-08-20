@@ -3,33 +3,29 @@ import time
 from typing import Any
 import uuid
 from fastapi.testclient import TestClient
-import httpx
-import pytest
 
 from bento_etl.db import JobStatusDatabase
 
 AUTHZ_HEADER = {"Authorization": "Token bearer"}
 
 DEFAULT_JOB_SCHEMA = {
-    "extractor": {
-        "extract_url": "some_url",
-        "frequency_ms": 0,
-        "type": "api-fetch"
-    },
+    "extractor": {"extract_url": "some_url", "frequency_ms": 0, "type": "api-fetch"},
     "transformer": {},
     "loader": {
         "dataset_id": "some_dataset_id",
         "batch_size": 0,
-        "data_type": "phenopackets"
+        "data_type": "phenopackets",
     },
 }
 
-def test_post_submit_job_valid(test_client: TestClient,
-                               job_status_database: JobStatusDatabase,
-                               mock_authz,
-                               mock_extractor_success_call,
-                               mock_loader_valid_post):
 
+def test_post_submit_job_valid(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_valid_post,
+):
     response = test_client.post(
         "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
     )
@@ -38,7 +34,9 @@ def test_post_submit_job_valid(test_client: TestClient,
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
 
-    time.sleep(1) # Time delay to let the job run and get updated in the db. might need to be longer
+    time.sleep(
+        1
+    )  # Time delay to let the job run and get updated in the db. might need to be longer
 
     db_response = test_client.get("/jobs")
     response_body = db_response.json()
@@ -47,12 +45,14 @@ def test_post_submit_job_valid(test_client: TestClient,
     assert len(response_body) == 1
     assert response_body[0]["status"] == "success"
 
-def test_post_submit_job_invalid_bad_extractor(test_client: TestClient,
-                               job_status_database: JobStatusDatabase,
-                               mock_authz,
-                               mock_extractor_bad_status_code,
-                               mock_loader_valid_post):
 
+def test_post_submit_job_invalid_bad_extractor(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_bad_status_code,
+    mock_loader_valid_post,
+):
     response = test_client.post(
         "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
     )
@@ -60,7 +60,9 @@ def test_post_submit_job_invalid_bad_extractor(test_client: TestClient,
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
 
-    time.sleep(1) # Time delay to let the job run and get updated in the db. might need to be longer
+    time.sleep(
+        1
+    )  # Time delay to let the job run and get updated in the db. might need to be longer
 
     db_response = test_client.get("/jobs")
     response_body = db_response.json()
@@ -69,12 +71,14 @@ def test_post_submit_job_invalid_bad_extractor(test_client: TestClient,
     assert len(response_body) == 1
     assert response_body[0]["status"] == "error"
 
-def test_post_submit_job_invalid_bad_loader(test_client: TestClient,
-                               job_status_database: JobStatusDatabase,
-                               mock_authz,
-                               mock_extractor_success_call,
-                               mock_loader_invalid_post):
 
+def test_post_submit_job_invalid_bad_loader(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_invalid_post,
+):
     response = test_client.post(
         "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
     )
@@ -82,7 +86,9 @@ def test_post_submit_job_invalid_bad_loader(test_client: TestClient,
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
 
-    time.sleep(1) # Time delay to let the job run and get updated in the db. might need to be longer
+    time.sleep(
+        1
+    )  # Time delay to let the job run and get updated in the db. might need to be longer
 
     db_response = test_client.get("/jobs")
     response_body = db_response.json()
