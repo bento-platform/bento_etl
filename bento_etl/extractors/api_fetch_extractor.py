@@ -30,9 +30,10 @@ class ApiPollExtractor(BaseExtractor):
             self.logger.error(error_message)
             raise Exception(error_message)
 
-        data = response.json()
-        if not data:
-            error_message = "Extracted payload is empty"
+        try:
+            data = response.json()
+        except Exception as e:
+            error_message = f"Extracted payload is empty or misformed: {e}"
             self.logger.error(error_message)
             raise Exception(error_message)
         return data
