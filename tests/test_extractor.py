@@ -1,6 +1,23 @@
 import pytest
 
 from bento_etl.extractors.api_fetch_extractor import ApiPollExtractor
+from bento_etl.extractors.dependencies import get_extractor
+from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
+
+
+def mock_job_with_api_fetch_extractor():
+    return Job(
+        extractor=ExtractStep(extract_url="some_url", frequency_ms=0, type="api-fetch"),
+        transformer=TransformStep(),
+        loader=LoadStep(dataset_id="some_id", batch_size=0, data_type="experiments"),
+    )
+
+
+class TestExtractorDependencies:
+    def test_get_extractor_api_fetch(self, logger, config):
+        job = mock_job_with_api_fetch_extractor()
+        extractor = get_extractor(job, logger, config)
+        assert type(extractor) is ApiPollExtractor
 
 
 class TestApiFetchExtractor:
