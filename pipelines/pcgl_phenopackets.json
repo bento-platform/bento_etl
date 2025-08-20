@@ -1,0 +1,13 @@
+{
+    "extractor": {
+        "extract_url": "https://submission.submission.dev.pcgl.sd4h.ca/data/category/2", 
+        "frequency_ms": 0, 
+        "type": "api-fetch"
+    },
+    "transformer": {},
+    "loader": {
+        "dataset_id": "some_dataset_id",
+        "batch_size": 0,
+        "data_type": "phenopackets"
+    }
+}

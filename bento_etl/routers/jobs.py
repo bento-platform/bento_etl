@@ -1,18 +1,22 @@
+import json
+import os
 import uuid
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 
 from bento_lib.auth.permissions import P_DELETE_DATA, P_INGEST_DATA
 from bento_lib.auth.resources import RESOURCE_EVERYTHING
 
 from bento_etl.authz import authz_middleware
+from bento_etl.config import ConfigDependency
 from bento_etl.db import JobStatusDatabaseDependency
 from bento_etl.extractors.base import BaseExtractor
-from bento_etl.extractors.dependencies import ExtractorDep
+from bento_etl.extractors.dependencies import ExtractorDep, get_extractor
 from bento_etl.loaders.base import BaseLoader
-from bento_etl.loaders.dependencies import LoaderDep
+from bento_etl.loaders.dependencies import LoaderDep, get_loader
+from bento_etl.logger import LoggerDependency
 from bento_etl.models import Job, JobStatus, JobStatusType
 from bento_etl.transformers.base import BaseTransformer
-from bento_etl.transformers.dependencies import TransformerDep
+from bento_etl.transformers.dependencies import TransformerDep, get_transformer
 
 DEPENDENCY_INGEST_DATA = authz_middleware.dep_require_permissions_on_resource(
     frozenset({P_INGEST_DATA}), RESOURCE_EVERYTHING
@@ -74,6 +78,38 @@ async def submit_job(
     job_id = db.create_status(job.model_dump()).id
     bt.add_task(run_pipeline, job_id, extractor, transformer, loader, db)
     return {"message": f"Running ETL job in the background {job_id}"}
+
+
+# TODO replace
+# @job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
+@job_router.post("/pipeline/{pipeline_file_name}", dependencies=[authz_middleware.dep_public_endpoint()])
+async def run_from_pipeline_file(
+    pipeline_file_name: str,
+    bt: BackgroundTasks,
+    db: JobStatusDatabaseDependency,
+    logger: LoggerDependency,
+    config: ConfigDependency
+):
+
+    pipeline_file_path = os.path.join(os.getcwd(), f"pipelines/{pipeline_file_name}.json")
+
+    if not os.path.isfile(pipeline_file_path):
+        raise HTTPException(status_code=404, detail="Pipeline file not found.")
+
+    with open(pipeline_file_path) as f:
+        file_content = json.load(f)
+
+    job = Job.model_validate(file_content)
+    extractor = get_extractor(job, logger, config)
+    transformer = get_transformer(job, logger)
+    loader = get_loader(job, logger, config)
+
+
+
+    job_id = db.create_status(job.model_dump()).id
+    bt.add_task(run_pipeline, job_id, extractor, transformer, loader, db)
+    return {"message": f"Running ETL job in the background {job_id}"}
+
 
 
 @job_router.get(
