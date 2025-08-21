@@ -21,4 +21,4 @@ class BaseExtractor:
         self.config = config
 
     def extract(self) -> dict:
-        pass
+        raise NotImplementedError

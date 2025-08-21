@@ -23,8 +23,7 @@ class TransformStep(BaseModel):
     Class to describe a Transformer step to run in a pipeline job.
     """
 
-    # TODO: complete
-    pass
+    type: Literal["None"]
 
 
 class LoadStep(BaseModel):
