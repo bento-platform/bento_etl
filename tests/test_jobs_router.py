@@ -10,7 +10,7 @@ AUTHZ_HEADER = {"Authorization": "Token bearer"}
 
 DEFAULT_JOB_SCHEMA = {
     "extractor": {"extract_url": "some_url", "frequency_ms": 0, "type": "api-fetch"},
-    "transformer": {},
+    "transformer": {"type": "None"},
     "loader": {
         "dataset_id": "some_dataset_id",
         "batch_size": 0,
