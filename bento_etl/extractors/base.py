@@ -1,5 +1,4 @@
 from logging import Logger
-from bento_etl.config import Config
 
 __all__ = ["BaseExtractor"]
 

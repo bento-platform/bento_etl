@@ -2,7 +2,6 @@ from logging import Logger
 from fastapi import status
 import httpx
 
-from bento_etl.config import Config
 from bento_etl.extractors.base import BaseExtractor
 
 
