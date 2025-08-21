@@ -26,14 +26,13 @@ class ApiPollExtractor(BaseExtractor):
         if (
             response.status_code != status.HTTP_200_OK
         ):  # TODO set expected range of values or custom status?
-            error_message = f"API request failed with status {response.status_code}"
+            error_message = f"API request failed with response: {response}"
             self.logger.error(error_message)
             raise Exception(error_message)
 
         try:
             data = response.json()
         except Exception as e:
-            error_message = f"Extracted payload is empty or misformed: {e}"
-            self.logger.error(error_message)
-            raise Exception(error_message)
+            self.logger.error(e)
+            raise
         return data
