@@ -93,18 +93,16 @@ async def run_from_pipeline_file(
 
     pipeline_file_path = os.path.join(os.getcwd(), f"pipelines/{pipeline_file_name}.json")
 
-    if not os.path.isfile(pipeline_file_path):
-        raise HTTPException(status_code=404, detail="Pipeline file not found.")
+    try:
+        with open(pipeline_file_path) as file:
+            file_content = json.load(file)
+            job = Job.model_validate(file_content)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Pipeline file not found or malformed: {e}")
 
-    with open(pipeline_file_path) as f:
-        file_content = json.load(f)
-
-    job = Job.model_validate(file_content)
     extractor = get_extractor(job, logger, config)
     transformer = get_transformer(job, logger)
     loader = get_loader(job, logger, config)
-
-
 
     job_id = db.create_status(job.model_dump()).id
     bt.add_task(run_pipeline, job_id, extractor, transformer, loader, db)
