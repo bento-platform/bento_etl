@@ -19,4 +19,5 @@ def get_transformer(job: Job, logger: LoggerDependency):
     else:
         raise NotImplementedError
 
+
 TransformerDep = Annotated[BaseTransformer, Depends(get_transformer)]

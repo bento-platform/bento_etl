@@ -83,23 +83,29 @@ async def submit_job(
 
 # TODO replace
 # @job_router.post("", dependencies=[DEPENDENCY_INGEST_DATA])
-@job_router.post("/pipeline/{pipeline_file_name}", dependencies=[authz_middleware.dep_public_endpoint()])
+@job_router.post(
+    "/pipeline/{pipeline_file_name}",
+    dependencies=[authz_middleware.dep_public_endpoint()],
+)
 async def run_from_pipeline_file(
     pipeline_file_name: str,
     bt: BackgroundTasks,
     db: JobStatusDatabaseDependency,
     logger: LoggerDependency,
-    config: ConfigDependency
+    config: ConfigDependency,
 ):
-
-    pipeline_file_path = os.path.join(os.getcwd(), f"pipelines/{pipeline_file_name}.json")
+    pipeline_file_path = os.path.join(
+        os.getcwd(), f"pipelines/{pipeline_file_name}.json"
+    )
 
     try:
         with open(pipeline_file_path) as file:
             file_content = json.load(file)
             job = Job.model_validate(file_content)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Pipeline file not found or malformed: {e}")
+        raise HTTPException(
+            status_code=400, detail=f"Pipeline file not found or malformed: {e}"
+        )
 
     extractor = get_extractor(job, logger)
     transformer = get_transformer(job, logger)
@@ -108,7 +114,6 @@ async def run_from_pipeline_file(
     job_id = db.create_status(job.model_dump()).id
     bt.add_task(run_pipeline, job_id, extractor, transformer, loader, db)
     return {"message": f"Running ETL job in the background {job_id}"}
-
 
 
 @job_router.get(
