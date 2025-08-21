@@ -11,13 +11,12 @@ __all__ = ["get_extractor", "ExtractorDep"]
 
 
 def get_extractor(
-    job: Job, logger: LoggerDependency, config: ConfigDependency
+    job: Job, logger: LoggerDependency
 ) -> BaseExtractor:
     # returns the appropriate extractor instance depending on the job description
     if job.extractor.type == "api-fetch":
         return ApiPollExtractor(
             logger=logger,
-            config=config,
             endpoint=job.extractor.extract_url,
             frequency=job.extractor.frequency_ms,
         )
