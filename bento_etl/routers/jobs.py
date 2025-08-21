@@ -47,13 +47,14 @@ async def run_pipeline(
 
     try:
         db.update_status(job_id, JobStatusType.EXTRACTING)
-        extract_df = extractor.extract()
+        data = extractor.extract()
 
-        db.update_status(job_id, JobStatusType.TRANSFORMING)
-        transform_df = transformer.transform(extract_df)
+        if transformer:
+            db.update_status(job_id, JobStatusType.TRANSFORMING)
+            data = transformer.transform(data)
 
         db.update_status(job_id, JobStatusType.LOADING)
-        await loader.load(transform_df)
+        await loader.load(data)
 
         db.update_status(job_id, JobStatusType.SUCCESS)
 
@@ -100,7 +101,7 @@ async def run_from_pipeline_file(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Pipeline file not found or malformed: {e}")
 
-    extractor = get_extractor(job, logger, config)
+    extractor = get_extractor(job, logger)
     transformer = get_transformer(job, logger)
     loader = get_loader(job, logger, config)
 

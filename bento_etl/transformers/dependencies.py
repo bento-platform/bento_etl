@@ -14,7 +14,9 @@ def get_transformer(job: Job, logger: LoggerDependency):
     # e.g:
     # if job.transformer.type == "phenopacket.json.pcgl":
     #   return TransformPhenoPCGL(job.transformer)
-    return BaseTransformer(logger)
-
+    if job.transformer.type == "None":
+        return None
+    else:
+        raise NotImplementedError
 
 TransformerDep = Annotated[BaseTransformer, Depends(get_transformer)]
