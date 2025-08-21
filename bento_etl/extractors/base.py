@@ -16,9 +16,8 @@ class BaseExtractor:
     a json dict.
     """
 
-    def __init__(self, logger: Logger, config: Config):
+    def __init__(self, logger: Logger):
         self.logger = logger
-        self.config = config
 
     def extract(self) -> dict:
         raise NotImplementedError

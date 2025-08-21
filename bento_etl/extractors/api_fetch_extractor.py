@@ -10,7 +10,6 @@ class ApiPollExtractor(BaseExtractor):
     def __init__(
         self,
         logger: Logger,
-        config: Config,
         endpoint: str,
         frequency: int,
         http_verb: str = "GET",
@@ -18,7 +17,7 @@ class ApiPollExtractor(BaseExtractor):
         self.endpoint = endpoint
         self.frequency = frequency
         self.http_verb = http_verb
-        super().__init__(logger, config)
+        super().__init__(logger)
 
     def extract(self) -> dict:
         response = httpx.request(self.http_verb, self.endpoint)
