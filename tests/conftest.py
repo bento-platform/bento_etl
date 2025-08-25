@@ -61,7 +61,7 @@ def test_client():
 
 @pytest.fixture
 def mocked_job_dict():
-    extractor = ExtractStep(extract_url="some_url", frequency_ms=0, type="api-fetch")
+    extractor = ExtractStep(extract_url="some_url", type="api-fetch", http_verb="GET", expected_status_code=200)
     tranformer = TransformStep(type="None")
     loader = LoadStep(
         dataset_id="some_dataset_id", batch_size=0, data_type="phenopackets"
@@ -83,7 +83,6 @@ def mock_authz():
         yield mock.post(
             "https://authz.local/policy/evaluate", payload={"result": [[True]]}
         )
-
 
 @pytest.fixture
 def load_phenopacket_data() -> dict:
