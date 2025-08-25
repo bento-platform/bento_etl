@@ -9,6 +9,6 @@
     "loader": {
         "dataset_id": "some_dataset_id",
         "batch_size": 0,
-        "data_type": "phenopackets"
+        "data_type": "experiments"
     }
 }
