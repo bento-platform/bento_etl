@@ -15,7 +15,8 @@ def get_extractor(job: Job, logger: LoggerDependency) -> BaseExtractor:
         return ApiPollExtractor(
             logger=logger,
             endpoint=job.extractor.extract_url,
-            frequency=job.extractor.frequency_ms,
+            http_verb=job.extractor.http_verb,
+            expected_status_code=job.extractor.expected_status_code
         )
     else:
         raise NotImplementedError

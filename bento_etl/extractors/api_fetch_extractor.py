@@ -1,5 +1,4 @@
 from logging import Logger
-from fastapi import status
 import httpx
 
 from bento_etl.extractors.base import BaseExtractor
@@ -10,20 +9,20 @@ class ApiPollExtractor(BaseExtractor):
         self,
         logger: Logger,
         endpoint: str,
-        frequency: int,
         http_verb: str = "GET",
+        expected_status_code = 200
     ):
         self.endpoint = endpoint
-        self.frequency = frequency
         self.http_verb = http_verb
+        self.expected_status_code = expected_status_code
         super().__init__(logger)
 
     def extract(self) -> dict:
         response = httpx.request(self.http_verb, self.endpoint)
 
         if (
-            response.status_code != status.HTTP_200_OK
-        ):  # TODO set expected range of values or custom status?
+            response.status_code != self.expected_status_code
+        ):
             error_message = f"API request failed with response: {response}"
             self.logger.error(error_message)
             raise Exception(error_message)

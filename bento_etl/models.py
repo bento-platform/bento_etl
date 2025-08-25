@@ -14,8 +14,10 @@ class ExtractStep(BaseModel):
     """
 
     extract_url: str
-    frequency_ms: int
     type: Literal["api-fetch"]
+    http_verb: str = "GET"
+    expected_status_code: int = 200
+
 
 
 class TransformStep(BaseModel):
