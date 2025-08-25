@@ -16,7 +16,12 @@ async def mock_long_task():
 
 def mock_job_with_data_type(data_type: str):
     return Job(
-        extractor = ExtractStep(extract_url="some_url", type="api-fetch", http_verb="GET", expected_status_code=200),
+        extractor=ExtractStep(
+            extract_url="some_url",
+            type="api-fetch",
+            http_verb="GET",
+            expected_status_code=200,
+        ),
         transformer=TransformStep(type="None"),
         loader=LoadStep(
             dataset_id="some_dataset_id", batch_size=0, data_type=data_type

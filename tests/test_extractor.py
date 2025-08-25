@@ -7,7 +7,12 @@ from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
 
 def mock_job_with_api_fetch_extractor():
     return Job(
-        extractor=ExtractStep(extract_url="some_url", type="api-fetch", http_verb="GET", expected_status_code=200),
+        extractor=ExtractStep(
+            extract_url="some_url",
+            type="api-fetch",
+            http_verb="GET",
+            expected_status_code=200,
+        ),
         transformer=TransformStep(type="None"),
         loader=LoadStep(dataset_id="some_id", batch_size=0, data_type="experiments"),
     )

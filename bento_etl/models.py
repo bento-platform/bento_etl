@@ -19,7 +19,6 @@ class ExtractStep(BaseModel):
     expected_status_code: int = 200
 
 
-
 class TransformStep(BaseModel):
     """
     Class to describe a Transformer step to run in a pipeline job.

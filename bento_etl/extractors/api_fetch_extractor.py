@@ -10,7 +10,7 @@ class ApiPollExtractor(BaseExtractor):
         logger: Logger,
         endpoint: str,
         http_verb: str = "GET",
-        expected_status_code = 200
+        expected_status_code=200,
     ):
         self.endpoint = endpoint
         self.http_verb = http_verb
@@ -20,9 +20,7 @@ class ApiPollExtractor(BaseExtractor):
     def extract(self) -> dict:
         response = httpx.request(self.http_verb, self.endpoint)
 
-        if (
-            response.status_code != self.expected_status_code
-        ):
+        if response.status_code != self.expected_status_code:
             error_message = f"API request failed with response: {response}"
             self.logger.error(error_message)
             raise Exception(error_message)
