@@ -5,10 +5,10 @@ on:
   pull_request:
     branches:
       - main
+      - 'feat/**'
   push:
     branches:
       - main
-      - 'feat/**'
 
 jobs:
   build-push:
