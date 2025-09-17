@@ -1,0 +1,104 @@
+{
+  "subject.vital_status.cause_of_death": {
+    "Died of cancer": {
+      "id": "NCIT:C28554",
+      "label": "cancer related"
+    },
+    "Died of other reasons": {
+      "id": "NCIT:C70719",
+      "label": "noncancer disease related"
+    },
+    "Unknown": {
+      "id": "NCIT:C16806",
+      "label": "unknown"
+    },
+    "Missing": {
+      "id": "NCIT:C17998",
+      "label": "unknown"
+    }
+  },
+  "biosamples.sampled_tissue": {
+    "Blood sample": {
+      "id": "UBERON:0000178",
+      "label": "blood"
+    }
+  },
+  "subject.gender": {
+    "male": {
+      "id": "NCIT:C20197",
+      "label": "Male Gender"
+    },
+    "female": {
+      "id": "NCIT:C16576",
+      "label": "Female Gender"
+    },
+    "unknown": {
+      "id": "NCIT:C17998",
+      "label": "Unknown"
+    }
+  },
+  "exposure.smoking_status": {
+    "Current reformed smoker for <= 15 years": {
+      "id": "NCIT:C156827",
+      "label": "Reformed Smoker for Less Than or Equal to 15 Years"
+    }
+  },
+  "exposure.physical_activity": {
+    "Unknown": {
+      "id": "NCIT:C17998",
+      "label": "Unknown"
+    }
+  },
+  "exposure.alcohol_consumption": {
+    "Alcohol consumption unknown": {
+      "id": "NCIT:C17998",
+      "label": "Unknown"
+    }
+  },
+  "diseases.term": {
+    "MONDO:0000001": {
+      "id": "MONDO:0000001",
+      "label": "inherited genetic disease"
+    },
+    "icd10:C34": {
+      "id": "icd10:C34",
+      "label": "Malignant neoplasm of bronchus and lung"
+    }
+  },
+  "exposures.exposure_code": {
+    "LOINC:43164-0": {
+      "id": "LOINC:43164-0",
+      "label": "tobacco smoking status"
+    }
+  },
+  "measurements.assay": {
+    "LOINC:29463-7": {
+      "id": "LOINC:29463-7",
+      "label": "body weight"
+    }
+  },
+  "measurements.value.quantity.unit": {
+    "UO:0000009": {
+      "id": "UO:0000009",
+      "label": "kilogram"
+    }
+  },
+  "treatments.agent": {
+    "NCIT:C138986": {
+      "id": "NCIT:C138986",
+      "label": "ampicillin (anhydrous)"
+    }
+  },
+  "treatments.cumulative_dose.unit": {
+    "UO:0000080": {
+      "id": "UO:0000080",
+      "label": "milligram"
+    }
+  },
+  "procedures.code": {
+    "OBI:0002117": {
+      "id": "OBI:0002117",
+      "label": "whole genome sequencing assay"
+    }
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "phenopacket": [
+    {
+      "api_field": "demographic.submitter_participant_id",
+      "schema_field": "subject.id",
+      "is_group_key": true
+    },
+    {
+      "api_field": "demographic.age_at_enrollment",
+      "schema_field": "subject.time_at_last_encounter.age.iso8601duration",
+      "transform": "age_to_iso"
+    },
+    {
+      "type": "object",
+      "api_field": "demographic.vital_status",
+      "schema_field": "subject.vital_status",
+      "sub_mappings": [
+        {
+          "api_field": "demographic.vital_status",
+          "schema_field": "subject.vital_status.status",
+          "value_map": {
+            "Deceased": "DECEASED",
+            "Alive": "ALIVE",
+            "Unknown": "UNKNOWN_STATUS"
+          }
+        },
+        {
+          "type": "ontology_class",
+          "api_field": "demographic.cause_of_death",
+          "schema_field": "subject.vital_status.cause_of_death",
+          "ontology_key": "subject.vital_status.cause_of_death"
+        },
+        {
+          "api_field": "demographic.age_at_death",
+          "schema_field": "subject.vital_status.time_of_death.age.iso8601duration",
+          "transform": "age_to_iso"
+        }
+      ]
+    },
+    {
+      "api_field": "demographic.gender",
+      "schema_field": "subject.gender",
+      "type": "ontology_class",
+      "ontology_key": "subject.gender"
+    },
+    {
+      "api_field": "demographic.sex_at_birth",
+      "schema_field": "subject.sex",
+      "value_map": {
+        "male": "MALE",
+        "female": "FEMALE",
+        "other": "OTHER_SEX",
+        "unknown": "UNKNOWN_SEX"
+      }
+    },
+    {
+      "api_field": "participant.duo_permission",
+      "schema_field": "subject.extra_properties.duo_permission"
+    },
+    {
+      "api_field": "specimen.sample_id",
+      "schema_field": "biosamples[].id"
+    },
+    {
+      "api_field": "specimen.submitter_participant_id",
+      "schema_field": "biosamples[].individual_id"
+    },
+    {
+      "type": "ontology_class",
+      "api_field": "specimen.sample_type",
+      "schema_field": "biosamples[].sampled_tissue",
+      "ontology_key": "biosamples.sampled_tissue"
+    },
+    {
+      "api_field": "specimen.specimen_tissue_source_code",
+      "schema_field": "biosamples[].sampled_tissue",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "sample_type"
+      }
+    },
+    {
+      "api_field": "specimen.sample_storage",
+      "schema_field": "biosamples[].extra_properties.sample_storage"
+    },
+    {
+      "api_field": "specimen.sample_processing",
+      "schema_field": "biosamples[].extra_properties.sample_processing"
+    },
+    {
+      "api_field": "specimen.sample_storage",
+      "schema_field": "biosamples[].description",
+      "transform": "combine_processing_storage"
+    },
+    {
+      "api_field": "comorbidity.comorbidity_term",
+      "schema_field": "diseases[].term",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "comorbidity_term",
+        "id_field": "comorbidity_code"
+      }
+    },
+    {
+      "api_field": "comorbidity.age_at_comorbidity_diagnosis",
+      "schema_field": "diseases[].onset.age.iso8601duration",
+      "transform": "age_to_iso"
+    },
+    {
+      "api_field": "diagnosis.age_at_diagnosis",
+      "schema_field": "diseases[].onset.age.iso8601duration",
+      "transform": "age_to_iso"
+    },
+    {
+      "api_field": "diagnosis.disease_code",
+      "schema_field": "diseases[].term",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "disease_term"
+      }
+    },
+    {
+      "api_field": "exposure.exposure_code",
+      "schema_field": "exposures[].exposure_code",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "exposure_term"
+      }
+    },
+    {
+      "api_field": "exposure.age_at_exposure",
+      "schema_field": "exposures[].time_observed.age.iso8601duration",
+      "transform": "age_to_iso"
+    },
+    {
+      "api_field": "exposure.exposure_duration",
+      "schema_field": "exposures[].duration"
+    },
+    {
+      "api_field": "measurement.measurement_code",
+      "schema_field": "measurements[].assay",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "measurement_term"
+      }
+    },
+    {
+      "api_field": "measurement.measurement_result_numeric",
+      "schema_field": "measurements[].value.quantity.value"
+    },
+    {
+      "api_field": "measurement.measurement_unit",
+      "schema_field": "measurements[].value.quantity.unit",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": ""
+      }
+    },
+    {
+      "api_field": "measurement.age_at_measurement",
+      "schema_field": "measurements[].time_observed.age.iso8601duration",
+      "transform": "age_to_iso"
+    },
+    {
+      "api_field": "medication.drug_code",
+      "schema_field": "medical_actions[].treatment.agent",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "drug_term"
+      }
+    },
+    {
+      "api_field": "medication.actual_cumulative_drug_dose",
+      "schema_field": "medical_actions[].treatment.cumulative_dose.value"
+    },
+    {
+      "api_field": "medication.drug_dose_units",
+      "schema_field": "medical_actions[].treatment.cumulative_dose.unit",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": ""
+      }
+    },
+    {
+      "api_field": "experiment.assay_type_code",
+      "schema_field": "procedures[].code",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "assay_type_term"
+      }
+    },
+    {
+      "api_field": "experiment.experiment_design",
+      "schema_field": "procedures[].description"
+    },
+    {
+      "api_field": "experiment.assay_type_code",
+      "schema_field": "biosamples[].procedure.code",
+      "transform": "curie_to_ontology",
+      "context": {
+        "label_field": "assay_type_term"
+      },
+      "match": {
+        "array": "biosamples",
+        "field": "id",
+        "from": "submitter_sample_id"
+      }
+    },
+    {
+      "api_field": "experiment.experiment_design",
+      "schema_field": "biosamples[].procedure.description",
+      "match": {
+        "array": "biosamples",
+        "field": "id",
+        "from": "submitter_sample_id"
+      }
+    },
+    {
+      "type": "ontology_class",
+      "api_field": "exposure.smoking_status",
+      "schema_field": "phenotypic_features[].type",
+      "ontology_key": "exposure.smoking_status"
+    },
+    {
+      "api_field": "exposure.smoking_status",
+      "schema_field": "phenotypic_features[].description"
+    },
+    {
+      "type": "ontology_class",
+      "api_field": "exposure.physical_activity",
+      "schema_field": "phenotypic_features[].type",
+      "ontology_key": "exposure.physical_activity"
+    },
+    {
+      "api_field": "exposure.physical_activity",
+      "schema_field": "phenotypic_features[].description"
+    },
+    {
+      "type": "ontology_class",
+      "api_field": "exposure.alcohol_consumption",
+      "schema_field": "phenotypic_features[].type",
+      "ontology_key": "exposure.alcohol_consumption"
+    },
+    {
+      "api_field": "exposure.alcohol_consumption",
+      "schema_field": "phenotypic_features[].description"
+    }
+  ]
+}
