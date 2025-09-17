@@ -4,7 +4,7 @@
         "type": "api-fetch"
     },
     "transformer": {
-        "type": "None"
+        "type": "experiments"
     },
     "loader": {
         "dataset_id": "some_dataset_id",

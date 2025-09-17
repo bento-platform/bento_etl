@@ -4,10 +4,10 @@
         "type": "api-fetch"
     },
     "transformer": {
-        "type": "None"
+        "type": "phenopackets"
     },
     "loader": {
-        "dataset_id": "some_dataset_id",
+        "dataset_id": "d8dbdb92-8ef2-4e0e-af58-6d20156fe9c7",
         "batch_size": 0,
         "data_type": "phenopackets"
     }
