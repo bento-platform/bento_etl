@@ -108,7 +108,7 @@ async def run_from_pipeline_file(
         )
 
     extractor = get_extractor(job, logger)
-    transformer = get_transformer(job, logger)
+    transformer = get_transformer(job, logger, config)
     loader = get_loader(job, logger, config)
 
     job_id = db.create_status(job.model_dump()).id
