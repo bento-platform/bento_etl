@@ -25,6 +25,7 @@ class ExperimentsTransformer(BaseTransformer):
     def transform(self, raw: dict) -> list[dict]:
         try:
             schema = self._fetch_schema().get("properties", {})
+            print(schema)
 
         except Exception as e:
             print(f"Error fetching schema: {e}")
