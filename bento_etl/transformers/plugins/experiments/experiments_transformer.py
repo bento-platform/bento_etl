@@ -32,6 +32,7 @@ class ExperimentsTransformer(BaseTransformer):
 
         try:
             data = data.get("records", {})
+            print(data)
         except Exception as e:
             print(f"Error fetching data: {e}")
 
