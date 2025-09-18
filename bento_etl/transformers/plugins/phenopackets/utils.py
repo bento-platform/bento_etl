@@ -207,7 +207,11 @@ def process_array_mappings(
                                 item_path = m["schema_field"].split("[]")[1][1:]
                                 set_nested(item, item_path, value)
                         if item:
-                            array.append(item)
+                            try:
+                                validate(instance=item, schema=array_item_schema)
+                                array.append(item)
+                            except ValidationError:
+                                pass
             else:
                 for row in rows:
                     item = {}
@@ -217,7 +221,11 @@ def process_array_mappings(
                             item_path = m["schema_field"].split("[]")[1][1:]
                             set_nested(item, item_path, value)
                     if item:
-                        array.append(item)
+                        try:
+                            validate(instance=item, schema=array_item_schema)
+                            array.append(item)
+                        except ValidationError:
+                            pass
 
 
 def build_phenopacket(
