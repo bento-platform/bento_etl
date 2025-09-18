@@ -1,4 +1,3 @@
-import json
 from collections import defaultdict
 from jsonschema import validate, ValidationError
 from typing import Any
