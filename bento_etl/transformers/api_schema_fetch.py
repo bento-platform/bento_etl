@@ -2,6 +2,7 @@ from logging import Logger
 import httpx
 from bento_etl.transformers.base import BaseTransformer
 
+
 class ApiSchemaFetch(BaseTransformer):
     def __init__(
         self,

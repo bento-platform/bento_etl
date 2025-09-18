@@ -59,4 +59,3 @@ class ApiPollExtractor(BaseExtractor):
             page += 1
 
         return all_records
-    

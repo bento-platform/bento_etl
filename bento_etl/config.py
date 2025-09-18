@@ -28,19 +28,23 @@ class Config(BentoFastAPIBaseConfig):
     bento_openid_config_url: str = ""
 
     # Mapping paths phenopackets
-    phenopackets_mappings_path: str =  os.path.join(
-        os.path.dirname(__file__), "transformers/plugins/phenopackets/mappings/pcgl_phenopackets_mappings.json"
+    phenopackets_mappings_path: str = os.path.join(
+        os.path.dirname(__file__),
+        "transformers/plugins/phenopackets/mappings/pcgl_phenopackets_mappings.json",
     )
-    phenopackets_ontology_mappings_path: str =  os.path.join(
-        os.path.dirname(__file__), "transformers/plugins/phenopackets/mappings/pcgl_phenopackets_ontology_mappings.json"
+    phenopackets_ontology_mappings_path: str = os.path.join(
+        os.path.dirname(__file__),
+        "transformers/plugins/phenopackets/mappings/pcgl_phenopackets_ontology_mappings.json",
     )
 
     # Mapping paths experimets
-    experiments_mappings_path: str =  os.path.join(
-        os.path.dirname(__file__), "transformers/plugins/experiments/mappings/pcgl_experiments_mappings.json"
+    experiments_mappings_path: str = os.path.join(
+        os.path.dirname(__file__),
+        "transformers/plugins/experiments/mappings/pcgl_experiments_mappings.json",
     )
-    experiments_ontology_mappings_path: str =  os.path.join(
-        os.path.dirname(__file__), "transformers/plugins/experiments/mappings/pcgl_experiments_ontology_mappings.json"
+    experiments_ontology_mappings_path: str = os.path.join(
+        os.path.dirname(__file__),
+        "transformers/plugins/experiments/mappings/pcgl_experiments_ontology_mappings.json",
     )
 
 

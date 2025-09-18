@@ -6,13 +6,22 @@ from bento_etl.config import Config
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.api_schema_fetch import ApiSchemaFetch
 
+
 class ExperimentsTransformer(BaseTransformer):
     def __init__(self, logger: Logger, config: Config):
         super().__init__(logger)
         self.config = config
         self.schema_endpoint = f"{config.katsu_url}api/schemas/experiment"
-        self.mappings = json.load(open(config.experiments_mappings_path)) if hasattr(config, "experiments_mappings_path") else {}
-        self.ontology_mappings = json.load(open(config.experiments_ontology_mappings_path)) if hasattr(config, "experiments_ontology_mappings_path") else {}
+        self.mappings = (
+            json.load(open(config.experiments_mappings_path))
+            if hasattr(config, "experiments_mappings_path")
+            else {}
+        )
+        self.ontology_mappings = (
+            json.load(open(config.experiments_ontology_mappings_path))
+            if hasattr(config, "experiments_ontology_mappings_path")
+            else {}
+        )
 
     def transform(self, raw: dict) -> list[dict]:
         try:
@@ -21,11 +30,10 @@ class ExperimentsTransformer(BaseTransformer):
         except Exception as e:
             print(f"Error fetching schema: {e}")
 
-        try: 
+        try:
             data = data.get("records", {})
         except Exception as e:
             print(f"Error fetching data: {e}")
-
 
         # TODO: Inject logic here to transform raw PCGL JSON into valid experiments
         # using schema for structure validation, mappings for field renaming/population,
