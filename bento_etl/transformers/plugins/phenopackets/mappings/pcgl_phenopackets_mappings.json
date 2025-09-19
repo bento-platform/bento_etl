@@ -76,6 +76,7 @@
       "schema_field": "biosamples[].sampled_tissue",
       "transform": "curie_to_ontology",
       "context": {
+        "id_field": "specimen_tissue_source_code",
         "label_field": "sample_type"
       }
     },
@@ -93,12 +94,12 @@
       "transform": "combine_processing_storage"
     },
     {
-      "api_field": "comorbidity.comorbidity_term",
+      "api_field": "comorbidity.comorbidity_code",
       "schema_field": "diseases[].term",
       "transform": "curie_to_ontology",
       "context": {
-        "label_field": "comorbidity_term",
-        "id_field": "comorbidity_code"
+        "id_field": "comorbidity_code",
+        "label_field": "comorbidity_term"
       }
     },
     {
@@ -116,6 +117,7 @@
       "schema_field": "diseases[].term",
       "transform": "curie_to_ontology",
       "context": {
+        "id_field": "disease_code",
         "label_field": "disease_term"
       }
     },
@@ -124,6 +126,7 @@
       "schema_field": "exposures[].exposure_code",
       "transform": "curie_to_ontology",
       "context": {
+        "id_field": "exposure_code",
         "label_field": "exposure_term"
       }
     },
@@ -141,6 +144,7 @@
       "schema_field": "measurements[].assay",
       "transform": "curie_to_ontology",
       "context": {
+        "id_field": "measurement_code",
         "label_field": "measurement_term"
       }
     },
@@ -153,7 +157,8 @@
       "schema_field": "measurements[].value.quantity.unit",
       "transform": "curie_to_ontology",
       "context": {
-        "label_field": ""
+        "id_field": "measurement_unit",
+        "label_field": "measurement_unit"
       }
     },
     {
@@ -166,6 +171,7 @@
       "schema_field": "medical_actions[].treatment.agent",
       "transform": "curie_to_ontology",
       "context": {
+        "id_field": "drug_code",
         "label_field": "drug_term"
       }
     },
@@ -178,7 +184,8 @@
       "schema_field": "medical_actions[].treatment.cumulative_dose.unit",
       "transform": "curie_to_ontology",
       "context": {
-        "label_field": ""
+        "id_field": "drug_dose_units",
+        "label_field": "drug_dose_units"
       }
     },
     {
@@ -186,6 +193,7 @@
       "schema_field": "procedures[].code",
       "transform": "curie_to_ontology",
       "context": {
+        "id_field": "assay_type_code",
         "label_field": "assay_type_term"
       }
     },
@@ -194,10 +202,16 @@
       "schema_field": "procedures[].description"
     },
     {
+      "api_field": "experiment.platform",
+      "schema_field": "procedures[].platform",
+      "type": "string"
+    },
+    {
       "api_field": "experiment.assay_type_code",
       "schema_field": "biosamples[].procedure.code",
       "transform": "curie_to_ontology",
       "context": {
+        "id_field": "assay_type_code",
         "label_field": "assay_type_term"
       },
       "match": {
@@ -214,6 +228,11 @@
         "field": "id",
         "from": "submitter_sample_id"
       }
+    },
+    {
+      "api_field": "follow_up.disease_status_at_followup",
+      "schema_field": "phenotypic_features[].disease_status",
+      "type": "string"
     },
     {
       "type": "ontology_class",
@@ -244,6 +263,10 @@
     {
       "api_field": "exposure.alcohol_consumption",
       "schema_field": "phenotypic_features[].description"
+    },
+    {
+      "api_field": "experiment.submitter_sample_id",
+      "schema_field": "biosamples[].id"
     }
   ]
 }

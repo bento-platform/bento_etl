@@ -55,50 +55,14 @@
       "label": "Unknown"
     }
   },
-  "diseases.term": {
-    "MONDO:0000001": {
-      "id": "MONDO:0000001",
-      "label": "inherited genetic disease"
-    },
-    "icd10:C34": {
-      "id": "icd10:C34",
-      "label": "Malignant neoplasm of bronchus and lung"
-    }
-  },
-  "exposures.exposure_code": {
-    "LOINC:43164-0": {
-      "id": "LOINC:43164-0",
-      "label": "tobacco smoking status"
-    }
-  },
-  "measurements.assay": {
-    "LOINC:29463-7": {
-      "id": "LOINC:29463-7",
-      "label": "body weight"
-    }
-  },
-  "measurements.value.quantity.unit": {
+  "units": {
     "UO:0000009": {
       "id": "UO:0000009",
       "label": "kilogram"
-    }
-  },
-  "treatments.agent": {
-    "NCIT:C138986": {
-      "id": "NCIT:C138986",
-      "label": "ampicillin (anhydrous)"
-    }
-  },
-  "treatments.cumulative_dose.unit": {
+    },
     "UO:0000080": {
       "id": "UO:0000080",
       "label": "milligram"
-    }
-  },
-  "procedures.code": {
-    "OBI:0002117": {
-      "id": "OBI:0002117",
-      "label": "whole genome sequencing assay"
     }
   }
 }
