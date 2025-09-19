@@ -23,7 +23,6 @@ class ExperimentsTransformer(BaseTransformer):
         )
 
     def transform(self, raw: dict) -> list[dict]:
-
         # TODO: Inject logic here to transform raw PCGL JSON into valid experiments
         # using schema for structure validation, mappings for field renaming/population,
         # and ontology_mappings for term standardization (e.g., experimental protocols).
