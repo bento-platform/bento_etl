@@ -331,8 +331,6 @@ def perform_transformation(
         }
         per_field_arrays = ["phenotypic_features"]
     elif schema_type == "experiment":
-        print("aqui")
-        print("RAVV", raw)
         array_dedup_keys = {
             "experiment_ontology": "id",
         }
@@ -384,5 +382,4 @@ def perform_transformation(
         except ValidationError as e:
             logger.error(f"Validation error for {p_id}: {e.message}")
         grouped_objs.append(grouped_obj)
-    print("www", grouped_objs)
     return grouped_objs

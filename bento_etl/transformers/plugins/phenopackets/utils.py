@@ -328,6 +328,4 @@ def perform_transformation(
         except ValidationError as e:
             logger.error(f"Validation error for {p_id}: {e.message}")
         phenopackets.append(phenopacket)
-    print(raw, "RAW_1")
-    print(phenopackets, "PhenoPz")
     return phenopackets
