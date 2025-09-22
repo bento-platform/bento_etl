@@ -1,9 +1,11 @@
+from typing import Any
 from logging import Logger
 import json
 
 from bento_etl.config import Config
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.api_schema_fetch import ApiSchemaFetch
+from .utils import perform_transformation
 
 
 class ExperimentsTransformer(BaseTransformer):
@@ -22,20 +24,11 @@ class ExperimentsTransformer(BaseTransformer):
             else {}
         )
 
-    def transform(self, raw: dict) -> list[dict]:
-        # TODO: Inject logic here to transform raw PCGL JSON into valid experiments
-        # using schema for structure validation, mappings for field renaming/population,
-        # and ontology_mappings for term standardization (e.g., experimental protocols).
-        # Example skeleton:
-        # transformed = []
-        # for item in raw.get("items", []):
-        #     experiment = {"id": item["experiment_id"], ...}  # Map fields per schema
-        #     # Apply ontology_mappings to populate terms like assay types
-        #     transformed.append(experiment)
-        # # Validate against schema if needed
-        # return transformed
-
-        raise NotImplementedError("Transformation logic to be injected")
+    def transform(self, raw: Any) -> list[dict]:
+        schema = self._fetch_schema()
+        return perform_transformation(
+            raw, schema, self.mappings, self.ontology_mappings, self.logger, schema_type="experiment"
+        )
 
     def _fetch_schema(self) -> dict:
         fetcher = ApiSchemaFetch(self.logger, self.schema_endpoint)
