@@ -1,0 +1,61 @@
+{
+  "experiment": [
+    {
+      "api_field": "experiment.submitter_experiment_id",
+      "schema_field": "id",
+      "is_group_key": true
+    },
+    {
+      "api_field": "experiment.platform",
+      "schema_field": "instrument.platform"
+    },
+    {
+      "api_field": "experiment.instrument",
+      "schema_field": "instrument.identifier"
+    },
+    {
+      "api_field": "experiment.experiment_design",
+      "schema_field": "extraction_protocol"
+    },
+    {
+      "api_field": "experiment.instrument_metadata",
+      "schema_field": "instrument.extra_properties.instrument_metadata"
+    },
+    {
+      "api_field": "experiment.sequencing_protocol",
+      "schema_field": "extra_properties.sequencing_protocol"
+    },
+    {
+      "api_field": "specimen.sample_id",
+      "schema_field": "biosample"
+    },
+    {
+      "api_field": "experiment.experiment_type",
+      "schema_field": "experiment_type",
+      "value_map": {
+        "NCIT:C84343 (Genomics)": "WGS",
+        "Other Genomics": "WGS",
+        "NCIT:RNASeq": "RNA-Seq"
+      }
+    },
+    {
+      "api_field": "experiment.experiment_type",
+      "schema_field": "study_type",
+      "value_map": {
+        "NCIT:C84343 (Genomics)": "Genomics",
+        "Other Genomics": "Genomics",
+        "NCIT:RNASeq": "Transcriptomics"
+      }
+    },
+    {
+      "api_field": "experiment.assay_type_code",
+      "schema_field": "experiment_ontology[].id",
+      "type": "string"
+    },
+    {
+      "api_field": "experiment.assay_type_term",
+      "schema_field": "experiment_ontology[].label",
+      "type": "string"
+    }
+  ]
+}

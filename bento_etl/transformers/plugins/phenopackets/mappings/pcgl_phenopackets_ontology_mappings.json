@@ -1,0 +1,68 @@
+{
+  "subject.vital_status.cause_of_death": {
+    "Died of cancer": {
+      "id": "NCIT:C28554",
+      "label": "cancer related"
+    },
+    "Died of other reasons": {
+      "id": "NCIT:C70719",
+      "label": "noncancer disease related"
+    },
+    "Unknown": {
+      "id": "NCIT:C16806",
+      "label": "unknown"
+    },
+    "Missing": {
+      "id": "NCIT:C17998",
+      "label": "unknown"
+    }
+  },
+  "biosamples.sampled_tissue": {
+    "Blood sample": {
+      "id": "UBERON:0000178",
+      "label": "blood"
+    }
+  },
+  "subject.gender": {
+    "male": {
+      "id": "NCIT:C20197",
+      "label": "Male Gender"
+    },
+    "female": {
+      "id": "NCIT:C16576",
+      "label": "Female Gender"
+    },
+    "unknown": {
+      "id": "NCIT:C17998",
+      "label": "Unknown"
+    }
+  },
+  "exposure.smoking_status": {
+    "Current reformed smoker for <= 15 years": {
+      "id": "NCIT:C156827",
+      "label": "Reformed Smoker for Less Than or Equal to 15 Years"
+    }
+  },
+  "exposure.physical_activity": {
+    "Unknown": {
+      "id": "NCIT:C17998",
+      "label": "Unknown"
+    }
+  },
+  "exposure.alcohol_consumption": {
+    "Alcohol consumption unknown": {
+      "id": "NCIT:C17998",
+      "label": "Unknown"
+    }
+  },
+  "units": {
+    "UO:0000009": {
+      "id": "UO:0000009",
+      "label": "kilogram"
+    },
+    "UO:0000080": {
+      "id": "UO:0000080",
+      "label": "milligram"
+    }
+  }
+}

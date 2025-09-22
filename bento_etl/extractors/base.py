@@ -1,5 +1,4 @@
 from logging import Logger
-import polars as pl
 
 __all__ = ["BaseExtractor"]
 
@@ -13,14 +12,11 @@ class BaseExtractor:
     this is the Tranformer's job in an ETL pipeline.
 
     Concrete extractors should be configured in the constructor and implement the `extract` function, which returns
-    a Polars DataFrame or a LazyFrame.
+    a json dict.
     """
 
     def __init__(self, logger: Logger):
         self.logger = logger
 
-    def extract(self) -> pl.DataFrame | pl.LazyFrame:
-        pass
-
-
-# TODO: implement an HTTP extractor capable of polling an endpoint to obtain JSON data
+    def extract(self) -> dict:
+        raise NotImplementedError
