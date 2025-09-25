@@ -2,6 +2,8 @@ from bento_lib.config.pydantic import BentoFastAPIBaseConfig
 from fastapi import Depends
 from functools import lru_cache
 from typing import Annotated
+from pathlib import Path
+from pydantic import Field
 
 from .constants import SERVICE_GROUP, SERVICE_ARTIFACT
 
@@ -26,10 +28,18 @@ class Config(BentoFastAPIBaseConfig):
     etl_client_secret: str = ""
     bento_openid_config_url: str = ""
 
+    # database
+    data_dir: Path = Field(
+        Path("etl", "data"), validation_alias="BENTO_ETL_INTERNAL_DATA_DIR"
+    )
+    db_name: str = "bento_etl.db"
+    database_path: Path = data_dir / db_name
+
 
 @lru_cache
 def get_config():
-    return Config()
+    # Load from env (mode_validate prevents pylance errors)
+    return Config.model_validate({})
 
 
 ConfigDependency = Annotated[Config, Depends(get_config)]

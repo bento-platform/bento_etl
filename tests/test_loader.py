@@ -16,8 +16,13 @@ async def mock_long_task():
 
 def mock_job_with_data_type(data_type: str):
     return Job(
-        extractor=ExtractStep(format="json", type="some_type"),
-        transformer=TransformStep(),
+        extractor=ExtractStep(
+            extract_url="some_url",
+            type="api-fetch",
+            http_verb="GET",
+            expected_status_code=200,
+        ),
+        transformer=TransformStep(type="None"),
         loader=LoadStep(
             dataset_id="some_dataset_id", batch_size=0, data_type=data_type
         ),
@@ -106,35 +111,35 @@ class TestPhenopacketsLoader:
 
     @pytest.mark.asyncio
     async def test_valid_load_no_batches(
-        self, logger, config, load_phenopacket_data, set_mock_for_valid_post
+        self, logger, config, load_phenopacket_data, mock_loader_valid_post
     ):
         loader = PhenopacketsLoader(logger, config, uuid.uuid4())
         await loader.load(load_phenopacket_data)
 
     @pytest.mark.asyncio
     async def test_valid_load_small_batch_size(
-        self, logger, config, load_phenopacket_data, set_mock_for_valid_post
+        self, logger, config, load_phenopacket_data, mock_loader_valid_post
     ):
         loader = PhenopacketsLoader(logger, config, uuid.uuid4(), 2)
         await loader.load(load_phenopacket_data)
 
     @pytest.mark.asyncio
     async def test_valid_load_large_batch_size(
-        self, logger, config, load_phenopacket_data, set_mock_for_valid_post
+        self, logger, config, load_phenopacket_data, mock_loader_valid_post
     ):
         loader = PhenopacketsLoader(logger, config, uuid.uuid4(), 10)
         await loader.load(load_phenopacket_data)
 
     @pytest.mark.asyncio
     async def test_load_invalid_dataset_id(
-        self, logger, config, load_phenopacket_data, set_mock_for_invalid_post
+        self, logger, config, load_phenopacket_data, mock_loader_invalid_post
     ):
         loader = PhenopacketsLoader(logger, config, "BAD_DATASET_ID")
         with pytest.raises(Exception, match="400"):
             await loader.load(load_phenopacket_data)
 
     @pytest.mark.asyncio
-    async def test_load_invalid_data(self, logger, config, set_mock_for_invalid_post):
+    async def test_load_invalid_data(self, logger, config, mock_loader_invalid_post):
         loader = PhenopacketsLoader(logger, config, uuid.uuid4())
         with pytest.raises(Exception, match="400"):
             await loader.load("BAD_DATA")
@@ -162,35 +167,35 @@ class TestExperimentsLoader:
 
     @pytest.mark.asyncio
     async def test_valid_load_no_batches(
-        self, logger, config, load_experiment_data, set_mock_for_valid_post
+        self, logger, config, load_experiment_data, mock_loader_valid_post
     ):
         loader = ExperimentsLoader(logger, config, uuid.uuid4())
         await loader.load(load_experiment_data)
 
     @pytest.mark.asyncio
     async def test_valid_load_small_batch_size(
-        self, logger, config, load_experiment_data, set_mock_for_valid_post
+        self, logger, config, load_experiment_data, mock_loader_valid_post
     ):
         loader = ExperimentsLoader(logger, config, uuid.uuid4(), 2)
         await loader.load(load_experiment_data)
 
     @pytest.mark.asyncio
     async def test_valid_load_large_batch_size(
-        self, logger, config, load_experiment_data, set_mock_for_valid_post
+        self, logger, config, load_experiment_data, mock_loader_valid_post
     ):
         loader = ExperimentsLoader(logger, config, uuid.uuid4(), 20)
         await loader.load(load_experiment_data)
 
     @pytest.mark.asyncio
     async def test_load_invalid_dataset_id(
-        self, logger, config, load_experiment_data, set_mock_for_invalid_post
+        self, logger, config, load_experiment_data, mock_loader_invalid_post
     ):
         loader = ExperimentsLoader(logger, config, "BAD_DATASET_ID")
         with pytest.raises(Exception, match="400"):
             await loader.load(load_experiment_data)
 
     @pytest.mark.asyncio
-    async def test_load_invalid_data(self, logger, config, set_mock_for_invalid_post):
+    async def test_load_invalid_data(self, logger, config, mock_loader_invalid_post):
         loader = ExperimentsLoader(logger, config, uuid.uuid4())
         with pytest.raises(Exception, match="400"):
             await loader.load("BAD_DATA")

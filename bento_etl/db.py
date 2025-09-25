@@ -6,6 +6,7 @@ from sqlmodel import Session, SQLModel, create_engine, func, select
 
 from bento_etl.logger import LoggerDependency
 from bento_etl.models import JobStatus, JobStatusType
+from bento_etl.config import ConfigDependency
 
 __all__ = [
     "JobStatusDatabase",
@@ -15,8 +16,8 @@ __all__ = [
 
 
 class JobStatusDatabase:
-    def __init__(self, logger: LoggerDependency):
-        self.engine = create_engine("sqlite:///jobstatus.db", echo=True)
+    def __init__(self, logger: LoggerDependency, config: ConfigDependency):
+        self.engine = create_engine(f"sqlite:///{config.database_path}", echo=True)
         self.logger = logger
 
     def setup(self):
