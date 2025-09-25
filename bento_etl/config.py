@@ -29,14 +29,17 @@ class Config(BentoFastAPIBaseConfig):
     bento_openid_config_url: str = ""
 
     # database
-    data_dir: Path = Field(Path("etl", "data"), validation_alias="BENTO_ETL_INTERNAL_DATA_DIR")
+    data_dir: Path = Field(
+        Path("etl", "data"), validation_alias="BENTO_ETL_INTERNAL_DATA_DIR"
+    )
     db_name: str = "bento_etl.db"
     database_path: Path = data_dir / db_name
 
 
 @lru_cache
 def get_config():
-    return Config.model_validate({}) # Load from env (mode_validate prevents pylance errors)
+    # Load from env (mode_validate prevents pylance errors)
+    return Config.model_validate({})
 
 
 ConfigDependency = Annotated[Config, Depends(get_config)]
