@@ -3,7 +3,7 @@ from fastapi import Depends
 from functools import lru_cache
 from typing import Annotated
 from pathlib import Path
-from pydantic import Field
+from pydantic import Field, computed_field
 
 from .constants import SERVICE_GROUP, SERVICE_ARTIFACT
 
@@ -33,7 +33,10 @@ class Config(BentoFastAPIBaseConfig):
         Path("etl", "data"), validation_alias="BENTO_ETL_INTERNAL_DATA_DIR"
     )
     db_name: str = "bento_etl.db"
-    database_path: Path = data_dir / db_name
+    
+    @computed_field(return_type=Path)
+    def database_path(self) -> Path:
+        return self.data_dir / self.db_name
 
 
 @lru_cache

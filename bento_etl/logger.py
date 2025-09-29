@@ -7,7 +7,7 @@ from fastapi import Depends
 from functools import lru_cache
 from typing import Annotated
 
-from .config import ConfigDependency
+from .config import get_config
 from .constants import BENTO_SERVICE_KIND
 
 __all__ = [
@@ -17,7 +17,8 @@ __all__ = [
 
 
 @lru_cache
-def get_logger(config: ConfigDependency) -> BoundLogger:
+def get_logger() -> BoundLogger:
+    config = get_config()
     configure_structlog_from_bento_config(config)
     configure_structlog_uvicorn()
 

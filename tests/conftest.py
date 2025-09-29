@@ -10,7 +10,7 @@ import json
 from sqlmodel import Session, delete
 
 from bento_etl.db import JobStatusDatabase, get_job_status_db
-from bento_etl.logger import get_logger
+from bento_etl.logger import get_logger, BoundLogger
 from bento_etl.models import ExtractStep, Job, JobStatus, LoadStep, TransformStep
 
 os.environ["BENTO_DEBUG"] = "true"
@@ -32,8 +32,8 @@ def config() -> Config:
 
 
 @pytest.fixture
-def logger(config: Config) -> Logger:
-    return get_logger(config)
+def logger() -> Logger:
+    return get_logger()
 
 
 @pytest.fixture
