@@ -4,9 +4,9 @@ from functools import lru_cache
 from fastapi import Depends, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, func, select
 
-from bento_etl.logger import LoggerDependency
+from bento_etl.logger import BoundLogger, get_logger
 from bento_etl.models import JobStatus, JobStatusType
-from bento_etl.config import ConfigDependency
+from bento_etl.config import Config, get_config
 
 __all__ = [
     "JobStatusDatabase",
@@ -16,7 +16,7 @@ __all__ = [
 
 
 class JobStatusDatabase:
-    def __init__(self, logger: LoggerDependency, config: ConfigDependency):
+    def __init__(self, logger: BoundLogger, config: Config):
         self.engine = create_engine(f"sqlite:///{config.database_path}", echo=True)
         self.logger = logger
 
@@ -80,8 +80,8 @@ class JobStatusDatabase:
 
 
 @lru_cache
-def get_job_status_db(logger: LoggerDependency):
-    return JobStatusDatabase(logger)
+def get_job_status_db():
+    return JobStatusDatabase(get_logger(), get_config())
 
 
 JobStatusDatabaseDependency = Annotated[JobStatusDatabase, Depends(get_job_status_db)]

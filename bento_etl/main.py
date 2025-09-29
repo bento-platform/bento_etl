@@ -22,12 +22,13 @@ BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
 }
 
 config = get_config()
-logger = get_logger(config)
-db = get_job_status_db(logger)
+logger = get_logger()
+db = get_job_status_db()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+
     logger.info("Starting up database...")
     db.setup()
     yield
