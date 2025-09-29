@@ -18,7 +18,7 @@ __all__ = [
 
 class JobStatusDatabase:
     def __init__(self, logger: BoundLogger, config: Config):
-        self.engine = create_engine(f"sqlite:///{config.database_path}", echo=True)
+        self.engine = create_engine(f"sqlite:////{str(config.database_path).lstrip('/')}", echo=True)
         self.logger = logger
 
     def setup(self):
