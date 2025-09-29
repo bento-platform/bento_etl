@@ -5,9 +5,9 @@ from datetime import datetime
 from fastapi import Depends, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select
 
-from bento_etl.logger import BoundLogger, get_logger
+from bento_etl.logger import BoundLogger, LoggerDependency
 from bento_etl.models import JobStatus, JobStatusType
-from bento_etl.config import Config, get_config
+from bento_etl.config import Config, ConfigDependency
 
 __all__ = [
     "JobStatusDatabase",
@@ -79,9 +79,8 @@ class JobStatusDatabase:
             session.commit()
 
 
-@lru_cache
-def get_job_status_db():
-    return JobStatusDatabase(get_logger(get_config()), get_config())
+def get_job_status_db(config: ConfigDependency, logger: LoggerDependency):
+    return JobStatusDatabase(logger, config)
 
 
 JobStatusDatabaseDependency = Annotated[JobStatusDatabase, Depends(get_job_status_db)]

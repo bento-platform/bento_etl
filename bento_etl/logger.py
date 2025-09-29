@@ -15,7 +15,6 @@ __all__ = [
     "LoggerDependency",
 ]
 
-
 @lru_cache
 def get_logger(config: ConfigDependency) -> BoundLogger:
     configure_structlog_from_bento_config(config)
