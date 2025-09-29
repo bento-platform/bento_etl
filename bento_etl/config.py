@@ -15,13 +15,6 @@ __all__ = [
 
 
 class Config(BentoFastAPIBaseConfig):
-    def __hash__(self):
-        return hash(tuple(self.__dict__.values()))
-
-    def __eq__(self, other):
-        if not isinstance(other, Config):
-            return NotImplemented
-        return self.__dict__ == other.__dict__
 
     # Service Info
     service_id: str = f"{SERVICE_GROUP}:{SERVICE_ARTIFACT}"
@@ -49,8 +42,7 @@ class Config(BentoFastAPIBaseConfig):
 
 @lru_cache
 def get_config():
-    # Load from env (mode_validate prevents pylance errors)
-    return Config.model_validate({})
+    return Config() # type: ignore
 
 
 ConfigDependency = Annotated[Config, Depends(get_config)]
