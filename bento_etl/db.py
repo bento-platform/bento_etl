@@ -81,7 +81,7 @@ class JobStatusDatabase:
 
 @lru_cache
 def get_job_status_db():
-    return JobStatusDatabase(get_logger(), get_config())
+    return JobStatusDatabase(get_logger(get_config()), get_config())
 
 
 JobStatusDatabaseDependency = Annotated[JobStatusDatabase, Depends(get_job_status_db)]

@@ -31,8 +31,8 @@ def config() -> Config:
 
 
 @pytest.fixture
-def logger() -> BoundLogger:
-    return get_logger()
+def logger(config) -> BoundLogger:
+    return get_logger(config)
 
 
 @pytest.fixture
