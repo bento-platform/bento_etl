@@ -33,7 +33,7 @@ class Config(BentoFastAPIBaseConfig):
         Path("etl", "data"), validation_alias="BENTO_ETL_INTERNAL_DATA_DIR"
     )
     db_name: str = "bento_etl.db"
-    
+
     @computed_field(return_type=Path)
     def database_path(self) -> Path:
         return self.data_dir / self.db_name

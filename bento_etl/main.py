@@ -28,7 +28,6 @@ db = get_job_status_db()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-
     logger.info("Starting up database...")
     db.setup()
     yield

@@ -1,4 +1,3 @@
-from logging import Logger
 from aioresponses import aioresponses
 import httpx
 import pytest
