@@ -1,8 +1,9 @@
 from typing import Annotated, Any
 from functools import lru_cache
+from datetime import datetime
 
 from fastapi import Depends, HTTPException
-from sqlmodel import Session, SQLModel, create_engine, func, select
+from sqlmodel import Session, SQLModel, create_engine, select
 
 from bento_etl.logger import BoundLogger, get_logger
 from bento_etl.models import JobStatus, JobStatusType
@@ -43,10 +44,10 @@ class JobStatusDatabase:
 
             job.status = status
             if job.status == JobStatusType.SUCCESS:
-                job.completed_at = func.now()
+                job.completed_at = datetime.now()
             elif job.status == JobStatusType.ERROR:
                 job.error_message = error_info
-                job.error_at = func.now()
+                job.error_at = datetime.now()
 
             session.add(job)
             session.commit()
