@@ -15,6 +15,14 @@ __all__ = [
 
 
 class Config(BentoFastAPIBaseConfig):
+    def __hash__(self):
+        return hash(tuple(self.__dict__.values()))
+
+    def __eq__(self, other):
+        if not isinstance(other, Config):
+            return NotImplemented
+        return self.__dict__ == other.__dict__
+
     # Service Info
     service_id: str = f"{SERVICE_GROUP}:{SERVICE_ARTIFACT}"
     service_name: str = "Bento ETL Service"
