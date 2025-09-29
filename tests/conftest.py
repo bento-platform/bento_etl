@@ -32,7 +32,7 @@ def config() -> Config:
 
 
 @pytest.fixture
-def logger() -> Logger:
+def logger() -> BoundLogger:
     return get_logger()
 
 
