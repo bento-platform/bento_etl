@@ -15,7 +15,6 @@ __all__ = [
 
 
 class Config(BentoFastAPIBaseConfig):
-
     # Service Info
     service_id: str = f"{SERVICE_GROUP}:{SERVICE_ARTIFACT}"
     service_name: str = "Bento ETL Service"
@@ -42,7 +41,7 @@ class Config(BentoFastAPIBaseConfig):
 
 @lru_cache
 def get_config():
-    return Config() # type: ignore
+    return Config()  # type: ignore
 
 
 ConfigDependency = Annotated[Config, Depends(get_config)]

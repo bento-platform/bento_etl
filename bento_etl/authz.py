@@ -11,7 +11,8 @@ __all__ = [
 
 config = get_config()
 authz_middleware = FastApiAuthMiddleware.build_from_fastapi_pydantic_config(
-    config, get_logger(config) # pyright: ignore[reportArgumentType]
+    config,
+    get_logger(config),  # pyright: ignore[reportArgumentType]
 )
 
 
