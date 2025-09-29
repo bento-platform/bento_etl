@@ -28,15 +28,16 @@ from bento_etl.config import Config, get_config
 from bento_etl.main import app
 from bento_etl import authz
 
+
 @pytest.fixture(scope="session", autouse=True)
 def db_teardown():
     yield
     db_path = os.path.join(
-        os.environ["BENTO_ETL_INTERNAL_DATA_DIR"],
-        os.environ["DB_NAME"]
+        os.environ["BENTO_ETL_INTERNAL_DATA_DIR"], os.environ["DB_NAME"]
     )
     if os.path.exists(db_path):
         os.unlink(db_path)
+
 
 @pytest.fixture
 def config() -> Config:
@@ -49,7 +50,9 @@ def logger(config) -> BoundLogger:
 
 
 @pytest.fixture
-def job_status_database(request: pytest.FixtureRequest, config, logger) -> JobStatusDatabase:
+def job_status_database(
+    request: pytest.FixtureRequest, config, logger
+) -> JobStatusDatabase:
     db = get_job_status_db(config, logger)
     db.setup()
 

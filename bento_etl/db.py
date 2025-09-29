@@ -79,6 +79,7 @@ class JobStatusDatabase:
             session.commit()
 
 
+@lru_cache
 def get_job_status_db(config: ConfigDependency, logger: LoggerDependency):
     return JobStatusDatabase(logger, config)
 
