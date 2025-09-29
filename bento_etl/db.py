@@ -25,10 +25,7 @@ class JobStatusDatabase:
 
     def create_status(self, job_data: dict[str, Any]) -> JobStatus:
         with Session(self.engine) as session:
-            job = JobStatus()
-            job.status = JobStatusType.SUBMITTED
-            job.job_data = job_data
-
+            job = JobStatus(status=JobStatusType.SUBMITTED, job_data=job_data)
             session.add(job)
             session.commit()
             session.refresh(job)

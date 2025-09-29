@@ -67,8 +67,8 @@ class JobStatus(SQLModel, table=True):
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
     job_data: dict = Field(sa_column=Column(JSON))
     created_at: datetime = Field(
-        sa_column=Column(DateTime(), server_default=func.now())
+        default=None, sa_column=Column(DateTime(), server_default=func.now())
     )
-    completed_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
-    error_at: Optional[datetime] = Field(sa_column=Column(DateTime()))
+    completed_at: Optional[datetime] = Field(default=None, sa_column=Column(DateTime()))
+    error_at: Optional[datetime] = Field(default=None, sa_column=Column(DateTime()))
     error_message: Optional[str] = Field(default=None)
