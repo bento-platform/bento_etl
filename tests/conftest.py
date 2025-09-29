@@ -17,6 +17,10 @@ os.environ["BENTO_VALIDATE_SSL"] = "false"
 os.environ["BENTO_JSON_LOGS"] = "false"  # use rich text logs in testing
 os.environ["CORS_ORIGINS"] = "*"
 
+# Use a temporary directory and SQLite file for testing
+os.environ["BENTO_ETL_INTERNAL_DATA_DIR"] = os.getcwd()
+os.environ["DB_NAME"] = "test_job_status.db"
+
 os.environ["BENTO_AUTHZ_SERVICE_URL"] = "https://authz.local"
 os.environ["AUTHZ_ENABLED"] = "False"
 
@@ -24,6 +28,15 @@ from bento_etl.config import Config, get_config
 from bento_etl.main import app
 from bento_etl import authz
 
+@pytest.fixture(scope="session", autouse=True)
+def db_teardown():
+    yield
+    db_path = os.path.join(
+        os.environ["BENTO_ETL_INTERNAL_DATA_DIR"],
+        os.environ["DB_NAME"]
+    )
+    if os.path.exists(db_path):
+        os.unlink(db_path)
 
 @pytest.fixture
 def config() -> Config:
