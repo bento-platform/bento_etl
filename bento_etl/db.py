@@ -1,4 +1,4 @@
-from typing import Annotated, Any
+from typing import Annotated, Any, Sequence
 from functools import lru_cache
 from datetime import datetime
 
@@ -54,7 +54,7 @@ class JobStatusDatabase:
             session.refresh(job)
             return job
 
-    def get_all_status(self) -> list[JobStatus]:
+    def get_all_status(self) -> Sequence[JobStatus]:
         with Session(self.engine) as session:
             return session.exec(select(JobStatus)).all()
 
