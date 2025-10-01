@@ -18,9 +18,9 @@ __all__ = [
 
 
 class JobStatusDatabase:
-    def __init__(self, logger: BoundLogger, config: Config):
+    def __init__(self, logger: BoundLogger, config: Config, memory: bool = False):
         self.engine = create_engine(
-            f"sqlite:////{str(config.database_path).lstrip('/')}", echo=True
+            f"sqlite:////{str(config.database_path).lstrip('/')}"if not memory else "sqlite:///:memory:", echo=True
         )
         self.logger = logger
 
@@ -86,6 +86,13 @@ def get_job_status_db(
     config: ConfigDependency,
 ):
     return JobStatusDatabase(logger, config)
+
+
+def get_job_status_db_in_memory(
+    logger: LoggerDependency,
+    config: ConfigDependency,
+):
+    return JobStatusDatabase(logger, config, True)
 
 
 JobStatusDatabaseDependency = Annotated[JobStatusDatabase, Depends(get_job_status_db)]
