@@ -1,6 +1,7 @@
 from typing import Annotated, Any, Sequence
 from functools import lru_cache
 from datetime import datetime
+from uuid import UUID
 
 from fastapi import Depends, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select
@@ -35,7 +36,7 @@ class JobStatusDatabase:
             return job
 
     def update_status(
-        self, job_id: str, status: JobStatusType, error_info: str | None = None
+        self, job_id: UUID, status: JobStatusType, error_info: str | None = None
     ) -> JobStatus:
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
@@ -60,7 +61,7 @@ class JobStatusDatabase:
         with Session(self.engine) as session:
             return session.exec(select(JobStatus)).all()
 
-    def get_status(self, job_id: str) -> JobStatus:
+    def get_status(self, job_id: UUID) -> JobStatus:
         with Session(self.engine) as session:
             job_selection = select(JobStatus).where(JobStatus.id == job_id)
             result = session.exec(job_selection).first()
@@ -70,7 +71,7 @@ class JobStatusDatabase:
                 )
             return result
 
-    def delete_status(self, job_id: str):
+    def delete_status(self, job_id: UUID):
         with Session(self.engine) as session:
             job = session.get(JobStatus, job_id)
             if not job:
