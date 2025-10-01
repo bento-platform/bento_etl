@@ -80,7 +80,10 @@ class JobStatusDatabase:
 
 
 @lru_cache
-def get_job_status_db(config: ConfigDependency, logger: LoggerDependency):
+def get_job_status_db(
+    logger: LoggerDependency,
+    config: ConfigDependency,
+):
     return JobStatusDatabase(logger, config)
 
 
