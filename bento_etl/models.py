@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Literal, Optional
 import uuid
 from pydantic import BaseModel
-from sqlmodel import JSON, Column, DateTime, Enum as SQLModelEnum, Field, SQLModel, func
+from sqlmodel import JSON, Column, Enum as SQLModelEnum, Field, SQLModel
 
 __all__ = ["Job"]
 
@@ -14,6 +14,7 @@ class ExtractStep(BaseModel):
     """
 
     extract_url: str
+    # 
     type: Literal["api-fetch"]
     http_verb: str = "GET"
     expected_status_code: int = 200
@@ -57,18 +58,14 @@ class JobStatusType(str, Enum):
     SUCCESS = "success"
     ERROR = "error"
 
-
 class JobStatus(SQLModel, table=True):
     """
     Describes the current status of a job
     """
-
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
     job_data: dict = Field(sa_column=Column(JSON))
-    created_at: datetime = Field(
-        default=None, sa_column=Column(DateTime(), server_default=func.now())
-    )
-    completed_at: Optional[datetime] = Field(default=None, sa_column=Column(DateTime()))
-    error_at: Optional[datetime] = Field(default=None, sa_column=Column(DateTime()))
-    error_message: Optional[str] = Field(default=None)
+    created_at: datetime = datetime.now()
+    completed_at: Optional[datetime] = None
+    error_at: Optional[datetime] = None
+    error_message: Optional[str] = None
