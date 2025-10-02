@@ -1,7 +1,6 @@
 from aioresponses import aioresponses
 import httpx
 import pytest
-from typing import Generator
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
@@ -37,10 +36,11 @@ def config() -> Config:
 def logger(config) -> BoundLogger:
     return get_logger(config)
 
+
 @pytest.fixture()
 def engine():
     eng = create_engine(
-                "sqlite+pysqlite:///:memory:",
+        "sqlite+pysqlite:///:memory:",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
@@ -48,8 +48,9 @@ def engine():
     yield eng
     eng.dispose()
 
+
 @pytest.fixture
-def job_status_database( logger, config, engine) -> JobStatusDatabase:
+def job_status_database(logger, config, engine) -> JobStatusDatabase:
     return JobStatusDatabase(logger, config, engine)
 
 
@@ -59,7 +60,7 @@ def test_client(job_status_database):
 
     with TestClient(app) as client:
         yield client
-    
+
     app.dependency_overrides.clear()
 
 

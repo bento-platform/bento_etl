@@ -14,7 +14,7 @@ class ExtractStep(BaseModel):
     """
 
     extract_url: str
-    # 
+    #
     type: Literal["api-fetch"]
     http_verb: str = "GET"
     expected_status_code: int = 200
@@ -58,10 +58,12 @@ class JobStatusType(str, Enum):
     SUCCESS = "success"
     ERROR = "error"
 
+
 class JobStatus(SQLModel, table=True):
     """
     Describes the current status of a job
     """
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     status: JobStatusType = Field(sa_column=Column(SQLModelEnum(JobStatusType)))
     job_data: dict = Field(sa_column=Column(JSON))

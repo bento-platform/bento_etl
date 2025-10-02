@@ -32,10 +32,11 @@ class Config(BentoFastAPIBaseConfig):
     data_dir: Path = Field(
         Path("etl", "data"), validation_alias="BENTO_ETL_INTERNAL_DATA_DIR"
     )
+
     @field_validator("data_dir", mode="before")
     def make_absolute(cls, v):
         return Path(v).expanduser().resolve()
-    
+
     # database
     db_name: str = "bento_etl.db"
 
