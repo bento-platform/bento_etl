@@ -37,9 +37,9 @@ def logger(config) -> BoundLogger:
 
 @pytest.fixture
 def job_status_database(
-    request: pytest.FixtureRequest, config, logger
+    request: pytest.FixtureRequest, logger, config
 ) -> JobStatusDatabase:
-    db = get_job_status_db_in_memory(config, logger)
+    db = get_job_status_db_in_memory(logger, config)
     db.setup()
 
     def teardown():

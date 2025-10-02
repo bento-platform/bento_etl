@@ -23,7 +23,7 @@ BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
 
 config = get_config()
 logger = get_logger(config)  # pyright: ignore[reportArgumentType]
-db = get_job_status_db(config, logger)  # pyright: ignore[reportArgumentType]
+db = get_job_status_db(logger, config)  # pyright: ignore[reportArgumentType]
 
 
 @asynccontextmanager
