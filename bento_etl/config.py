@@ -3,7 +3,7 @@ from fastapi import Depends
 from functools import lru_cache
 from typing import Annotated
 from pathlib import Path
-from pydantic import Field, computed_field
+from pydantic import Field, computed_field, field_validator
 
 from .constants import SERVICE_GROUP, SERVICE_ARTIFACT
 
@@ -27,16 +27,21 @@ class Config(BentoFastAPIBaseConfig):
     etl_client_id: str = ""
     etl_client_secret: str = ""
     bento_openid_config_url: str = ""
+    testing: bool = False
 
-    # database
     data_dir: Path = Field(
         Path("etl", "data"), validation_alias="BENTO_ETL_INTERNAL_DATA_DIR"
     )
+    @field_validator("data_dir", mode="before")
+    def make_absolute(cls, v):
+        return Path(v).expanduser().resolve()
+    
+    # database
     db_name: str = "bento_etl.db"
 
-    @computed_field(return_type=Path)
-    def database_path(self) -> Path:
-        return self.data_dir / self.db_name
+    @computed_field(return_type=str)
+    def database_path(self) -> str:
+        return str(self.data_dir / self.db_name)
 
 
 @lru_cache

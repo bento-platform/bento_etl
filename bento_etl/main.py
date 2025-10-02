@@ -28,11 +28,15 @@ db = get_job_status_db(logger, config)  # pyright: ignore[reportArgumentType]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    logger.info("Starting up database...")
-    db.setup()
-    yield
-    logger.info("Shutting down database...")
-    logger.info("Finished shutting down database.")
+    if config.testing:
+        logger.info("Handing off control to testing env for lifespan events")
+        yield
+    else:
+        logger.info("Starting up database...")
+        db.setup()
+        yield
+        logger.info("Shutting down database...")
+        logger.info("Finished shutting down database.")
 
 
 app = BentoFastAPI(
