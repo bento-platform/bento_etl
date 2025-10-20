@@ -36,6 +36,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         db.setup()
         yield
         logger.info("Shutting down database...")
+        db.engine.dispose()
         logger.info("Finished shutting down database.")
 
 
