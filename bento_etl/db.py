@@ -20,7 +20,9 @@ __all__ = [
 
 
 class JobStatusDatabase:
-    def __init__(self, logger: BoundLogger, config: Config, engine: Optional[Engine]=None):
+    def __init__(
+        self, logger: BoundLogger, config: Config, engine: Optional[Engine] = None
+    ):
         self.engine = engine or create_engine(
             f"sqlite:///{config.database_path}", echo=True
         )
