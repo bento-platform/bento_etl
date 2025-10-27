@@ -37,7 +37,7 @@ Jobs router plan:
 
 
 async def run_pipeline(
-    job_id: str,
+    job_id: uuid.UUID,
     extractor: BaseExtractor,
     transformer: BaseTransformer,
     loader: BaseLoader,
