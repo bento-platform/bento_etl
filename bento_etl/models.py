@@ -14,7 +14,6 @@ class ExtractStep(BaseModel):
     """
 
     extract_url: str
-    #
     type: Literal["api-fetch"]
     http_verb: str = "GET"
     expected_status_code: int = 200
