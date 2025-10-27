@@ -2,9 +2,11 @@ from typing import Annotated, Any, Sequence
 from functools import lru_cache
 from datetime import datetime
 from uuid import UUID
+from typing import Optional
 
 from fastapi import Depends, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select
+from sqlalchemy import Engine
 
 from bento_etl.logger import BoundLogger, LoggerDependency
 from bento_etl.models import JobStatus, JobStatusType
@@ -18,7 +20,7 @@ __all__ = [
 
 
 class JobStatusDatabase:
-    def __init__(self, logger: BoundLogger, config: Config, engine=None):
+    def __init__(self, logger: BoundLogger, config: Config, engine: Optional[Engine]=None):
         self.engine = engine or create_engine(
             f"sqlite:///{config.database_path}", echo=True
         )
