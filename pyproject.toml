@@ -6,14 +6,14 @@ authors = [
     {name = "Victor Rocheleau",email = "victor.rocheleau@mcgill.ca"}
 ]
 readme = "README.md"
-requires-python = ">=3.10,<=3.13"
+requires-python = ">=3.12,<3.14"
 dependencies = [
-    "fastapi (>=0.115.12,<0.116.0)",
+    "fastapi (>=0.119.1,<0.120.0)",
     "pydantic (>=2.11.4,<3.0.0)",
-    "bento-lib (>=13.1.0,<14.0.0)",
+    "bento-lib (>=14.0.0,<15.0.0)",
     "pydantic-settings (>=2.9.1,<3.0.0)",
     "structlog (>=25.3.0,<26.0.0)",
-    "uvicorn (>=0.34.2,<0.35.0)",
+    "uvicorn (>=0.38.0,<0.39.0)",
     "polars (>=1.30.0,<2.0.0)"
 ]
 
@@ -32,8 +32,8 @@ coverage = "^7.8.0"
 debugpy = "^1.8.14"
 pytest = "^8.3.5"
 pytest-asyncio = "^0.26.0"
-pytest-cov = "^6.1.1"
-ruff = "^0.11.9"
+pytest-cov = "^7.0.0"
+ruff = "^0.14.1"
 httpx = "^0.28.1"
 
 [build-system]

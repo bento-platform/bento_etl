@@ -1,4 +1,4 @@
-FROM ghcr.io/bento-platform/bento_base_image:python-debian-2025.05.05
+FROM ghcr.io/bento-platform/bento_base_image:python-debian-2025.10.16
 
 LABEL org.opencontainers.image.description="Local development image for the Bento ETL service."
 LABEL devcontainer.metadata='[{ \
@@ -20,7 +20,7 @@ COPY run.dev.bash .
 
 # Install more recent poetry
 # TODO: rm once included in base image
-RUN pip install --no-cache-dir poetry==2.1.3
+RUN pip install --no-cache-dir poetry==2.2.1
 
 RUN poetry config virtualenvs.create false && \
     poetry --no-cache install --no-root
