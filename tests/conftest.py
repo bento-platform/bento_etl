@@ -2,9 +2,8 @@ from aioresponses import aioresponses
 import httpx
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.pool import StaticPool
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, create_engine
+from sqlmodel.pool import StaticPool
 
 import os
 import json
