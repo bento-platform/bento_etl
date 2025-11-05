@@ -32,7 +32,7 @@ def test_post_submit_job_valid(
 
     assert response.status_code == 200
     assert response.json()["message"]
-    assert len(test_client.get("/jobs").json()) == 1
+    assert len(job_status_database.get_all_status()) == 1
 
     time.sleep(
         1

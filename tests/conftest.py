@@ -1,22 +1,23 @@
-from logging import Logger
 from aioresponses import aioresponses
 import httpx
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.pool import StaticPool
+from sqlmodel import SQLModel
 
 import os
 import json
 
-from sqlmodel import Session, delete
-
 from bento_etl.db import JobStatusDatabase, get_job_status_db
-from bento_etl.logger import get_logger
-from bento_etl.models import ExtractStep, Job, JobStatus, LoadStep, TransformStep
+from bento_etl.logger import get_logger, BoundLogger
+from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
 
 os.environ["BENTO_DEBUG"] = "true"
 os.environ["BENTO_VALIDATE_SSL"] = "false"
 os.environ["BENTO_JSON_LOGS"] = "false"  # use rich text logs in testing
 os.environ["CORS_ORIGINS"] = "*"
+os.environ["TESTING"] = "True"
 
 os.environ["BENTO_AUTHZ_SERVICE_URL"] = "https://authz.local"
 os.environ["AUTHZ_ENABLED"] = "False"
@@ -32,31 +33,35 @@ def config() -> Config:
 
 
 @pytest.fixture
-def logger(config: Config) -> Logger:
+def logger(config: Config) -> BoundLogger:
     return get_logger(config)
 
 
-@pytest.fixture
-def job_status_database(
-    logger: Logger, request: pytest.FixtureRequest
-) -> JobStatusDatabase:
-    db = get_job_status_db(logger)
-    db.setup()
-
-    def teardown():
-        # Deletes the contents of the db after test
-        with Session(db.engine) as session:
-            session.exec(delete(JobStatus))
-            session.commit()
-
-    request.addfinalizer(teardown)
-    return db
+@pytest.fixture()
+def engine():
+    eng = create_engine(
+        "sqlite+pysqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    SQLModel.metadata.create_all(eng)
+    yield eng
+    eng.dispose()
 
 
 @pytest.fixture
-def test_client():
+def job_status_database(logger, config, engine) -> JobStatusDatabase:
+    return JobStatusDatabase(logger, config, engine)
+
+
+@pytest.fixture
+def test_client(job_status_database):
+    app.dependency_overrides[get_job_status_db] = lambda: job_status_database
+
     with TestClient(app) as client:
         yield client
+
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture
