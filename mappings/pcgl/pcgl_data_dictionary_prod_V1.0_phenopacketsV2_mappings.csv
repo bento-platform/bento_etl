@@ -11,7 +11,7 @@ index,Domain,Entity,Field,class,Phenopackets,Phenopackets_doc_link
 10,PARTICIPANT,Sociodemographic,age_at_sociodem_collection,,,
 11,BIOSPECIMEN,Specimen,age_at_specimen_collection,timeElement,biosamples[].time_of_collection.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#time-of-collection
 12,CLINICAL,Treatment,age_at_treatment,timeElement,medical_actions[].therapeutic_regimen.start_time.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/therapeutic-regimen.html#start-time
-13,ANALYSIS,Analysis,analysisType,o,biosamples[].files[].file_attributes.analysisType,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+13,ANALYSIS,Analysis,analysisType,,biosamples[].files[].file_attributes.analysistype,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
 14,CLINICAL,Radiation,anatomical_site_irradiated_code,ontologyclass,medical_actions[].radiation_therapy.body_site.id,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#body-site
 15,CLINICAL,Radiation,anatomical_site_irradiated_term,ontologyclass,medical_actions[].radiation_therapy.body_site.label,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#body-site
 16,BIOSPECIMEN,Experiment,assay_type_code,ontologyclass,experiment_ontology[].id,
