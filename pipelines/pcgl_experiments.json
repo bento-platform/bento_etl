@@ -1,6 +1,6 @@
 {
     "extractor": {
-        "extract_url": "https://submission.submission.dev.pcgl.sd4h.ca/data/category/2", 
+        "extract_url": "https://submission.ingress.dev.k8s.pcgl.dev-sd4h.ca/data/category/2",
         "type": "api-fetch"
     },
     "transformer": {
