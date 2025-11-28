@@ -64,3 +64,11 @@ You can then open the dev container in VS Code, the repo is mounted at `/etl`:
 FastAPI produces an OpenAPI schema automatically, providing rich API docs.
 
 To access the Swagger UI of a local bento_etl, simply open a browser and visit `localhost:5000/docs`.
+
+## Mappings
+
+The ETL uses CSV mapping files located in the `mappings/` directory.  
+These files define how PCGL data dictionary fields are transformed into ETL JSON models (Phenopackets V2 and Katsu experiments).
+
+For the full documentation of the CSV mapping pattern, see  
+**[docs/mappings.md](docs/mappings.md)**.
