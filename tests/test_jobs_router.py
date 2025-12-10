@@ -187,9 +187,7 @@ def test_run_from_pipeline_file_valid(
     assert response_body[0]["status"] == "success"
 
 
-def test_run_from_pipeline_file_not_found(
-    test_client: TestClient, mock_authz
-):
+def test_run_from_pipeline_file_not_found(test_client: TestClient, mock_authz):
     """Test running a job from a non-existent pipeline file."""
     response = test_client.post(
         "/jobs/pipeline/nonexistent_pipeline", headers=AUTHZ_HEADER
@@ -213,9 +211,7 @@ def test_run_from_pipeline_file_experiments(
     mock_loader_valid_post,
 ):
     """Test running an experiments job from a valid pipeline file."""
-    response = test_client.post(
-        "/jobs/pipeline/pcgl_experiments", headers=AUTHZ_HEADER
-    )
+    response = test_client.post("/jobs/pipeline/pcgl_experiments", headers=AUTHZ_HEADER)
 
     assert response.status_code == 200
     assert response.json()["message"]

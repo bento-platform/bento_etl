@@ -1,6 +1,4 @@
-import pytest
 from fastapi.testclient import TestClient
-from bento_etl.main import app
 
 AUTHZ_HEADER = {"Authorization": "Token bearer"}
 

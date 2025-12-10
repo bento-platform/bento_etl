@@ -22,7 +22,9 @@ class TestTransformerDependencies:
         job = Job(
             extractor=ExtractStep(extract_url="test_url", type="api-fetch"),
             transformer=TransformStep(type="None"),
-            loader=LoadStep(dataset_id="test_id", batch_size=0, data_type="phenopackets")
+            loader=LoadStep(
+                dataset_id="test_id", batch_size=0, data_type="phenopackets"
+            ),
         )
 
         transformer = get_transformer(job, logger)
