@@ -2,6 +2,7 @@ import asyncio
 import uuid
 import httpx
 import pytest
+from unittest.mock import MagicMock
 from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import get_loader
 from bento_etl.loaders.experiments_loader import ExperimentsLoader
@@ -39,6 +40,15 @@ class TestLoaderDependencies:
         job = mock_job_with_data_type("experiments")
         loader = get_loader(job, logger, config)
         assert type(loader) is ExperimentsLoader
+
+    def test_get_loader_invalid_type(self, logger, config):
+        """Test that get_loader raises NotImplementedError for invalid data type."""
+        job = MagicMock()
+        job.loader = MagicMock()
+        job.loader.data_type = "invalid-type"
+
+        with pytest.raises(NotImplementedError):
+            get_loader(job, logger, config)
 
 
 class TestBaseLoader:

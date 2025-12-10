@@ -1,6 +1,8 @@
 import pytest
+from unittest.mock import MagicMock
 
 from bento_etl.extractors.api_fetch_extractor import ApiPollExtractor
+from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import get_extractor
 from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
 
@@ -23,6 +25,24 @@ class TestExtractorDependencies:
         job = mock_job_with_api_fetch_extractor()
         extractor = get_extractor(job, logger)
         assert type(extractor) is ApiPollExtractor
+
+    def test_get_extractor_invalid_type(self, logger):
+        """Test that get_extractor raises NotImplementedError for invalid extractor type."""
+        job = MagicMock()
+        job.extractor = MagicMock()
+        job.extractor.type = "invalid-type"
+
+        with pytest.raises(NotImplementedError):
+            get_extractor(job, logger)
+
+
+class TestBaseExtractor:
+    def test_extract_raises_not_implemented(self, logger):
+        """Test that base extractor's extract method raises NotImplementedError."""
+        extractor = BaseExtractor(logger)
+
+        with pytest.raises(NotImplementedError):
+            extractor.extract()
 
 
 class TestApiFetchExtractor:

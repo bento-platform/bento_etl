@@ -1,5 +1,6 @@
 import polars as pl
 import pytest
+from unittest.mock import MagicMock
 from bento_etl.transformers.base import BaseTransformer
 from bento_etl.transformers.dependencies import get_transformer
 from bento_etl.logger import BoundLogger
@@ -29,3 +30,12 @@ class TestTransformerDependencies:
 
         transformer = get_transformer(job, logger)
         assert transformer is None
+
+    def test_get_transformer_invalid_type(self, logger: BoundLogger):
+        """Test that get_transformer raises NotImplementedError for invalid type."""
+        job = MagicMock()
+        job.transformer = MagicMock()
+        job.transformer.type = "invalid-type"
+
+        with pytest.raises(NotImplementedError):
+            get_transformer(job, logger)

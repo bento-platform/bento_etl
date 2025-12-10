@@ -2,9 +2,13 @@ import json
 import time
 from typing import Any
 import uuid
+from unittest.mock import MagicMock
+import pytest
 from fastapi.testclient import TestClient
 
 from bento_etl.db import JobStatusDatabase
+from bento_etl.routers.jobs import run_pipeline
+from bento_etl.models import JobStatusType
 
 AUTHZ_HEADER = {"Authorization": "Token bearer"}
 
@@ -216,3 +220,45 @@ def test_run_from_pipeline_file_experiments(
     assert response.status_code == 200
     assert response.json()["message"]
     assert len(job_status_database.get_all_status()) == 1
+
+
+@pytest.mark.asyncio
+async def test_run_pipeline_with_transformer(
+    job_status_database: JobStatusDatabase,
+    mocked_job_dict: dict[str, Any],
+):
+    """Test run_pipeline with a transformer."""
+    # Create a mock extractor
+    mock_extractor = MagicMock()
+    mock_extractor.extract.return_value = {"data": "test"}
+
+    # Create a mock transformer (non-None)
+    mock_transformer = MagicMock()
+    mock_transformer.transform.return_value = {"data": "transformed"}
+
+    # Create a mock loader with async load method
+    mock_loader = MagicMock()
+
+    async def mock_load(data):
+        return None
+
+    mock_loader.load = mock_load
+
+    # Create a job status
+    job_status = job_status_database.create_status(mocked_job_dict)
+
+    # Run the pipeline
+    await run_pipeline(
+        job_status.id,
+        mock_extractor,
+        mock_transformer,
+        mock_loader,
+        job_status_database,
+    )
+
+    # Verify transformer was called
+    mock_transformer.transform.assert_called_once()
+
+    # Verify the job completed successfully
+    updated_status = job_status_database.get_status(job_status.id)
+    assert updated_status.status == JobStatusType.SUCCESS

@@ -135,6 +135,27 @@ def mock_extractor_valid_empty_response(monkeypatch):
     monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args: httpx.Response(200))
 
 
+#### TRANSFORMER MOCKS
+
+
+@pytest.fixture
+def mock_transformer(monkeypatch):
+    """Mock transformer that returns data unchanged."""
+    from bento_etl.transformers import dependencies
+
+    def mock_get_transformer(job, logger):
+        # Return a mock transformer for testing the transformer execution path
+        from unittest.mock import MagicMock
+
+        if job.transformer.type == "test-transformer":
+            mock_trans = MagicMock()
+            mock_trans.transform = lambda data: data  # passthrough
+            return mock_trans
+        return dependencies.get_transformer(job, logger)
+
+    monkeypatch.setattr("bento_etl.routers.jobs.get_transformer", mock_get_transformer)
+
+
 #### LOADER MOCKS
 LOADER_POST_REQUEST_PATH = "bento_etl.loaders.base.httpx.AsyncClient.post"
 
