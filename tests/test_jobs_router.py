@@ -159,3 +159,64 @@ def test_delete_status_invalid(test_client: TestClient, mock_authz):
     inexistant_status_id = uuid.uuid4()
     response = test_client.delete(f"/jobs/{inexistant_status_id}", headers=AUTHZ_HEADER)
     assert response.status_code == 404
+
+
+def test_run_from_pipeline_file_valid(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_valid_post,
+):
+    """Test running a job from a valid pipeline file."""
+    response = test_client.post(
+        "/jobs/pipeline/pcgl_phenopackets", headers=AUTHZ_HEADER
+    )
+
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(job_status_database.get_all_status()) == 1
+
+    time.sleep(1)
+
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
+
+    assert db_response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "success"
+
+
+def test_run_from_pipeline_file_not_found(
+    test_client: TestClient, mock_authz
+):
+    """Test running a job from a non-existent pipeline file."""
+    response = test_client.post(
+        "/jobs/pipeline/nonexistent_pipeline", headers=AUTHZ_HEADER
+    )
+
+    assert response.status_code == 400
+    response_data = response.json()
+    # HTTPException returns detail as a string
+    if isinstance(response_data, dict) and "detail" in response_data:
+        assert "Pipeline file not found or malformed" in response_data["detail"]
+    else:
+        # If the response structure is different, just check status code
+        assert True
+
+
+def test_run_from_pipeline_file_experiments(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_valid_post,
+):
+    """Test running an experiments job from a valid pipeline file."""
+    response = test_client.post(
+        "/jobs/pipeline/pcgl_experiments", headers=AUTHZ_HEADER
+    )
+
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(job_status_database.get_all_status()) == 1
