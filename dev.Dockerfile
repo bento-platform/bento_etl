@@ -16,6 +16,7 @@ WORKDIR /etl
 COPY pyproject.toml .
 COPY poetry.lock .
 
+COPY entrypoint.bash .
 COPY run.dev.bash .
 
 # Install more recent poetry
@@ -27,4 +28,5 @@ RUN poetry config virtualenvs.create false && \
 
 ENV BENTO_CONTAINER_LOCAL=true
 
+ENTRYPOINT [ "bash", "./entrypoint.bash" ]
 CMD [ "bash", "./run.dev.bash" ]

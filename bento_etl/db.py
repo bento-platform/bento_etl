@@ -24,7 +24,7 @@ class JobStatusDatabase:
         self, logger: BoundLogger, config: Config, engine: Optional[Engine] = None
     ):
         self.engine = engine or create_engine(
-            f"sqlite:///{config.database_path}", echo=True
+            f"sqlite:///{config.db_name}", echo=True
         )
         self.logger = logger
 
