@@ -20,7 +20,7 @@ def get_extractor(
             endpoint=job.extractor.extract_url,
             http_verb=job.extractor.http_verb,
             expected_status_code=job.extractor.expected_status_code,
-            auth=config.extractor_bearer_token,
+            bearer_token=config.extractor_bearer_token,
         )
     else:
         raise NotImplementedError
