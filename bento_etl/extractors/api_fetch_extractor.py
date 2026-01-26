@@ -11,7 +11,7 @@ class ApiPollExtractor(BaseExtractor):
         endpoint: str,
         http_verb: str = "GET",
         expected_status_code=200,
-        bearer_token: str = None
+        bearer_token: str = None,
     ):
         self.endpoint = endpoint
         self.http_verb = http_verb
@@ -23,7 +23,7 @@ class ApiPollExtractor(BaseExtractor):
         headers = {}
         if self.bearer_token:
             headers["Authorization"] = f"Bearer {self.bearer_token}"
-            
+
         response = httpx.request(self.http_verb, self.endpoint, headers=headers)
 
         if response.status_code != self.expected_status_code:

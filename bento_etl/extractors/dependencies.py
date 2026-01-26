@@ -10,7 +10,9 @@ from bento_etl.models import Job
 __all__ = ["get_extractor", "ExtractorDep"]
 
 
-def get_extractor(job: Job, logger: LoggerDependency, config: ConfigDependency) -> BaseExtractor:
+def get_extractor(
+    job: Job, logger: LoggerDependency, config: ConfigDependency
+) -> BaseExtractor:
     # returns the appropriate extractor instance depending on the job description
     if job.extractor.type == "api-fetch":
         return ApiPollExtractor(
@@ -18,7 +20,7 @@ def get_extractor(job: Job, logger: LoggerDependency, config: ConfigDependency) 
             endpoint=job.extractor.extract_url,
             http_verb=job.extractor.http_verb,
             expected_status_code=job.extractor.expected_status_code,
-            auth=config.extractor_bearer_token
+            auth=config.extractor_bearer_token,
         )
     else:
         raise NotImplementedError
