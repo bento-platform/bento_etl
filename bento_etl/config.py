@@ -33,7 +33,7 @@ class Config(BentoFastAPIBaseConfig):
 
     # Extractor API auth
     # TODO: temp hack to authenticate with PCGL submission service, replace with a generic OIDC service flow later
-    extractor_bearer_token: str = None
+    extractor_bearer_token: str = ""
 
 
 @lru_cache
