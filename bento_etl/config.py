@@ -31,6 +31,10 @@ class Config(BentoFastAPIBaseConfig):
     # TODO: mount to volume, allow test with a PG DB
     db_name: str = "bento_etl.db"
 
+    # Extractor API auth
+    # TODO: temp hack to authenticate with PCGL submission service, replace with a generic OIDC service flow later
+    extractor_bearer_token: str = None
+
 
 @lru_cache
 def get_config():
