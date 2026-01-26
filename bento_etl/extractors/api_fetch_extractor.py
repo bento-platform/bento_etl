@@ -11,7 +11,7 @@ class ApiPollExtractor(BaseExtractor):
         endpoint: str,
         http_verb: str = "GET",
         expected_status_code=200,
-        bearer_token: str = None,
+        bearer_token: str = "",
     ):
         self.endpoint = endpoint
         self.http_verb = http_verb
