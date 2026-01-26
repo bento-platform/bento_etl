@@ -121,7 +121,7 @@ def mock_extractor_success_call(monkeypatch, load_phenopacket_data):
     phenopacket_content = json.dumps(load_phenopacket_data).encode("utf-8")
     monkeypatch.setattr(
         EXTRACTOR_REQUEST_PATH,
-        lambda *args: httpx.Response(200, content=phenopacket_content),
+        lambda *args, **kwargs: httpx.Response(200, content=phenopacket_content),
     )
 
 
