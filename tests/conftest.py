@@ -127,7 +127,7 @@ def mock_extractor_success_call(monkeypatch, load_phenopacket_data):
 
 @pytest.fixture
 def mock_extractor_bad_status_code(monkeypatch):
-    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args,: httpx.Response(400))
+    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args, **kwargs: httpx.Response(400))
 
 
 @pytest.fixture
