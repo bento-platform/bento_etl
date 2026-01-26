@@ -20,10 +20,11 @@ class ApiPollExtractor(BaseExtractor):
         super().__init__(logger)
 
     def extract(self) -> dict:
-        headers = {}
+        headers = None
         if self.bearer_token:
-            headers["Authorization"] = f"Bearer {self.bearer_token}"
-
+            headers = {
+                "Authorization": f"Bearer {self.bearer_token}"
+            }
         response = httpx.request(self.http_verb, self.endpoint, headers=headers)
 
         if response.status_code != self.expected_status_code:
