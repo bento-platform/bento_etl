@@ -127,12 +127,16 @@ def mock_extractor_success_call(monkeypatch, load_phenopacket_data):
 
 @pytest.fixture
 def mock_extractor_bad_status_code(monkeypatch):
-    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args, **kwargs: httpx.Response(400))
+    monkeypatch.setattr(
+        EXTRACTOR_REQUEST_PATH, lambda *args, **kwargs: httpx.Response(400)
+    )
 
 
 @pytest.fixture
 def mock_extractor_valid_empty_response(monkeypatch):
-    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args, **kwargs: httpx.Response(200))
+    monkeypatch.setattr(
+        EXTRACTOR_REQUEST_PATH, lambda *args, **kwargs: httpx.Response(200)
+    )
 
 
 #### TRANSFORMER MOCKS
