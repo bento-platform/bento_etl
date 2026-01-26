@@ -132,7 +132,7 @@ def mock_extractor_bad_status_code(monkeypatch):
 
 @pytest.fixture
 def mock_extractor_valid_empty_response(monkeypatch):
-    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args: httpx.Response(200))
+    monkeypatch.setattr(EXTRACTOR_REQUEST_PATH, lambda *args, **kwargs: httpx.Response(200))
 
 
 #### TRANSFORMER MOCKS
