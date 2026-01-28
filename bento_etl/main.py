@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         # tests with in-memory DB
         logger.info("Handing off control to testing env for lifespan events")
         yield
-    else: # pragma: no cover
+    else:  # pragma: no cover
         logger.info("Starting up database...")
         db.setup()
         yield
