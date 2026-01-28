@@ -15,9 +15,11 @@ class BaseTransformer:
     def __init__(self, logger: Logger):
         self.logger = logger
 
-    def transform(self, raw: pl.DataFrame | pl.LazyFrame):
+    def transform(
+        self, raw: pl.DataFrame | pl.LazyFrame
+    ) -> pl.DataFrame | pl.LazyFrame:
         # TODO: figure out best return type hint
-        pass
+        raise NotImplementedError
 
 
 # TODO: implement Phenopacket and Experiment transformers that take in PCGL JSON data.

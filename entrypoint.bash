@@ -2,6 +2,8 @@
 
 source /create_service_user.bash
 
+chown -R bento_user:bento_user /etl
+
 # Set up Git configuration if needed (useful for development images / containers)
 gosu bento_user /bin/bash -c '/set_gitconfig.bash'
 

@@ -1,0 +1,14 @@
+{
+    "extractor": {
+        "extract_url": "http://localhost:5000/test/data-sources/pheno-clean",
+        "type": "api-fetch"
+    },
+    "transformer": {
+        "type": "None"
+    },
+    "loader": {
+        "dataset_id": "some_dataset_id",
+        "batch_size": 0,
+        "data_type": "phenopackets"
+    }
+}
