@@ -15,26 +15,152 @@ For a Bento instance that needs ETL processing, the general flow would be:
    1. Triggers: On demand ingestions
    2. Crons: Regular sync ingestions
 
-## ETL Pipeline configuration
+## ETL Pipelines
 
-TODO!
-- Extractors
-  - Configure API polling extractor (**WIP**)
-  - Configure S3 polling extractor (ROADMAP)
-- Transformers
-  - Configure a JSON to Phenopackets transformer (**WIP**)
-  - Configure a JSON to Experiments transformer (**WIP**)
-  - Configure a passthrough transformer (ROADMAP)
-  - Configure a CSV to Phenopackets transformer (ROADMAP)
-  - Configure a CSV to Experiments transformer (ROADMAP)
-  - Configure a VCF to Parquet transformer (ROADMAP)
-  - Configure a VCF to VCF transformer (ROADMAP)
-- Loaders
-  - Configure a Katsu Phenopackets loader (**WIP**)
-  - Configure a Katsu Experiments loader (**WIP**)
-  - Configure a Gohan VCF loader (ROADMAP)
-  - Configure a generic S3 loader (ROADMAP)
-  - Configure a generic HTTP loader (ROADMAP)
+ETL pipelines always consist of 3 ordered steps:
+1. `Extract`: retrieve data from a source and pass it to the next step
+2. `Transform`: transforms the extracted data into the expected format for the next step
+3. `Load`: loads transformed data into a Bento data service (Katsu, Gohan eventually)
+
+A pipeline run for ETL is refered to here as a `Job`.
+
+A bento_etl `Job` object defines all three steps of an ETL pipeline. When a `Job` object is submitted, `bento_etl` 
+returns the Job's unique ID and runs it in the background.
+
+Jobs can be configured and invoked in two ways:
+1. On-demand ad-hoc jobs submission by sending a `Job` object in the body of a POST request at `/jobs`
+2. On-demand pre-defined `Job` configuration file names at `/jobs/pipeline/{pipeline_file_name}`
+   1. Where `pipeline_file_name` is the name of a `Job` JSON file (without the extension) at `/etl/pipelines`
+
+In both cases, the actual JSON Job definition is the same.
+
+Pre-defined pipelines can be built into images, or mounted as volumes for convenient configuration.
+
+### Extractor
+
+The `Extractor` configuration defines how bento_etl extracts data at the beginning of an ETL pipeline.
+
+Currently, the only extractor type supported is `api-fetch`, where data if pulled from an HTTP(S) API.
+
+To connect to external APIs, `bento_etl` will sometimes need to be authorized on private endpoints.
+
+We support a simple bearer token authentication configuration when running bento_etl.
+```bash
+# Set the token value in an environment variable
+export EXTRACTOR_BEARER_TOKEN=<BEARER TOKEN VALUE>
+
+# Start bento_etl
+docker compose up
+```
+
+When this is set, any extractor request will include an `Authorization` header with the value 
+`Bearer <EXTRACTOR_BEARER_TOKEN>`.
+
+This method can be used to authenticate to the PCGL Submission service in order to retrieve clinical data.
+
+> [!NOTE]
+> This configuration is a short term hack to support extractions on a specific system.
+> Future work will be made so that `bento_etl` can retrieve and renew its own temporary bearer tokens.
+
+Example extractor JSON config:
+```JSON
+{
+  "extract_url": "http//localhost:5000/test/data-sources/pheno-clean",
+  "type": "api-fetch",
+  "http_verb": "GET",
+  "expected_status_code": 200
+}
+```
+
+#### Extractor roadmap
+- S3 polling extractor
+  - Extract data from an S3 bucket
+- Extractor OIDC auth configuration
+- CSV extractors
+
+### Transformers
+
+Transformers are used to convert the output of an Extractor into the expected input of a loader.
+
+For instance, extracted clinical data needs to be transformed into Katsu's Phenopackets format before it can be loaded 
+in Katsu.
+
+The only supported Transformer at the moment if `None`, which is effectively a passthrough transformer that feeds the 
+output of the Extractor directly to the Loader, without doing transformations.
+
+This can be used for tests and to ingest data that is already correctly formated.
+
+Example Tranformer JSON:
+```JSON
+{
+  "type": "None"
+}
+```
+
+#### Transformers roadmap
+- Configure a JSON to Phenopackets transformer (**WIP**)
+- Configure a JSON to Experiments transformer (**WIP**)
+- Configure a CSV to Phenopackets transformer (ROADMAP)
+- Configure a CSV to Experiments transformer (ROADMAP)
+- Configure a VCF to Parquet transformer (ROADMAP)
+- Configure a VCF to VCF transformer (ROADMAP)
+
+
+### Loaders
+
+Loaders are the final step of an ETL pipeline. A loader's input is the output of a tranformer.
+
+Loaders specificaly target Bento services like Katsu and integrate with Bento's authn/authz system.
+
+Some container environment variables are important for the loader:
+- `KATSU_URL` to configure the target Katsu
+- To authenticate bento_etl with bento_authz when calling Katsu, set:
+  - `ETL_CLIENT_ID`
+  - `ETL_CLIENT_SECRET`
+  - `BENTO_OPENID_CONFIG_URL`
+
+Two types of loaders are supported at the moment:
+1. `phenopackets`
+2. `experiments`
+
+Example of a Loader JSON:
+```JSON
+{
+  "dataset_id": "<KATSU DATASET ID TO INGEST INTO>",
+  "batch_size": 0,  // number of items to ingest at a time, 0 means all-at-once
+  "data_type": "< phenopackets || experiments >"
+}
+```
+
+### Loaders roadmap
+- Configure a Gohan VCF loader (ROADMAP)
+- Configure a generic S3 loader (ROADMAP)
+- Configure a generic HTTP loader (ROADMAP)
+
+### Full Job example
+
+As seen [here](./pipelines/test_experiments.json).
+
+This ETL Job object performs the following:
+1. Extracts clean Experiments JSON from the test data endpoint
+2. Passthrough Transformer forwards the data to the loader with no modifications
+3. Loader ingests the data into one of Katsu's datasets
+```JSON
+{
+    "extractor": {
+        "extract_url": "http://localhost:5000/test/data-sources/exps-clean",
+        "type": "api-fetch"
+    },
+    "transformer": {
+        "type": "None"
+    },
+    "loader": {
+        "dataset_id": "some_dataset_id",
+        "batch_size": 0,
+        "data_type": "experiments"
+    }
+}
+```
 
 ## Dev
 
