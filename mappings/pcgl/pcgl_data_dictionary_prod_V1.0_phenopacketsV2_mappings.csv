@@ -1,0 +1,181 @@
+index,Domain,Entity,Field,class,Phenopackets,Phenopackets_doc_link
+1,CLINICAL,Medication,actual_cumulative_drug_dose,,medical_actions[].treatment.cumulative_dose.value,https://phenopacket-schema.readthedocs.io/en/latest/treatment.html#cumulative-dose
+2,CLINICAL,Comorbidity,age_at_comorbidity_diagnosis,timeElement,diseases[].onset.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/disease.html#onset
+3,CLINICAL,Demographic,age_at_death,timeElement,subject.vital_status.time_of_death.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/vital-status.html#time-of-death
+4,CLINICAL,Diagnosis,age_at_diagnosis,timeElement,diseases[].onset.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/disease.html#onset
+5,CLINICAL,Demographic,age_at_enrollment,timeElement,subject.time_at_last_encounter.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#time-at-last-encounter
+6,CLINICAL,Exposure,age_at_exposure,timeElement,exposures[].occurrence.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/exposure.html#occurrence
+7,CLINICAL,Follow Up,age_at_followup,timeElement,phenotypic_features[].time_observed.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#time-observed
+8,CLINICAL,Measurement,age_at_measurement,timeElement,measurements[].time_observed.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/measurement.html#time-observed
+9,CLINICAL,Phenotype,age_at_phenotype,timeElement,phenotypic_features[].onset.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#onset
+10,PARTICIPANT,Sociodemographic,age_at_sociodem_collection,,,
+11,BIOSPECIMEN,Specimen,age_at_specimen_collection,timeElement,biosamples[].time_of_collection.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#time-of-collection
+12,CLINICAL,Treatment,age_at_treatment,timeElement,medical_actions[].therapeutic_regimen.start_time.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/therapeutic-regimen.html#start-time
+13,ANALYSIS,Analysis,analysisType,,biosamples[].files[].file_attributes.analysistype,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+14,CLINICAL,Radiation,anatomical_site_irradiated_code,ontologyclass,medical_actions[].radiation_therapy.body_site.id,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#body-site
+15,CLINICAL,Radiation,anatomical_site_irradiated_term,ontologyclass,medical_actions[].radiation_therapy.body_site.label,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#body-site
+16,BIOSPECIMEN,Experiment,assay_type_code,ontologyclass,experiment_ontology[].id,
+17,BIOSPECIMEN,Experiment,assay_type_term,ontologyclass,experiment_ontology[].label,
+18,CLINICAL,Demographic,cause_of_death ,ontologyclass,subject.vital_status.cause_of_death.label,https://phenopacket-schema.readthedocs.io/en/latest/vital-status.html#cause-of-death
+19,ADMIN,Study,collaborators,,,
+20,CLINICAL,Comorbidity,comorbidity_code,ontologyclass,diseases[].term.id,https://phenopacket-schema.readthedocs.io/en/latest/disease.html#term
+21,CLINICAL,Comorbidity,comorbidity_status,boolean,diseases[].excluded,https://phenopacket-schema.readthedocs.io/en/latest/disease.html#excluded
+22,CLINICAL,Comorbidity,comorbidity_term,ontologyclass,diseases[].term.label,https://phenopacket-schema.readthedocs.io/en/latest/disease.html#term
+23,CLINICAL,Comorbidity,comorbidity_treatment_status,ontologyclass,medical_actions[].response_to_treatment.label,https://phenopacket-schema.readthedocs.io/en/latest/medical-action.html#response-to-treatment
+24,DATA ACCESS,Dac,contact_email,,,
+25,DATA ACCESS,Dac,contact_name,,,
+26,ADMIN,Study,context,,,
+27,DATA ACCESS,Dac,dac_description,,,
+28,DATA ACCESS,Dac,dac_id,,,
+29,ADMIN,Study,dac_id,,,
+30,DATA ACCESS,Dac,dac_name,,,
+31,ANALYSIS,Analysis,data_category,experiments,files[].file_attributes.data_category,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+32,ANALYSIS,File,dataType,experiments,files[].file_attributes.data_type,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+33,CLINICAL,Diagnosis,disease_code,,diseases[].term.id,https://phenopacket-schema.readthedocs.io/en/latest/disease.html#term
+34,PARTICIPANT,Participant,disease_specific_modifier,,phenotypic_features[].modifiers.id,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#modifiers
+35,CLINICAL,Follow Up,disease_status_at_followup,,,
+36,CLINICAL,Diagnosis,disease_term,,diseases[].term.label,https://phenopacket-schema.readthedocs.io/en/latest/disease.html#term
+37,ADMIN,Study,domain,,,
+38,CLINICAL,Medication,drug_code,,medical_actions[].treatment.agent.id,https://phenopacket-schema.readthedocs.io/en/latest/treatment.html#agent
+39,CLINICAL,Medication,drug_dose_units,ontologyclass,medical_actions[].treatment.dose_intervals[].quantity.unit,https://phenopacket-schema.readthedocs.io/en/latest/dose-interval.html#quantity
+40,CLINICAL,Medication,drug_term,,medical_actions[].treatment.agent.label,https://phenopacket-schema.readthedocs.io/en/latest/treatment.html#agent
+41,PARTICIPANT,Participant,duo_modifier,,,
+42,PARTICIPANT,Participant,duo_permission,,,
+43,PARTICIPANT,Sociodemographic,education,,,
+44,PARTICIPANT,Sociodemographic,education_collect_method,,,
+45,PARTICIPANT,Sociodemographic,ethnicity,,,
+46,PARTICIPANT,Sociodemographic,ethnicity_another_category,,,
+47,PARTICIPANT,Sociodemographic,ethnicity_collect_method,,,
+48,BIOSPECIMEN,Experiment,experiment_design,,,
+49,BIOSPECIMEN,Experiment,experiment_type,,,
+50,CLINICAL,Exposure,exposure_amount,,,
+51,CLINICAL,Exposure,exposure_code,ontologyclass,exposures[].type.id,https://phenopacket-schema.readthedocs.io/en/latest/exposure.html#type
+52,CLINICAL,Exposure,exposure_duration,timeElement,exposures[].occurrence.time_interval.end,https://phenopacket-schema.readthedocs.io/en/latest/exposure.html#occurrence
+53,CLINICAL,Exposure,exposure_status,ontologyclass,exposures[].modifiers.label,https://phenopacket-schema.readthedocs.io/en/latest/exposure.html#modifiers
+54,CLINICAL,Exposure,exposure_term,ontologyclass,exposures[].type.label,https://phenopacket-schema.readthedocs.io/en/latest/exposure.html#type
+55,CLINICAL,Exposure,exposure_unit,,,
+56,BIOSPECIMEN,Read Group,file_r1,,,
+57,BIOSPECIMEN,Read Group,file_r2,,,
+58,ANALYSIS,File,fileAccess,object,files[].file_attributes.access,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+59,ANALYSIS,File,fileMd5sum,object,files[].file_attributes.md5sum,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+60,ANALYSIS,File,fileName,object,files[].uri,https://phenopacket-schema.readthedocs.io/en/latest/file.html#uri
+61,ANALYSIS,File,fileSize,object,files[].file_attributes.filesize,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+62,ANALYSIS,File,fileType,object,files[].file_attributes.filetype,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+63,ADMIN,Study,funding_sources,,,
+64,PARTICIPANT,Sociodemographic,gender,ontologyclass,subject.gender,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#gender
+65,PARTICIPANT,Sociodemographic,gender_another_gender,,,
+66,PARTICIPANT,Sociodemographic,gender_collect_method,,,
+67,ANALYSIS,Analysis,genome_annotation,,files[].file_attributes.genome_annotation,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+68,ANALYSIS,Analysis,genome_build,,files[].file_attributes.genome_build,https://phenopacket-schema.readthedocs.io/en/latest/file.html#file-attributes
+69,PARTICIPANT,Sociodemographic,geographic_location,,,
+70,PARTICIPANT,Sociodemographic,geographic_location_additional,,,
+71,PARTICIPANT,Sociodemographic,geographic_location_collect_method,,,
+72,BIOSPECIMEN,Read Group,insert_size,,,
+73,BIOSPECIMEN,Experiment,instrument,,,
+74,BIOSPECIMEN,Experiment,instrument_metadata,,,
+75,ADMIN,Study,keywords,,,
+76,ADMIN,Study,lead_organizations,,,
+77,BIOSPECIMEN,Read Group,library_description,,,
+78,BIOSPECIMEN,Read Group,library_layout,,,
+79,BIOSPECIMEN,Read Group,library_name,,,
+80,CLINICAL,Measurement,measurement_code,,measurements[].assay.id,https://phenopacket-schema.readthedocs.io/en/latest/measurement.html#assay
+81,CLINICAL,Measurement,measurement_result_categorical,,measurements[].value.ontology_class.label,https://phenopacket-schema.readthedocs.io/en/latest/measurement.html#value
+82,CLINICAL,Measurement,measurement_result_numeric,,measurements[].value.typed_quantity.quantity.value,https://phenopacket-schema.readthedocs.io/en/latest/measurement.html#value
+83,CLINICAL,Measurement,measurement_term,,measurements[].assay.label,https://phenopacket-schema.readthedocs.io/en/latest/measurement.html#assay
+84,CLINICAL,Measurement,measurement_unit,,measurements[].value.quantity.unit.label,https://phenopacket-schema.readthedocs.io/en/latest/measurement.html#value
+85,BIOSPECIMEN,Sample,molecule_type_code,,biosamples[].sample_type.id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#sample-type
+86,BIOSPECIMEN,Sample,molecule_type_term,,biosamples[].sample_type.label,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#sample-type
+87,ADMIN,Study,participant_criteria,,,
+88,PARTICIPANT,Sociodemographic,personal_income,,,
+89,PARTICIPANT,Sociodemographic,personal_income_collect_method,,,
+90,CLINICAL,Phenotype,phenotype_code,ontologyclass,phenotypic_features[].type.id,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#type
+91,CLINICAL,Phenotype,phenotype_duration,timeElement,phenotypic_features[].resolution.interval.end,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#resolution
+92,CLINICAL,Phenotype,phenotype_observed,boolean,phenotypic_features[].excluded,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#excluded
+93,CLINICAL,Phenotype,phenotype_severity,ontologyclass,phenotypic_features[].severity.label,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#severity
+94,CLINICAL,Phenotype,phenotype_term,ontologyclass,phenotypic_features[].type.label,https://phenopacket-schema.readthedocs.io/en/latest/phenotypic-feature.html#type
+95,BIOSPECIMEN,Experiment,platform,,,
+96,BIOSPECIMEN,Read Group,platform_unit,,,
+97,CLINICAL,Medication,prescribed_cumulative_drug_dose,ontologyclass,medical_actions[].treatment.dose_intervals[].schedule_frequency.label,https://phenopacket-schema.readthedocs.io/en/latest/dose-interval.html#schedule-frequency
+98,ADMIN,Study,principal_investigators,,,
+99,CLINICAL,Procedure,procedure_body_site_code,ontologyclass,medical_actions[].procedure.body_site.id,https://phenopacket-schema.readthedocs.io/en/latest/procedure.html#body-site
+100,CLINICAL,Procedure,procedure_body_site_term,ontologyclass,medical_actions[].procedure.body_site.label,https://phenopacket-schema.readthedocs.io/en/latest/procedure.html#body-site
+101,CLINICAL,Procedure,procedure_code,ontologyclass,medical_actions[].procedure.code.id,https://phenopacket-schema.readthedocs.io/en/latest/procedure.html#code
+102,CLINICAL,Procedure,procedure_term,ontologyclass,medical_actions[].procedure.code.label,https://phenopacket-schema.readthedocs.io/en/latest/procedure.html#code
+103,ADMIN,Study,program_name,,,
+104,ADMIN,Study,publication_links,,,
+105,PARTICIPANT,Sociodemographic,race,,,
+106,PARTICIPANT,Sociodemographic,race_another_racial_category,,,
+107,PARTICIPANT,Sociodemographic,race_collect_method,,,
+108,CLINICAL,Radiation,radiation_dosage,,medical_actions[].radiation_therapy.dosage,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#dosage
+109,CLINICAL,Radiation,radiation_fractions,,medical_actions[].radiation_therapy.fractions,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#fractions
+110,CLINICAL,Radiation,radiation_modality_code,ontologyclass,medical_actions[].radiation_therapy.modality.id,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#modality
+111,CLINICAL,Radiation,radiation_modality_term,ontologyclass,medical_actions[].radiation_therapy.modality.label,https://phenopacket-schema.readthedocs.io/en/latest/radiation-therapy.html#modality
+112,BIOSPECIMEN,Read Group,read_group_id_in_bam,,,
+113,BIOSPECIMEN,Read Group,read_length_r1,,,
+114,BIOSPECIMEN,Read Group,read_length_r2,,,
+115,BIOSPECIMEN,Sample,sample_status,,biosamples[].material_sample.label,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#material-sample
+116,BIOSPECIMEN,Experiment,sequencing_protocol,,extraction_protocol,
+117,PARTICIPANT,Sociodemographic,sex_another_category,,,
+118,PARTICIPANT,Sociodemographic,sex_at_birth,enum,subject.sex,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#sex
+119,PARTICIPANT,Sociodemographic,sex_collect_method,,,
+120,PARTICIPANT,Sociodemographic,sociodem_date_collection,,,
+121,PARTICIPANT,Sociodemographic,sociodem_notes,,,
+122,PARTICIPANT,Sociodemographic,sociodem_question,,,
+123,PARTICIPANT,Sociodemographic,sociodem_question_detail,,,
+124,BIOSPECIMEN,Specimen,specimen_anatomic_location_code,ontologyclass,biosamples[].procedure.body_site.id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#procedure
+125,BIOSPECIMEN,Specimen,specimen_anatomic_location_term,ontologyclass,biosamples[].procedure.body_site.label,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#procedure
+126,BIOSPECIMEN,Specimen,specimen_laterality,,biosamples[].extra_properties.laterality,
+127,BIOSPECIMEN,Specimen,specimen_processing,ontologyclass,biosamples[].sample_processing.label,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#sample-processing
+128,BIOSPECIMEN,Specimen,specimen_storage,ontologyclass,biosamples[].sample_storage.label,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#sample-storage
+129,BIOSPECIMEN,Specimen,specimen_tissue_source_code,ontologyclass,biosamples[].sampled_tissue.id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#sampled-tissue
+130,BIOSPECIMEN,Specimen,specimen_tissue_source_term,ontologyclass,biosamples[].sampled_tissue.label,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#sampled-tissue
+131,ADMIN,Study,status,,,
+132,ADMIN,Study,study_description,,,
+133,PARTICIPANT,Participant,study_id,,,
+134,ADMIN,Study,study_id,,,
+135,ADMIN,Study,study_name,,,
+136,ANALYSIS,Analysis,studyId,,,
+137,ANALYSIS,Analysis,submitter_analysis_id,,,
+138,ANALYSIS,File,submitter_analysis_id,,,
+139,ANALYSIS,Workflow,submitter_analysis_id,,,
+140,CLINICAL,Diagnosis,submitter_diagnosis_id,,,
+141,CLINICAL,Treatment,submitter_diagnosis_id,,,
+142,ANALYSIS,Analysis,submitter_experiment_id,,,
+143,BIOSPECIMEN,Experiment,submitter_experiment_id,,,
+144,BIOSPECIMEN,Read Group,submitter_experiment_id,,,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+145,ANALYSIS,Analysis,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+146,CLINICAL,Comorbidity,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+147,CLINICAL,Demographic,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+148,CLINICAL,Diagnosis,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+149,CLINICAL,Exposure,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+150,CLINICAL,Follow Up,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+151,CLINICAL,Measurement,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+152,PARTICIPANT,Participant,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+153,CLINICAL,Phenotype,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+154,PARTICIPANT,Sociodemographic,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+155,BIOSPECIMEN,Specimen,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+156,CLINICAL,Treatment,submitter_participant_id,,subject.id,https://phenopacket-schema.readthedocs.io/en/latest/individual.html#id
+157,BIOSPECIMEN,Read Group,submitter_read_group_id,,,
+158,ANALYSIS,Analysis,submitter_sample_id,,biosamples[].id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#id
+159,BIOSPECIMEN,Experiment,submitter_sample_id,,biosamples[].id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#id
+160,BIOSPECIMEN,Sample,submitter_sample_id,,biosamples[].id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#id
+161,PARTICIPANT,Sociodemographic,submitter_sociodem_id,,,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#id
+162,ANALYSIS,Analysis,submitter_specimen_id,,biosamples[].id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#id
+163,BIOSPECIMEN,Sample,submitter_specimen_id,,biosamples[].id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#id
+164,BIOSPECIMEN,Specimen,submitter_specimen_id,,biosamples[].id,https://phenopacket-schema.readthedocs.io/en/latest/biosample.html#id
+165,CLINICAL,Medication,submitter_treatment_id,,,
+166,CLINICAL,Procedure,submitter_treatment_id,,,
+167,CLINICAL,Radiation,submitter_treatment_id,,,
+168,CLINICAL,Treatment,submitter_treatment_id,,,
+169,ANALYSIS,Workflow,submitter_workflow_id,,,
+170,CLINICAL,Treatment,treatment_duration,,medical_actions[].therapeutic_regimen.end_time.age.iso8601duration,https://phenopacket-schema.readthedocs.io/en/latest/therapeutic-regimen.html#end-time
+171,CLINICAL,Treatment,treatment_intent,,medical_actions[].treatment_intent,https://phenopacket-schema.readthedocs.io/en/latest/treatment.html#treatment-intent
+172,CLINICAL,Treatment,treatment_response,,medical_actions[].response_to_treatment,https://phenopacket-schema.readthedocs.io/en/latest/medical-action.html#response-to-treatment
+173,CLINICAL,Treatment,treatment_status,,medical_actions[].therapeutic_regimen.regimen_status,https://phenopacket-schema.readthedocs.io/en/latest/therapeutic-regimen.html#regimen-status
+174,CLINICAL,Treatment,treatment_type,,medical_actions[].action,https://phenopacket-schema.readthedocs.io/en/latest/medical-action.html
+175,ANALYSIS,Analysis,variant_calling_strategy,,,
+176,ANALYSIS,Analysis,variant_class,,,
+177,CLINICAL,Demographic,vital_status,,subject.vital_status.status,https://phenopacket-schema.readthedocs.io/en/latest/vital-status.html#status
+178,ANALYSIS,Workflow,workflow_name,,,
+179,ANALYSIS,Workflow,workflow_url,,,
+180,ANALYSIS,Workflow,workflow_version,,,

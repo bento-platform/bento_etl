@@ -21,7 +21,7 @@ COPY run.dev.bash .
 
 # Install more recent poetry
 # TODO: rm once included in base image
-RUN pip install --no-cache-dir poetry==2.1.3
+RUN pip install --no-cache-dir poetry==2.2.1
 
 RUN poetry config virtualenvs.create false && \
     poetry --no-cache install --no-root

@@ -1,0 +1,36 @@
+index,Domain,Entity,Field,Experiments
+1,ANALYSIS,Analysis,analysisType,experiments.experiment_results[].extra_properties.analysis_type
+2,ANALYSIS,Analysis,data_category,experiments.experiment_results[].data_output_type
+3,ANALYSIS,Analysis,genome_annotation,experiments.experiment_results[].genome_assembly_id
+4,ANALYSIS,Analysis,submitter_experiment_id,experiments.id
+5,ANALYSIS,Analysis,submitter_sample_id,experiments.biosample
+6,ANALYSIS,Analysis,variant_calling_strategy,experiments.experiment_results[].extra_properties.variant_calling_strategy
+7,ANALYSIS,Analysis,variant_class,experiments.experiment_results[].extra_properties.variant_class
+8,BIOSPECIMEN,Experiment,assay_type_code,experiments.experiment_ontology[].id
+9,BIOSPECIMEN,Experiment,assay_type_term,experiments.experiment_ontology[].label
+10,BIOSPECIMEN,Experiment,experiment_design,experiments.extraction_protocol
+11,BIOSPECIMEN,Experiment,experiment_type,experiments.study_type
+12,BIOSPECIMEN,Experiment,instrument,experiments.instrument.identifier
+13,BIOSPECIMEN,Experiment,instrument_metadata,experiments.instrument.description
+14,BIOSPECIMEN,Experiment,platform,experiments.instrument.platform
+15,BIOSPECIMEN,Experiment,sequencing_protocol,experiments.extraction_protocol
+16,BIOSPECIMEN,Experiment,submitter_experiment_id,experiments.id
+17,BIOSPECIMEN,Experiment,submitter_sample_id,experiments.biosample
+18,ANALYSIS,File,dataType,experiments.experiment_results[].data_output_type
+19,ANALYSIS,File,fileAccess,experiments.experiment_results[].extra_properties.file_access
+20,ANALYSIS,File,fileMd5sum,experiments.experiment_results[].extra_properties.filemd5sum
+21,ANALYSIS,File,fileName,experiments.experiment_results.filename
+22,ANALYSIS,File,fileName,experiments.experiment_results.url
+23,ANALYSIS,File,fileSize,experiments.experiment_results[].extra_properties.file_size
+24,ANALYSIS,File,fileType,experiments.experiment_results[].file_format
+25,BIOSPECIMEN,Read Group,insert_size,experiments.experiment_results[].extra_properties.insert_size
+26,BIOSPECIMEN,Read Group,library_description,experiments.experiment_results[].extra_properties.library_description
+27,BIOSPECIMEN,Read Group,library_layout,experiments.experiment_results[].extra_properties.library_layout
+28,BIOSPECIMEN,Read Group,library_name,experiments.experiment_results[].extra_properties.library_name
+29,BIOSPECIMEN,Read Group,platform_unit,experiments.instrument.model
+30,BIOSPECIMEN,Read Group,read_group_id_in_bam,experiments.experiment_results[].extra_properties..read_group_id_in_bam
+31,BIOSPECIMEN,Read Group,read_length_r1,experiments.experiment_results[].extra_properties.read_length_r1
+32,BIOSPECIMEN,Read Group,read_length_r2,experiments.experiment_results[].extra_properties.read_length_r2
+33,BIOSPECIMEN,Sample,molecule_type_term,experiments.molecule_ontology.label
+34,BIOSPECIMEN,Sample,molecule_type_id,experiments.molecule_ontology.id
+35,BIOSPECIMEN,Sample,molecule_type_term,experiments.molecule
