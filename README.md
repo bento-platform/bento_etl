@@ -24,7 +24,7 @@ TODO!
 - Transformers
   - Configure a JSON to Phenopackets transformer (**WIP**)
   - Configure a JSON to Experiments transformer (**WIP**)
-  - Configure a passthrough transformer (ROADMAP)
+  - ~Configure a passthrough transformer (ROADMAP)~
   - Configure a CSV to Phenopackets transformer (ROADMAP)
   - Configure a CSV to Experiments transformer (ROADMAP)
   - Configure a VCF to Parquet transformer (ROADMAP)

@@ -29,9 +29,10 @@ db = get_job_status_db(logger, config)  # pyright: ignore[reportArgumentType]
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     if config.testing:
+        # tests with in-memory DB
         logger.info("Handing off control to testing env for lifespan events")
         yield
-    else:
+    else: # pragma: no cover
         logger.info("Starting up database...")
         db.setup()
         yield
