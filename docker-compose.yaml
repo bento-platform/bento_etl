@@ -10,6 +10,8 @@ services:
       - BENTO_AUTHZ_SERVICE_URL=""
       - BENTO_AUTHZ_ENABLED=False
       - INTERNAL_PORT=5000
+      # OPTIONAL: temp hack to authenticate with PCGL submission service
+      - EXTRACTOR_BEARER_TOKEN
     healthcheck:
       test: [ "CMD", "curl", "http://localhost:5000/service-info" ]
       timeout: 5s

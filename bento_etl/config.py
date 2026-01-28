@@ -25,11 +25,20 @@ class Config(BentoFastAPIBaseConfig):
     etl_client_id: str = ""
     etl_client_secret: str = ""
     bento_openid_config_url: str = ""
+    testing: bool = False
+
+    # database
+    # TODO: mount to volume, allow test with a PG DB
+    db_name: str = "bento_etl.db"
+
+    # Extractor API auth
+    # TODO: temp hack to authenticate with PCGL submission service, replace with a generic OIDC service flow later
+    extractor_bearer_token: str = ""
 
 
 @lru_cache
 def get_config():
-    return Config()
+    return Config()  # type: ignore
 
 
 ConfigDependency = Annotated[Config, Depends(get_config)]

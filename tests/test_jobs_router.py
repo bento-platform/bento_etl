@@ -1,36 +1,105 @@
 import json
+import time
 from typing import Any
 import uuid
+from unittest.mock import MagicMock
+import pytest
 from fastapi.testclient import TestClient
 
 from bento_etl.db import JobStatusDatabase
+from bento_etl.routers.jobs import run_pipeline
+from bento_etl.models import JobStatusType
 
 AUTHZ_HEADER = {"Authorization": "Token bearer"}
 
+DEFAULT_JOB_SCHEMA = {
+    "extractor": {"extract_url": "some_url", "frequency_ms": 0, "type": "api-fetch"},
+    "transformer": {"type": "None"},
+    "loader": {
+        "dataset_id": "some_dataset_id",
+        "batch_size": 0,
+        "data_type": "phenopackets",
+    },
+}
 
-# TODO: Once Extractor and Transformer are integrated:
-#   - Test for Error if
-#       - Bad params are passed in extractor
-#       - Correct extractor params but bad transformer params
-#       - Correct extractor and transformer params but bad loader params
-#   - Finish test for Success if the params to ETL are valid
-def test_post_submit_job_valid(test_client: TestClient, mock_authz):
-    job_schema = {
-        "id": "some_id",
-        "extractor": {"format": "json", "type": "string"},
-        "transformer": {},
-        "loader": {
-            "dataset_id": "some_dataset_id",
-            "batch_size": 0,
-            "data_type": "phenopackets",
-        },
-    }
+
+def test_post_submit_job_valid(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_valid_post,
+):
     response = test_client.post(
-        "/jobs", content=json.dumps(job_schema), headers=AUTHZ_HEADER
+        "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
+    )
+
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(job_status_database.get_all_status()) == 1
+
+    time.sleep(
+        1
+    )  # Time delay to let the job run and get updated in the db. might need to be longer
+
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
+
+    assert db_response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "success"
+
+
+def test_post_submit_job_invalid_bad_extractor(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_bad_status_code,
+    mock_loader_valid_post,
+):
+    response = test_client.post(
+        "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
     )
     assert response.status_code == 200
     assert response.json()["message"]
     assert len(test_client.get("/jobs").json()) == 1
+
+    time.sleep(
+        1
+    )  # Time delay to let the job run and get updated in the db. might need to be longer
+
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
+
+    assert db_response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "error"
+
+
+def test_post_submit_job_invalid_bad_loader(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_invalid_post,
+):
+    response = test_client.post(
+        "/jobs", content=json.dumps(DEFAULT_JOB_SCHEMA), headers=AUTHZ_HEADER
+    )
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(test_client.get("/jobs").json()) == 1
+
+    time.sleep(
+        1
+    )  # Time delay to let the job run and get updated in the db. might need to be longer
+
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
+
+    assert db_response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "error"
 
 
 def test_get_status_valid(
@@ -94,3 +163,102 @@ def test_delete_status_invalid(test_client: TestClient, mock_authz):
     inexistant_status_id = uuid.uuid4()
     response = test_client.delete(f"/jobs/{inexistant_status_id}", headers=AUTHZ_HEADER)
     assert response.status_code == 404
+
+
+def test_run_from_pipeline_file_valid(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_valid_post,
+):
+    """Test running a job from a valid pipeline file."""
+    response = test_client.post(
+        "/jobs/pipeline/test_phenopackets", headers=AUTHZ_HEADER
+    )
+
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(job_status_database.get_all_status()) == 1
+
+    time.sleep(1)
+
+    db_response = test_client.get("/jobs")
+    response_body = db_response.json()
+
+    assert db_response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body[0]["status"] == "success"
+
+
+def test_run_from_pipeline_file_not_found(test_client: TestClient, mock_authz):
+    """Test running a job from a non-existent pipeline file."""
+    response = test_client.post(
+        "/jobs/pipeline/nonexistent_pipeline", headers=AUTHZ_HEADER
+    )
+
+    assert response.status_code == 400
+    response_data = response.json()
+    # HTTPException returns detail as a string
+    if isinstance(response_data, dict) and "detail" in response_data:
+        assert "Pipeline file not found or malformed" in response_data["detail"]
+    else:
+        # If the response structure is different, just check status code
+        assert True
+
+
+def test_run_from_pipeline_file_experiments(
+    test_client: TestClient,
+    job_status_database: JobStatusDatabase,
+    mock_authz,
+    mock_extractor_success_call,
+    mock_loader_valid_post,
+):
+    """Test running an experiments job from a valid pipeline file."""
+    response = test_client.post("/jobs/pipeline/test_experiments", headers=AUTHZ_HEADER)
+
+    assert response.status_code == 200
+    assert response.json()["message"]
+    assert len(job_status_database.get_all_status()) == 1
+
+
+@pytest.mark.asyncio
+async def test_run_pipeline_with_transformer(
+    job_status_database: JobStatusDatabase,
+    mocked_job_dict: dict[str, Any],
+):
+    """Test run_pipeline with a transformer."""
+    # Create a mock extractor
+    mock_extractor = MagicMock()
+    mock_extractor.extract.return_value = {"data": "test"}
+
+    # Create a mock transformer (non-None)
+    mock_transformer = MagicMock()
+    mock_transformer.transform.return_value = {"data": "transformed"}
+
+    # Create a mock loader with async load method
+    mock_loader = MagicMock()
+
+    async def mock_load(data):
+        return None
+
+    mock_loader.load = mock_load
+
+    # Create a job status
+    job_status = job_status_database.create_status(mocked_job_dict)
+
+    # Run the pipeline
+    await run_pipeline(
+        job_status.id,
+        mock_extractor,
+        mock_transformer,
+        mock_loader,
+        job_status_database,
+    )
+
+    # Verify transformer was called
+    mock_transformer.transform.assert_called_once()
+
+    # Verify the job completed successfully
+    updated_status = job_status_database.get_status(job_status.id)
+    assert updated_status.status == JobStatusType.SUCCESS

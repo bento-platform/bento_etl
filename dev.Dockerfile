@@ -1,4 +1,4 @@
-FROM ghcr.io/bento-platform/bento_base_image:python-debian-2025.05.05
+FROM ghcr.io/bento-platform/bento_base_image:python-debian-2026.01.14
 
 LABEL org.opencontainers.image.description="Local development image for the Bento ETL service."
 LABEL devcontainer.metadata='[{ \
@@ -16,6 +16,7 @@ WORKDIR /etl
 COPY pyproject.toml .
 COPY poetry.lock .
 
+COPY entrypoint.bash .
 COPY run.dev.bash .
 
 # Install more recent poetry
@@ -27,4 +28,5 @@ RUN poetry config virtualenvs.create false && \
 
 ENV BENTO_CONTAINER_LOCAL=true
 
+ENTRYPOINT [ "bash", "./entrypoint.bash" ]
 CMD [ "bash", "./run.dev.bash" ]

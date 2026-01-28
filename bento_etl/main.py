@@ -22,17 +22,23 @@ BENTO_SERVICE_INFO: BentoExtraServiceInfo = {
 }
 
 config = get_config()
-logger = get_logger(config)
-db = get_job_status_db(logger)
+logger = get_logger(config)  # pyright: ignore[reportArgumentType]
+db = get_job_status_db(logger, config)  # pyright: ignore[reportArgumentType]
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    logger.info("Starting up database...")
-    db.setup()
-    yield
-    logger.info("Shutting down database...")
-    logger.info("Finished shutting down database.")
+    if config.testing:
+        # tests with in-memory DB
+        logger.info("Handing off control to testing env for lifespan events")
+        yield
+    else:  # pragma: no cover
+        logger.info("Starting up database...")
+        db.setup()
+        yield
+        logger.info("Shutting down database...")
+        db.engine.dispose()
+        logger.info("Finished shutting down database.")
 
 
 app = BentoFastAPI(
@@ -49,7 +55,7 @@ app = BentoFastAPI(
 app.include_router(job_router)
 
 # Dummy data source router for dev work
-if config.bento_debug:
-    from .routers.test_sources import test_data_source_router
+if config.bento_debug or config.testing:
+    from .routers.test_sources import data_source_test_router
 
-    app.include_router(test_data_source_router)
+    app.include_router(data_source_test_router)

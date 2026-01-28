@@ -1,6 +1,8 @@
 from fastapi import Depends
 from typing import Annotated
 
+from bento_etl.config import ConfigDependency
+from bento_etl.extractors.api_fetch_extractor import ApiPollExtractor
 from bento_etl.extractors.base import BaseExtractor
 from bento_etl.logger import LoggerDependency
 from bento_etl.models import Job
@@ -8,14 +10,20 @@ from bento_etl.models import Job
 __all__ = ["get_extractor", "ExtractorDep"]
 
 
-def get_extractor(job: Job, logger: LoggerDependency):
+def get_extractor(
+    job: Job, logger: LoggerDependency, config: ConfigDependency
+) -> BaseExtractor:
     # returns the appropriate extractor instance depending on the job description
-    # TODO: implement dependency injection logic once we have Job model and concrete extractors
-    # if job.extractor.type == "http_poll":
-    #   return HTTPExtractor(job.extractor)
-
-    # TODO: should probably raise if dependency cannot be provided from job details
-    return BaseExtractor(logger)
+    if job.extractor.type == "api-fetch":
+        return ApiPollExtractor(
+            logger=logger,
+            endpoint=job.extractor.extract_url,
+            http_verb=job.extractor.http_verb,
+            expected_status_code=job.extractor.expected_status_code,
+            bearer_token=config.extractor_bearer_token,
+        )
+    else:
+        raise NotImplementedError
 
 
 ExtractorDep = Annotated[BaseExtractor, Depends(get_extractor)]

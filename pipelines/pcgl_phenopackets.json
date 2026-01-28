@@ -1,0 +1,14 @@
+{
+    "extractor": {
+        "extract_url": "https://submission.ingress.dev.k8s.pcgl.dev-sd4h.ca/data/category/2", 
+        "type": "api-fetch"
+    },
+    "transformer": {
+        "type": "None"
+    },
+    "loader": {
+        "dataset_id": "some_dataset_id",
+        "batch_size": 0,
+        "data_type": "phenopackets"
+    }
+}
