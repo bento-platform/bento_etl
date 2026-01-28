@@ -54,7 +54,7 @@ app = BentoFastAPI(
 app.include_router(job_router)
 
 # Dummy data source router for dev work
-if config.bento_debug:
+if config.bento_debug or config.testing:
     from .routers.test_sources import data_source_test_router
 
     app.include_router(data_source_test_router)

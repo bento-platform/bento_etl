@@ -107,7 +107,7 @@ async def run_from_pipeline_file(
             status_code=400, detail=f"Pipeline file not found or malformed: {e}"
         )
 
-    extractor = get_extractor(job, logger)
+    extractor = get_extractor(job, logger, config)
     transformer = get_transformer(job, logger)
     loader = get_loader(job, logger, config)
 
