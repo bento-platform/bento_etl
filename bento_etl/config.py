@@ -35,6 +35,15 @@ class Config(BentoFastAPIBaseConfig):
     # TODO: temp hack to authenticate with PCGL submission service, replace with a generic OIDC service flow later
     extractor_bearer_token: str = ""
 
+    # S3 source config
+    s3_endpoint: str = ""
+    s3_allowed_buckets: list[str] = []
+    s3_region: str = ""
+    s3_access_key: str = ""
+    s3_secret_key: str = ""
+    s3_validate_ssl: bool = True
+    s3_use_https: bool = True
+
 
 @lru_cache
 def get_config():

@@ -8,6 +8,12 @@ from sqlmodel import JSON, Column, Enum as SQLModelEnum, Field, SQLModel
 __all__ = ["Job"]
 
 
+class S3ExtractStep(BaseModel):
+    bucket_name: str
+    object_key: str
+    parse_as: str = Literal["JSONL, JSON"]
+
+
 class ExtractStep(BaseModel):
     """
     Class to describe an Extractor step to run in a pipeline job.
