@@ -7,7 +7,7 @@ from bento_etl.loaders.base import BaseLoader
 from bento_etl.loaders.dependencies import get_loader
 from bento_etl.loaders.experiments_loader import ExperimentsLoader
 from bento_etl.loaders.phenopackets_loader import PhenopacketsLoader
-from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
+from bento_etl.models import Job, LoadStep, TransformStep, ApiFetchExtractStep
 
 
 async def mock_long_task():
@@ -17,7 +17,7 @@ async def mock_long_task():
 
 def mock_job_with_data_type(data_type: str):
     return Job(
-        extractor=ExtractStep(
+        extractor=ApiFetchExtractStep(
             extract_url="some_url",
             type="api-fetch",
             http_verb="GET",

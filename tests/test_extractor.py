@@ -4,13 +4,13 @@ from unittest.mock import MagicMock
 from bento_etl.extractors.api_fetch_extractor import ApiPollExtractor
 from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import get_extractor
-from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
+from bento_etl.models import Job, LoadStep, TransformStep, ApiFetchExtractStep
 from bento_etl.config import Config
 
 
 def mock_job_with_api_fetch_extractor():
     return Job(
-        extractor=ExtractStep(
+        extractor=ApiFetchExtractStep(
             extract_url="some_url",
             type="api-fetch",
             http_verb="GET",

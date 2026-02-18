@@ -4,7 +4,7 @@ services:
     ports:
       - 5000:5000
     environment:
-      - BENTO_UID=${UID}
+      - BENTO_UID
       - BENTO_DEBUG=False
       - CORS_ORIGINS="*"
       - BENTO_AUTHZ_SERVICE_URL=""

@@ -12,6 +12,7 @@ class ExtractStep(BaseModel):
     """
     Class to describe an Extractor step to run in a pipeline job.
     """
+
     type: Literal["api-fetch", "s3"]
 
 
@@ -21,9 +22,11 @@ class ApiFetchExtractStep(ExtractStep):
     http_verb: str = "GET"
     expected_status_code: int = 200
 
+
 class S3ExtractStep(BaseModel):
     object_key: str
     type: Literal["s3"]
+
 
 class TransformStep(BaseModel):
     """

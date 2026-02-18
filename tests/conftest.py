@@ -10,7 +10,7 @@ import json
 
 from bento_etl.db import JobStatusDatabase, get_job_status_db
 from bento_etl.logger import get_logger, BoundLogger
-from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
+from bento_etl.models import Job, LoadStep, TransformStep, ApiFetchExtractStep
 
 os.environ["BENTO_DEBUG"] = "true"
 os.environ["BENTO_VALIDATE_SSL"] = "false"
@@ -65,7 +65,7 @@ def test_client(job_status_database):
 
 @pytest.fixture
 def mocked_job_dict():
-    extractor = ExtractStep(
+    extractor = ApiFetchExtractStep(
         extract_url="some_url",
         type="api-fetch",
         http_verb="GET",

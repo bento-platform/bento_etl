@@ -191,8 +191,8 @@ This ETL Job object performs the following:
 We recommend using docker compose for local dev work:
 
 ```
-# Set UID for volume permissions
-export UID=$(id -u)
+# Set BENTO_UID for volume permissions
+export BENTO_UID=$(id -u)
 
 # Spin up the ETL service
 docker compose -f docker-compose.dev.yaml up -d

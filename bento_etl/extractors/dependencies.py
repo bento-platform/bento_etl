@@ -24,11 +24,7 @@ def get_extractor(
             bearer_token=config.extractor_bearer_token,
         )
     elif isinstance(job.extractor, S3ExtractStep):
-        return S3Extractor(
-            logger=logger,
-            config=config,
-            ext_config=job.extractor
-        )
+        return S3Extractor(logger=logger, config=config, ext_config=job.extractor)
     else:
         raise NotImplementedError
 

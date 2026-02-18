@@ -9,7 +9,6 @@ from bento_etl.config import Config
 
 
 class S3Extractor(BaseExtractor):
-
     def __init__(self, logger: Logger, config: Config, ext_config: S3ExtractStep):
         s3_protocol = "https" if config.s3_use_https else "http"
 
