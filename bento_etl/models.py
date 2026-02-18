@@ -8,21 +8,22 @@ from sqlmodel import JSON, Column, Enum as SQLModelEnum, Field, SQLModel
 __all__ = ["Job"]
 
 
-class S3ExtractStep(BaseModel):
-    bucket_name: str
-    object_key: str
-
-
 class ExtractStep(BaseModel):
     """
     Class to describe an Extractor step to run in a pipeline job.
     """
+    type: Literal["api-fetch", "s3"]
 
-    extract_url: str
+
+class ApiFetchExtractStep(ExtractStep):
     type: Literal["api-fetch"]
+    extract_url: str
     http_verb: str = "GET"
     expected_status_code: int = 200
 
+class S3ExtractStep(BaseModel):
+    object_key: str
+    type: Literal["s3"]
 
 class TransformStep(BaseModel):
     """
@@ -43,7 +44,7 @@ class LoadStep(BaseModel):
 
 
 class Job(BaseModel):
-    extractor: ExtractStep
+    extractor: ApiFetchExtractStep | S3ExtractStep
     transformer: TransformStep
     loader: LoadStep
 

@@ -1,9 +1,7 @@
 from bento_lib.config.pydantic import BentoFastAPIBaseConfig
 from fastapi import Depends
 from functools import lru_cache
-from typing import Annotated, List
-from pydantic import field_validator
-from pydantic_settings import ForceDecode
+from typing import Annotated
 
 from .constants import SERVICE_GROUP, SERVICE_ARTIFACT
 
@@ -44,10 +42,8 @@ class Config(BentoFastAPIBaseConfig):
     s3_secret_key: str = ""
     s3_validate_ssl: bool = True
     s3_use_https: bool = True
+    s3_bucket: str = ""
 
-    # Since bento_etl will sometimes handle S3 credentials that can access multiple buckets,
-    # the buckets that bento_etl can use must be explicitly configured for data safety.
-    s3_allowed_buckets: Annotated[list[str], ForceDecode]
 
 @lru_cache
 def get_config():

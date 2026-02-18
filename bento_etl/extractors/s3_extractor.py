@@ -20,20 +20,10 @@ class S3Extractor(BaseExtractor):
         self.secret_key = config.s3_secret_key
         self.validate_ssl = config.s3_validate_ssl
         self.use_https = config.s3_use_https
-
-        allowed_buckets = config.s3_allowed_buckets
+        self.bucket = config.s3_bucket
 
         # Extraction specific config
-        self.bucket = ext_config.bucket_name
         self.object_key = ext_config.object_key
-
-        # Raise if bucket is not in the allowed buckets list
-        if allowed_buckets and ext_config.bucket_name not in allowed_buckets:
-            raise Exception(f"Bucket {self.bucket} is not in the allowed buckets list")
-        
-        # Raise if allowed buckets list is undefined
-        if not allowed_buckets:
-            raise Exception("Config S3_ALLOWED_BUCKETS list is empty, allowed buckets must be explicitly configured.")
 
         super().__init__(logger)
 
@@ -47,14 +37,16 @@ class S3Extractor(BaseExtractor):
             verify=self.validate_ssl,
         )
 
-    def _parse_body(self, body: StreamingBody) -> dict:
+    def _parse_body(self, body: StreamingBody) -> list[dict]:
         if self.object_key.endswith(".json"):
+            self.logger.info("Parsing object as JSON")
             return json.loads(body.read())
         elif self.object_key.endswith(".jsonl"):
+            self.logger.info("Parsing object as new-line-delimited JSON (JSONL)")
             data = []
-            for index, line_bytes in enumerate(body.iter_lines()):
+            for line_bytes in body.iter_lines():
                 line_str = line_bytes.decode("utf-8")
-                data[index] = line_str
+                data.append(json.loads(line_str))
             return data
         else:
             file_ext = self.object_key.split(".")[-1]

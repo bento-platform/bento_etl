@@ -80,8 +80,8 @@ The `s3` extractor can be used to extract data from an S3 object store.
 The extractor will be configured if the following environement variables are set:
 ```bash
 export S3_ENDPOINT=my-object-store-endpoint.com
-export S3_ALLOWED_BUCKETS='["allowed_bucket_1", "allowed_bucket_2"]'
-export S3_REGION="us-east-1"
+export S3_BUCKET=my-bucket
+export S3_REGION=us-east-1
 export S3_ACCESS_KEY=<S3 ACCESS KEY>
 export S3_SECRET_KEY=<S3 SECRET KEY>
 # Default settings
@@ -96,10 +96,6 @@ With the configuration above, `bento_etl` will instantiate an `S3Extractor` extr
 targets the S3 endpoint `https://my-object-store-endpoint.com` with SSL validation.
 
 The S3Extractor will only be able to connect to the S3 buckets `allowed_bucket_1` and `allowed_bucket_2`.
-
-> [!IMPORTANT]
-> `bento_etl` will sometimes handle S3 credentials that can access multiple buckets, the buckets that 
-> `bento_etl` can use must be explicitly configured in `S3_ALLOWED_BUCKETS` as a valid JSON array string.
 
 
 #### Extractor roadmap
