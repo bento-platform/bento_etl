@@ -36,11 +36,12 @@ In both cases, the actual JSON Job definition is the same.
 
 Pre-defined pipelines can be built into images, or mounted as volumes for convenient configuration.
 
-### Extractor
+### Extractors
 
 The `Extractor` configuration defines how bento_etl extracts data at the beginning of an ETL pipeline.
 
-Currently, the only extractor type supported is `api-fetch`, where data if pulled from an HTTP(S) API.
+#### REST API fetch
+The `api-fetch` extractor can be used to fetch data from a REST API endpoint over HTTP(S).
 
 To connect to external APIs, `bento_etl` will sometimes need to be authorized on private endpoints.
 
@@ -72,9 +73,36 @@ Example extractor JSON config:
 }
 ```
 
+#### S3 extractor
+
+The `s3` extractor can be used to extract data from an S3 object store.
+
+The extractor will be configured if the following environement variables are set:
+```bash
+export S3_ENDPOINT=my-object-store-endpoint.com
+export S3_ALLOWED_BUCKETS='["allowed_bucket_1", "allowed_bucket_2"]'
+export S3_REGION="us-east-1"
+export S3_ACCESS_KEY=<S3 ACCESS KEY>
+export S3_SECRET_KEY=<S3 SECRET KEY>
+# Default settings
+# export S3_VALIDATE_SSL="true"
+# export S3_USE_HTTPS="true"
+
+# Starts bento_etl with the env vars above
+docker compose up
+```
+
+With the configuration above, `bento_etl` will instantiate an `S3Extractor` extractor dependency that 
+targets the S3 endpoint `https://my-object-store-endpoint.com` with SSL validation.
+
+The S3Extractor will only be able to connect to the S3 buckets `allowed_bucket_1` and `allowed_bucket_2`.
+
+> [!IMPORTANT]
+> `bento_etl` will sometimes handle S3 credentials that can access multiple buckets, the buckets that 
+> `bento_etl` can use must be explicitly configured in `S3_ALLOWED_BUCKETS` as a valid JSON array string.
+
+
 #### Extractor roadmap
-- S3 polling extractor
-  - Extract data from an S3 bucket
 - Extractor OIDC auth configuration
 - CSV extractors
 

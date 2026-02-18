@@ -182,3 +182,5 @@ cython_debug/
 
 # SQLite database file
 *.db
+
+.s3.env

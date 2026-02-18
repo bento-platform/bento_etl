@@ -11,7 +11,6 @@ __all__ = ["Job"]
 class S3ExtractStep(BaseModel):
     bucket_name: str
     object_key: str
-    parse_as: str = Literal["JSONL, JSON"]
 
 
 class ExtractStep(BaseModel):
