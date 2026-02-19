@@ -2,9 +2,16 @@ import pytest
 from unittest.mock import MagicMock
 
 from bento_etl.extractors.api_fetch_extractor import ApiPollExtractor
+from bento_etl.extractors.s3_extractor import S3Extractor
 from bento_etl.extractors.base import BaseExtractor
 from bento_etl.extractors.dependencies import get_extractor
-from bento_etl.models import Job, LoadStep, TransformStep, ApiFetchExtractStep
+from bento_etl.models import (
+    Job,
+    LoadStep,
+    TransformStep,
+    ApiFetchExtractStep,
+    S3ExtractStep,
+)
 from bento_etl.config import Config
 
 
@@ -21,11 +28,24 @@ def mock_job_with_api_fetch_extractor():
     )
 
 
+def mock_job_with_s3_extractor():
+    return Job(
+        extractor=S3ExtractStep(object_key="some-object.jsonl"),
+        transformer=TransformStep(type="None"),
+        loader=LoadStep(dataset_id="some_id", batch_size=0, data_type="experiments"),
+    )
+
+
 class TestExtractorDependencies:
     def test_get_extractor_api_fetch(self, logger, config: Config):
         job = mock_job_with_api_fetch_extractor()
         extractor = get_extractor(job, logger, config)
-        assert type(extractor) is ApiPollExtractor
+        assert isinstance(extractor, ApiPollExtractor)
+
+    def test_get_extractor_s3(self, logger, config: Config):
+        job = mock_job_with_s3_extractor()
+        extractor = get_extractor(job, logger, config)
+        assert isinstance(extractor, S3Extractor)
 
     def test_get_extractor_invalid_type(self, logger, config: Config):
         """Test that get_extractor raises NotImplementedError for invalid extractor type."""
@@ -67,3 +87,16 @@ class TestApiFetchExtractor:
         extractor = ApiPollExtractor(logger, "http://empty_url")
         with pytest.raises(Exception):
             extractor.extract()
+
+
+class TestS3Extractor:
+
+    def test_extract_valid_json(
+        self, logger, config, load_phenopacket_data, mock_s3_extractor_pheno_json, mocked_s3
+    ):
+        # Pheno data in JSONL
+        extractor = S3Extractor(
+            logger, config, S3ExtractStep(object_key="phenopackets.json")
+        )
+        response = extractor.extract()
+        assert response == load_phenopacket_data

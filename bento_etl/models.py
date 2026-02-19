@@ -5,7 +5,17 @@ import uuid
 from pydantic import BaseModel
 from sqlmodel import JSON, Column, Enum as SQLModelEnum, Field, SQLModel
 
-__all__ = ["Job"]
+__all__ = [
+    "Job",
+    "ExtractStep",
+    "ApiFetchExtractStep",
+    "S3ExtractStep",
+    "TransformStep",
+    "LoadStep",
+    "Job",
+    "JobStatus",
+    "JobStatusType",
+]
 
 
 class ExtractStep(BaseModel):
@@ -13,11 +23,11 @@ class ExtractStep(BaseModel):
     Class to describe an Extractor step to run in a pipeline job.
     """
 
-    type: Literal["api-fetch", "s3"]
-
 
 class ApiFetchExtractStep(ExtractStep):
-    type: Literal["api-fetch"]
+    type: Literal[
+        "api-fetch"
+    ]  # TODO: rm, we use subclasses instead of a type field now
     extract_url: str
     http_verb: str = "GET"
     expected_status_code: int = 200
@@ -25,7 +35,6 @@ class ApiFetchExtractStep(ExtractStep):
 
 class S3ExtractStep(BaseModel):
     object_key: str
-    type: Literal["s3"]
 
 
 class TransformStep(BaseModel):

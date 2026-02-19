@@ -77,29 +77,77 @@ Example extractor JSON config:
 
 The `s3` extractor can be used to extract data from an S3 object store.
 
-The extractor will be configured if the following environement variables are set:
-```bash
-export S3_ENDPOINT=my-object-store-endpoint.com
-export S3_BUCKET=my-bucket
-export S3_REGION=us-east-1
-export S3_ACCESS_KEY=<S3 ACCESS KEY>
-export S3_SECRET_KEY=<S3 SECRET KEY>
-# Default settings
-# export S3_VALIDATE_SSL="true"
-# export S3_USE_HTTPS="true"
+To configure a `bento_etl` container for S3 access, you must:
+1. Mount an AWS Config file at `/etl/.aws/config`
+2. Mount an AWS Shared Credentials file at `/etl/.aws/credentials`
+3. Set environement variables:
+   1. `AWS_CONFIG_FILE=/etl/.aws/config`
+   2. `AWS_SHARED_CREDENTIALS_FILE=/etl/.aws/credentials`
+   3. `AWS_PROFILE=<NAME OF YOUR PROFILE>`
+   4. `S3_BUCKET=<NAME OF YOUR BUCKET>`
 
-# Starts bento_etl with the env vars above
-docker compose up
+Example of an `/etl/.aws/config` file you can use with an S3 compatible API:
+```
+[default]
+region = us-east-1
+output = json
+
+[profile my-profile]
+region = us-east-1
+services = s3-private
+
+[services s3-private]
+s3 =
+    endpoint_url = https://s3.private.endpoint
+    addressing_style = path
+    signature_version = s3v4
+    use_accelerate_endpoint = false
+    use_dualstack_endpoint = false
+
+s3api =
+    endpoint_url = https://s3.private.endpoint
+    addressing_style = path
+    signature_version = s3v4
 ```
 
+Example of an `/etl/.aws/credentials` file you can use with an S3 compatible API:
+```
+[my-profile]
+aws_access_key_id = <ACCESS KEY ID>
+aws_secret_access_key = <SECRET KEY ID>
+```
+
+> [!IMPORTANT]
+> Make sure that you correctly set `AWS_PROFILE` to a value that is present in the 
+> S3 configuration file.
+
 With the configuration above, `bento_etl` will instantiate an `S3Extractor` extractor dependency that 
-targets the S3 endpoint `https://my-object-store-endpoint.com` with SSL validation.
+targets the S3 endpoint `https://s3.private.endpoint` with SSL validation.
 
-The S3Extractor will only be able to connect to the S3 buckets `allowed_bucket_1` and `allowed_bucket_2`.
+The S3Extractor will only be able to connect to the S3 bucket configured in `S3_BUCKET`.
 
+Submitting an ETL Job with an S3 extraction step is as simple as making a `POST` to `/jobs` with a body like this:
+```JSON
+{
+  "extractor": {
+    "object_key": "path/to/a/json/file.json"
+  },
+  "transformer": {
+    "type": "None"
+  },
+  "loader": {
+    "dataset_id": "",
+    "batch_size": 0,
+    "data_type": "phenopackets"
+  }
+}
+```
+
+> [!WARNING]
+> The S3Extractor currently only handles the `.json` and `.jsonl` (new-line delimited JSON) file extentions.
+> New extentions and file types will be added over time (CSVs, VCFs, etc ...).
 
 #### Extractor roadmap
-- Extractor OIDC auth configuration
 - CSV extractors
 
 ### Transformers
@@ -190,7 +238,7 @@ This ETL Job object performs the following:
 
 We recommend using docker compose for local dev work:
 
-```
+```bash
 # Set BENTO_UID for volume permissions
 export BENTO_UID=$(id -u)
 
