@@ -90,9 +90,13 @@ class TestApiFetchExtractor:
 
 
 class TestS3Extractor:
-
     def test_extract_valid_json(
-        self, logger, config, load_phenopacket_data, mock_s3_extractor_pheno_json, mocked_s3
+        self,
+        logger,
+        config,
+        load_phenopacket_data,
+        mock_s3_extractor_pheno_json,
+        mocked_s3,
     ):
         # Pheno data in JSONL
         extractor = S3Extractor(

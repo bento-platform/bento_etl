@@ -32,7 +32,9 @@ class S3Extractor(BaseExtractor):
             raise Exception(f"No parsing method supports file extension: {file_ext}")
 
     def extract(self):
-        response: dict = self.s3_client.get_object(Bucket=self.bucket, Key=self.object_key)
+        response: dict = self.s3_client.get_object(
+            Bucket=self.bucket, Key=self.object_key
+        )
 
         body: StreamingBody = response.get("Body")
         if not body:

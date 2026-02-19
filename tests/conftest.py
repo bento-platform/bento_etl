@@ -158,6 +158,7 @@ def aws_credentials():
     os.environ["S3_ACCESS_KEY"] = "testing"
     os.environ["S3_SECRET_KEY"] = "testing"
 
+
 @pytest.fixture(scope="function")
 def s3(aws_credentials):
     """
@@ -165,6 +166,7 @@ def s3(aws_credentials):
     """
     with mock_aws():
         yield boto3.client("s3", region_name="us-east-1")
+
 
 @pytest.fixture(scope="function")
 def mocked_s3(aws_credentials):
@@ -174,11 +176,17 @@ def mocked_s3(aws_credentials):
     with mock_aws():
         yield
 
+
 @pytest.fixture
 def mock_s3_extractor_pheno_json(mocked_s3):
     s3 = boto3.client("s3")
     s3.create_bucket(Bucket="test")
-    s3.put_object(Bucket="test", Key="phenopackets.json", Body="data/synthetic_phenopackets_v2.json")
+    s3.put_object(
+        Bucket="test",
+        Key="phenopackets.json",
+        Body="data/synthetic_phenopackets_v2.json",
+    )
+
 
 #### TRANSFORMER MOCKS
 
