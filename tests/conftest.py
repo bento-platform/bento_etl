@@ -181,11 +181,12 @@ def mocked_s3(aws_credentials):
 def mock_s3_extractor_pheno_json(mocked_s3):
     s3 = boto3.client("s3")
     s3.create_bucket(Bucket="test")
-    s3.put_object(
-        Bucket="test",
-        Key="phenopackets.json",
-        Body="data/synthetic_phenopackets_v2.json",
-    )
+    with open("tests/data/synthetic_phenopackets_v2.json", 'rb') as f:
+        s3.put_object(
+            Bucket="test",
+            Key="phenopackets.json",
+            Body=f,
+        )
 
 
 #### TRANSFORMER MOCKS
