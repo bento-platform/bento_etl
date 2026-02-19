@@ -30,6 +30,7 @@ jobs:
           AWS_SECURITY_TOKEN: testing
           AWS_SESSION_TOKEN: testing
           AWS_DEFAULT_REGION: us-east-1
+          S3_BUCKET: test
         run: |
           poetry run pytest -svv --cov=bento_etl --cov-branch --cov-report xml
       - name: Upload coverage to Codecov
