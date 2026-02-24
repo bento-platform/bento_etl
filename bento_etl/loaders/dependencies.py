@@ -22,7 +22,7 @@ def get_loader(job: Job, logger: LoggerDependency, config: ConfigDependency):
         return ExperimentsLoader(
             logger, config, job.loader.dataset_id, job.loader.batch_size
         )
-    elif job.loader.data_type == "print": # pragma: no cover
+    elif job.loader.data_type == "print":  # pragma: no cover
         return PrintLoader(logger, config)
     else:
         raise NotImplementedError
