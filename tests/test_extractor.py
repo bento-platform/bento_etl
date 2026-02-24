@@ -119,3 +119,11 @@ class TestS3Extractor:
         )
         response = extractor.extract()
         assert response == load_phenopacket_data
+
+    def test_extract_invalid_extension(self, logger, config, mock_s3_pdf_object):
+        # .pdf files are not supported
+        extractor = S3Extractor(
+            logger, config, S3ExtractStep(object_key=mock_s3_pdf_object)
+        )
+        with pytest.raises(Exception):
+            extractor.extract()

@@ -197,6 +197,21 @@ def mock_s3_extractor_pheno_jsonl(mocked_s3):
         )
 
 
+@pytest.fixture
+def mock_s3_pdf_object(mocked_s3) -> str:
+    s3 = boto3.client("s3")
+    s3.create_bucket(Bucket="test")
+
+    # Creates an object test-doc.pdf with empty bytes to test file extention detection
+    object_name = "test-doc.pdf"
+    s3.put_object(
+        Bucket="test",
+        Key=object_name,
+        Body=b"",
+    )
+    return object_name
+
+
 #### TRANSFORMER MOCKS
 
 
