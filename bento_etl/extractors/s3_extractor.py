@@ -36,8 +36,5 @@ class S3Extractor(BaseExtractor):
             Bucket=self.bucket, Key=self.object_key
         )
 
-        body: StreamingBody = response.get("Body")
-        if not body:
-            raise Exception(f"'Body' not found in response for key {self.object_key}")
-
+        body: StreamingBody = response["Body"]
         return self._parse_body(body)
