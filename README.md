@@ -78,15 +78,20 @@ Example extractor JSON config:
 The `s3` extractor can be used to extract data from an S3 object store.
 
 To configure a `bento_etl` container for S3 access, you must:
-1. Mount an AWS Config file at `/etl/.aws/config`
-2. Mount an AWS Shared Credentials file at `/etl/.aws/credentials`
+1. Mount an AWS Config file at `/.aws/config` in the container
+2. Mount an AWS Shared Credentials file at `/.aws/credentials` in the container
 3. Set environement variables:
-   1. `AWS_CONFIG_FILE=/etl/.aws/config`
-   2. `AWS_SHARED_CREDENTIALS_FILE=/etl/.aws/credentials`
+   1. `AWS_CONFIG_FILE=/.aws/config`
+   2. `AWS_SHARED_CREDENTIALS_FILE=/.aws/credentials`
    3. `AWS_PROFILE=<NAME OF YOUR PROFILE>`
    4. `S3_BUCKET=<NAME OF YOUR BUCKET>`
 
-Example of an `/etl/.aws/config` file you can use with an S3 compatible API:
+> [!IMPORTANT]
+> The docker-compose files in this repo assume that you have configured AWS S3 config files at:
+> * `~/.aws/config`
+> * `~/.aws/credentials`
+
+Example of an `/.aws/config` file you can use with an S3 compatible API:
 ```bash
 [default]
 region = us-east-1
@@ -110,7 +115,7 @@ s3api =
     signature_version = s3v4
 ```
 
-Example of an `/etl/.aws/credentials` file you can use with an S3 compatible API:
+Example of an `/.aws/credentials` file you can use with an S3 compatible API:
 ```bash
 [my-profile]
 aws_access_key_id = <ACCESS KEY ID>
