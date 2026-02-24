@@ -152,11 +152,7 @@ def aws_credentials():
     os.environ["AWS_SESSION_TOKEN"] = "testing"
     os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 
-    # TODO: only use default boto/aws env vars
     os.environ["S3_BUCKET"] = "test"
-    os.environ["S3_REGION"] = "us-east-1"
-    os.environ["S3_ACCESS_KEY"] = "testing"
-    os.environ["S3_SECRET_KEY"] = "testing"
 
 
 @pytest.fixture(scope="function")
@@ -185,6 +181,18 @@ def mock_s3_extractor_pheno_json(mocked_s3):
         s3.put_object(
             Bucket="test",
             Key="phenopackets.json",
+            Body=f,
+        )
+
+
+@pytest.fixture
+def mock_s3_extractor_pheno_jsonl(mocked_s3):
+    s3 = boto3.client("s3")
+    s3.create_bucket(Bucket="test")
+    with open("tests/data/synthetic_phenopackets_v2.jsonl", "rb") as f:
+        s3.put_object(
+            Bucket="test",
+            Key="phenopackets.jsonl",
             Body=f,
         )
 

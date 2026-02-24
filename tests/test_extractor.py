@@ -104,3 +104,18 @@ class TestS3Extractor:
         )
         response = extractor.extract()
         assert response == load_phenopacket_data
+
+    def test_extract_valid_jsonl(
+        self,
+        logger,
+        config,
+        load_phenopacket_data,
+        mock_s3_extractor_pheno_jsonl,
+        mocked_s3,
+    ):
+        # Pheno data in JSONL
+        extractor = S3Extractor(
+            logger, config, S3ExtractStep(object_key="phenopackets.jsonl")
+        )
+        response = extractor.extract()
+        assert response == load_phenopacket_data

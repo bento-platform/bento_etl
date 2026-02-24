@@ -32,7 +32,7 @@ services:
     volumes:
       - $PWD:/etl
       # OPTIONAL: mount your ~/.aws and set AWS_PROFILE to use local S3 credentials
-      # - ~/.aws:/etl/.aws
+      - ~/.aws:/etl/.aws
     healthcheck:
       test: [ "CMD", "curl", "http://localhost:5000/service-info" ]
       timeout: 5s
