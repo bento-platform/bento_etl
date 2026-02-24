@@ -127,3 +127,10 @@ class TestS3Extractor:
         )
         with pytest.raises(Exception):
             extractor.extract()
+
+    def test_extract_inexistant_object(self, logger, config):
+        extractor = S3Extractor(
+            logger, config, S3ExtractStep(object_key="this-key-is-not-in-the-bucket")
+        )
+        with pytest.raises(Exception):
+            extractor.extract()
