@@ -16,23 +16,21 @@ services:
       # OPTIONAL: temp hack to authenticate with PCGL submission service
       - EXTRACTOR_BEARER_TOKEN
       # OPTIONAL: S3 extractor config
-      # - AWS_CONFIG_FILE=/etl/.aws/config
-      # - AWS_SHARED_CREDENTIALS_FILE=/etl/.aws/credentials
-      # - AWS_PROFILE=<YOUR AWS PROFILE>
-      # Moto test vars
-      # TODO: set these for the test GH Action
-      - AWS_ACCESS_KEY_ID=testing
-      - AWS_SECRET_ACCESS_KEY=testing
-      - AWS_SECURITY_TOKEN=testing
-      - AWS_SESSION_TOKEN=testing
-      - AWS_DEFAULT_REGION=us-east-1
-      - S3_BUCKET=test
-      # S3 bucket to use
-      # - S3_BUCKET=research-portal-etl-dev
+      - AWS_CONFIG_FILE=/.aws/config
+      - AWS_SHARED_CREDENTIALS_FILE=/.aws/credentials
+      - AWS_PROFILE
+      - S3_BUCKET
+      # TESTING S3:
+      # - AWS_ACCESS_KEY_ID=testing
+      # - AWS_SECRET_ACCESS_KEY=testing
+      # - AWS_SECURITY_TOKEN=testing
+      # - AWS_SESSION_TOKEN=testing
+      # - AWS_DEFAULT_REGION=us-east-1
+      # - S3_BUCKET=test
     volumes:
       - $PWD:/etl
       # OPTIONAL: mount your ~/.aws and set AWS_PROFILE to use local S3 credentials
-      - ~/.aws:/etl/.aws
+      - ~/.aws:/.aws
     healthcheck:
       test: [ "CMD", "curl", "http://localhost:5000/service-info" ]
       timeout: 5s

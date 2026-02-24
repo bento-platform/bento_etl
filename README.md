@@ -87,7 +87,7 @@ To configure a `bento_etl` container for S3 access, you must:
    4. `S3_BUCKET=<NAME OF YOUR BUCKET>`
 
 Example of an `/etl/.aws/config` file you can use with an S3 compatible API:
-```
+```bash
 [default]
 region = us-east-1
 output = json
@@ -111,7 +111,7 @@ s3api =
 ```
 
 Example of an `/etl/.aws/credentials` file you can use with an S3 compatible API:
-```
+```bash
 [my-profile]
 aws_access_key_id = <ACCESS KEY ID>
 aws_secret_access_key = <SECRET KEY ID>
@@ -120,6 +120,20 @@ aws_secret_access_key = <SECRET KEY ID>
 > [!IMPORTANT]
 > Make sure that you correctly set `AWS_PROFILE` to a value that is present in the 
 > S3 configuration file.
+
+Start `bento_etl` with S3 enabled:
+```bash
+# Set the aws config profile
+export AWS_PROFILE=my-profile
+
+# Validate that you can list objects in the bucket 'my-bucket' with the S3 CLI
+aws s3 ls my-bucket
+
+# Set S3_BUCKET env var
+export S3_BUCKET=my-bucket
+
+docker compose up
+```
 
 With the configuration above, `bento_etl` will instantiate an `S3Extractor` extractor dependency that 
 targets the S3 endpoint `https://s3.private.endpoint` with SSL validation.
@@ -138,7 +152,7 @@ Submitting an ETL Job with an S3 extraction step is as simple as making a `POST`
   "loader": {
     "dataset_id": "",
     "batch_size": 0,
-    "data_type": "phenopackets"
+    "data_type": "print"
   }
 }
 ```
@@ -192,15 +206,16 @@ Some container environment variables are important for the loader:
   - `BENTO_OPENID_CONFIG_URL`
 
 Two types of loaders are supported at the moment:
-1. `phenopackets`
-2. `experiments`
+1. `phenopackets`: loads Phenopackets V2 into a Katsu service
+2. `experiments`: loads Experiment Metadata into a Katsu service
+3. `print`: simply prints the items for debugging
 
 Example of a Loader JSON:
 ```JSON
 {
   "dataset_id": "<KATSU DATASET ID TO INGEST INTO>",
   "batch_size": 0,  // number of items to ingest at a time, 0 means all-at-once
-  "data_type": "< phenopackets || experiments >"
+  "data_type": "< phenopackets || experiments || print>"
 }
 ```
 

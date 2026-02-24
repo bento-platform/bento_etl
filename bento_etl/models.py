@@ -45,6 +45,8 @@ class TransformStep(BaseModel):
     type: Literal["None"]
 
 
+# TODO: define "load step" models specific to bento services
+# and do dependency injection based on the model instance presented.
 class LoadStep(BaseModel):
     """
     Class to describe a Loader step to run in a pipeline job.
@@ -52,7 +54,7 @@ class LoadStep(BaseModel):
 
     dataset_id: str
     batch_size: int
-    data_type: Literal["phenopackets", "experiments"]
+    data_type: Literal["phenopackets", "experiments", "print"]
 
 
 class Job(BaseModel):

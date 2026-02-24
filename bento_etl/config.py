@@ -38,13 +38,6 @@ class Config(BentoFastAPIBaseConfig):
     # NOTE: S3 credentials are provided using the default aws/boto3 environment variables
     # https://docs.aws.amazon.com/boto3/latest/guide/credentials.html#environment-variables
 
-    # # S3 source config
-    # s3_endpoint: str = ""
-    # s3_region: str = ""
-    # s3_access_key: str = ""
-    # s3_secret_key: str = ""
-    # s3_validate_ssl: bool = True
-    # s3_use_https: bool = True
     s3_bucket: str = ""
 
 

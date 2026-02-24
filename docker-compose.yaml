@@ -5,7 +5,7 @@ services:
       - 5000:5000
     environment:
       - BENTO_UID
-      - BENTO_DEBUG=False
+      - BENTO_DEBUG=True
       - CORS_ORIGINS="*"
       - BENTO_AUTHZ_SERVICE_URL=""
       - BENTO_AUTHZ_ENABLED=False
@@ -13,13 +13,21 @@ services:
       # OPTIONAL: temp hack to authenticate with PCGL submission service
       - EXTRACTOR_BEARER_TOKEN
       # OPTIONAL: S3 extractor config
-      - AWS_CONFIG_FILE="/etl/.aws/config"
-      - AWS_SHARED_CREDENTIALS_FILE="/etl/.aws/credentials"
-      - AWS_PROFILE="pcgl-dev"
-      - S3_BUCKET # S3 bucket to use
-    # Optional mount your ~/.aws and set AWS_PROFILE to use local S3 credentials
-    # volumes:
-    #   - ~/.aws:/etl/.aws
+      - AWS_CONFIG_FILE=/.aws/config
+      - AWS_SHARED_CREDENTIALS_FILE=/.aws/credentials
+      - AWS_PROFILE
+      - S3_BUCKET
+      # TESTING S3:
+      # - AWS_ACCESS_KEY_ID=testing
+      # - AWS_SECRET_ACCESS_KEY=testing
+      # - AWS_SECURITY_TOKEN=testing
+      # - AWS_SESSION_TOKEN=testing
+      # - AWS_DEFAULT_REGION=us-east-1
+      # - S3_BUCKET=test
+    volumes:
+      - $PWD:/etl
+      # OPTIONAL: mount your ~/.aws and set AWS_PROFILE to use local S3 credentials
+      - ~/.aws:/.aws
     healthcheck:
       test: [ "CMD", "curl", "http://localhost:5000/service-info" ]
       timeout: 5s

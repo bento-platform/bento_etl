@@ -156,15 +156,6 @@ def aws_credentials():
 
 
 @pytest.fixture(scope="function")
-def s3(aws_credentials):
-    """
-    Return a mocked S3 client
-    """
-    with mock_aws():
-        yield boto3.client("s3", region_name="us-east-1")
-
-
-@pytest.fixture(scope="function")
 def mocked_s3(aws_credentials):
     """
     Return a mocked S3 client
