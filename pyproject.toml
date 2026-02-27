@@ -19,6 +19,8 @@ polars = ">=1.30.0,<2.0.0"
 httpx = ">=0.28.1,<0.29.0"
 sqlmodel = ">=0.0.24,<0.0.25"
 uvicorn = ">=0.38.0,<0.39.0"
+boto3 = "^1.42.50"
+moto = {extras = ["s3"], version = "^5.1.21"}
 
 [tool.poetry]
 packages = [{include = "bento_etl"}]

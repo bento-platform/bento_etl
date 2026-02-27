@@ -23,6 +23,14 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Test
+        env:
+          # Moto s3 mock env vars
+          AWS_ACCESS_KEY_ID: testing
+          AWS_SECRET_ACCESS_KEY: testing
+          AWS_SECURITY_TOKEN: testing
+          AWS_SESSION_TOKEN: testing
+          AWS_DEFAULT_REGION: us-east-1
+          S3_BUCKET: test
         run: |
           poetry run pytest -svv --cov=bento_etl --cov-branch --cov-report xml
       - name: Upload coverage to Codecov

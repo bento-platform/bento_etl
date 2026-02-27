@@ -36,11 +36,12 @@ In both cases, the actual JSON Job definition is the same.
 
 Pre-defined pipelines can be built into images, or mounted as volumes for convenient configuration.
 
-### Extractor
+### Extractors
 
 The `Extractor` configuration defines how bento_etl extracts data at the beginning of an ETL pipeline.
 
-Currently, the only extractor type supported is `api-fetch`, where data if pulled from an HTTP(S) API.
+#### REST API fetch
+The `api-fetch` extractor can be used to fetch data from a REST API endpoint over HTTP(S).
 
 To connect to external APIs, `bento_etl` will sometimes need to be authorized on private endpoints.
 
@@ -72,10 +73,100 @@ Example extractor JSON config:
 }
 ```
 
+#### S3 extractor
+
+The `s3` extractor can be used to extract data from an S3 object store.
+
+To configure a `bento_etl` container for S3 access, you must:
+1. Mount an AWS Config file at `/.aws/config` in the container
+2. Mount an AWS Shared Credentials file at `/.aws/credentials` in the container
+3. Set environement variables:
+   1. `AWS_CONFIG_FILE=/.aws/config`
+   2. `AWS_SHARED_CREDENTIALS_FILE=/.aws/credentials`
+   3. `AWS_PROFILE=<NAME OF YOUR PROFILE>`
+   4. `S3_BUCKET=<NAME OF YOUR BUCKET>`
+
+> [!IMPORTANT]
+> The docker-compose files in this repo assume that you have configured AWS S3 config files at:
+> * `~/.aws/config`
+> * `~/.aws/credentials`
+
+Example of an `/.aws/config` file you can use with an S3 compatible API:
+```bash
+[default]
+region = us-east-1
+output = json
+
+[profile my-profile]
+region = us-east-1
+services = s3-private
+
+[services s3-private]
+s3 =
+    endpoint_url = https://s3.private.endpoint
+    addressing_style = path
+    signature_version = s3v4
+    use_accelerate_endpoint = false
+    use_dualstack_endpoint = false
+
+s3api =
+    endpoint_url = https://s3.private.endpoint
+    addressing_style = path
+    signature_version = s3v4
+```
+
+Example of an `/.aws/credentials` file you can use with an S3 compatible API:
+```bash
+[my-profile]
+aws_access_key_id = <ACCESS KEY ID>
+aws_secret_access_key = <SECRET KEY ID>
+```
+
+> [!IMPORTANT]
+> Make sure that you correctly set `AWS_PROFILE` to a value that is present in the 
+> S3 configuration file.
+
+Start `bento_etl` with S3 enabled:
+```bash
+# Set the aws config profile
+export AWS_PROFILE=my-profile
+
+# Validate that you can list objects in the bucket 'my-bucket' with the S3 CLI
+aws s3 ls my-bucket
+
+# Set S3_BUCKET env var
+export S3_BUCKET=my-bucket
+
+docker compose up
+```
+
+With the configuration above, `bento_etl` will instantiate an `S3Extractor` extractor dependency that 
+targets the S3 endpoint `https://s3.private.endpoint` with SSL validation.
+
+The S3Extractor will only be able to connect to the S3 bucket configured in `S3_BUCKET`.
+
+Submitting an ETL Job with an S3 extraction step is as simple as making a `POST` to `/jobs` with a body like this:
+```JSON
+{
+  "extractor": {
+    "object_key": "path/to/a/json/file.json"
+  },
+  "transformer": {
+    "type": "None"
+  },
+  "loader": {
+    "dataset_id": "",
+    "batch_size": 0,
+    "data_type": "print"
+  }
+}
+```
+
+> [!WARNING]
+> The S3Extractor currently only handles the `.json` and `.jsonl` (new-line delimited JSON) file extentions.
+> New extentions and file types will be added over time (CSVs, VCFs, etc ...).
+
 #### Extractor roadmap
-- S3 polling extractor
-  - Extract data from an S3 bucket
-- Extractor OIDC auth configuration
 - CSV extractors
 
 ### Transformers
@@ -120,15 +211,16 @@ Some container environment variables are important for the loader:
   - `BENTO_OPENID_CONFIG_URL`
 
 Two types of loaders are supported at the moment:
-1. `phenopackets`
-2. `experiments`
+1. `phenopackets`: loads Phenopackets V2 into a Katsu service
+2. `experiments`: loads Experiment Metadata into a Katsu service
+3. `print`: simply prints the items for debugging
 
 Example of a Loader JSON:
 ```JSON
 {
   "dataset_id": "<KATSU DATASET ID TO INGEST INTO>",
   "batch_size": 0,  // number of items to ingest at a time, 0 means all-at-once
-  "data_type": "< phenopackets || experiments >"
+  "data_type": "< phenopackets || experiments || print>"
 }
 ```
 
@@ -166,9 +258,9 @@ This ETL Job object performs the following:
 
 We recommend using docker compose for local dev work:
 
-```
-# Set UID for volume permissions
-export UID=$(id -u)
+```bash
+# Set BENTO_UID for volume permissions
+export BENTO_UID=$(id -u)
 
 # Spin up the ETL service
 docker compose -f docker-compose.dev.yaml up -d

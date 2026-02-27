@@ -35,6 +35,11 @@ class Config(BentoFastAPIBaseConfig):
     # TODO: temp hack to authenticate with PCGL submission service, replace with a generic OIDC service flow later
     extractor_bearer_token: str = ""
 
+    # NOTE: S3 credentials are provided using the default aws/boto3 environment variables
+    # https://docs.aws.amazon.com/boto3/latest/guide/credentials.html#environment-variables
+
+    s3_bucket: str = ""
+
 
 @lru_cache
 def get_config():

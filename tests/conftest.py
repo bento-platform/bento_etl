@@ -1,16 +1,19 @@
-from aioresponses import aioresponses
 import httpx
 import pytest
+import os
+import json
+import boto3
+
+from moto import mock_aws
+from aioresponses import aioresponses
 from fastapi.testclient import TestClient
 from sqlmodel import SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
-import os
-import json
 
 from bento_etl.db import JobStatusDatabase, get_job_status_db
 from bento_etl.logger import get_logger, BoundLogger
-from bento_etl.models import ExtractStep, Job, LoadStep, TransformStep
+from bento_etl.models import Job, LoadStep, TransformStep, ApiFetchExtractStep
 
 os.environ["BENTO_DEBUG"] = "true"
 os.environ["BENTO_VALIDATE_SSL"] = "false"
@@ -65,7 +68,7 @@ def test_client(job_status_database):
 
 @pytest.fixture
 def mocked_job_dict():
-    extractor = ExtractStep(
+    extractor = ApiFetchExtractStep(
         extract_url="some_url",
         type="api-fetch",
         http_verb="GET",
@@ -137,6 +140,67 @@ def mock_extractor_valid_empty_response(monkeypatch):
     monkeypatch.setattr(
         EXTRACTOR_REQUEST_PATH, lambda *args, **kwargs: httpx.Response(200)
     )
+
+
+# S3
+@pytest.fixture(scope="function")
+def aws_credentials():
+    """Mocked AWS Credentials for moto."""
+    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+    os.environ["AWS_SECURITY_TOKEN"] = "testing"
+    os.environ["AWS_SESSION_TOKEN"] = "testing"
+    os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+
+    os.environ["S3_BUCKET"] = "test"
+
+
+@pytest.fixture(scope="function")
+def mocked_s3(aws_credentials):
+    """
+    Return a mocked S3 client
+    """
+    with mock_aws():
+        yield
+
+
+@pytest.fixture
+def mock_s3_extractor_pheno_json(mocked_s3):
+    s3 = boto3.client("s3")
+    s3.create_bucket(Bucket="test")
+    with open("tests/data/synthetic_phenopackets_v2.json", "rb") as f:
+        s3.put_object(
+            Bucket="test",
+            Key="phenopackets.json",
+            Body=f,
+        )
+
+
+@pytest.fixture
+def mock_s3_extractor_pheno_jsonl(mocked_s3):
+    s3 = boto3.client("s3")
+    s3.create_bucket(Bucket="test")
+    with open("tests/data/synthetic_phenopackets_v2.jsonl", "rb") as f:
+        s3.put_object(
+            Bucket="test",
+            Key="phenopackets.jsonl",
+            Body=f,
+        )
+
+
+@pytest.fixture
+def mock_s3_pdf_object(mocked_s3) -> str:
+    s3 = boto3.client("s3")
+    s3.create_bucket(Bucket="test")
+
+    # Creates an object test-doc.pdf with empty bytes to test file extention detection
+    object_name = "test-doc.pdf"
+    s3.put_object(
+        Bucket="test",
+        Key=object_name,
+        Body=b"",
+    )
+    return object_name
 
 
 #### TRANSFORMER MOCKS

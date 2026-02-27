@@ -5,7 +5,17 @@ import uuid
 from pydantic import BaseModel
 from sqlmodel import JSON, Column, Enum as SQLModelEnum, Field, SQLModel
 
-__all__ = ["Job"]
+__all__ = [
+    "Job",
+    "ExtractStep",
+    "ApiFetchExtractStep",
+    "S3ExtractStep",
+    "TransformStep",
+    "LoadStep",
+    "Job",
+    "JobStatus",
+    "JobStatusType",
+]
 
 
 class ExtractStep(BaseModel):
@@ -13,10 +23,18 @@ class ExtractStep(BaseModel):
     Class to describe an Extractor step to run in a pipeline job.
     """
 
+
+class ApiFetchExtractStep(ExtractStep):
+    type: Literal[
+        "api-fetch"
+    ]  # TODO: rm, we use subclasses instead of a type field now
     extract_url: str
-    type: Literal["api-fetch"]
     http_verb: str = "GET"
     expected_status_code: int = 200
+
+
+class S3ExtractStep(BaseModel):
+    object_key: str
 
 
 class TransformStep(BaseModel):
@@ -27,6 +45,8 @@ class TransformStep(BaseModel):
     type: Literal["None"]
 
 
+# TODO: define "load step" models specific to bento services
+# and do dependency injection based on the model instance presented.
 class LoadStep(BaseModel):
     """
     Class to describe a Loader step to run in a pipeline job.
@@ -34,11 +54,11 @@ class LoadStep(BaseModel):
 
     dataset_id: str
     batch_size: int
-    data_type: Literal["phenopackets", "experiments"]
+    data_type: Literal["phenopackets", "experiments", "print"]
 
 
 class Job(BaseModel):
-    extractor: ExtractStep
+    extractor: ApiFetchExtractStep | S3ExtractStep
     transformer: TransformStep
     loader: LoadStep
 
